@@ -1,0 +1,4078 @@
+{
+  "meta": {
+    "name": "Kiniela Mundial 2026",
+    "lastGenerated": "2026-06-03T18:16:18.805146Z",
+    "sources": [
+      {
+        "label": "FIFA official match schedule",
+        "url": "https://www.fifa.com/tournaments/mens/worldcup/canadamexicousa2026/articles/match-schedule-fixtures-results-teams-stadiums"
+      },
+      {
+        "label": "worldcup26.ir public API",
+        "url": "https://worldcup26.ir/"
+      },
+      {
+        "label": "worldcup26 open-source repository",
+        "url": "https://github.com/rezarahiminia/worldcup2026"
+      }
+    ],
+    "scoreRules": {
+      "exact": 7,
+      "resultAndOneGoal": 4,
+      "result": 3,
+      "oneGoal": 1
+    }
+  },
+  "teams": [
+    {
+      "id": "1",
+      "fifaCode": "MEX",
+      "iso2": "mx",
+      "group": "A",
+      "name": {
+        "en": "Mexico",
+        "es": "México"
+      },
+      "flag": "https://flagcdn.com/w160/mx.png",
+      "scouting": {
+        "rating": 78,
+        "attack": 76,
+        "midfield": 77,
+        "defense": 75,
+        "tempo": 81,
+        "experience": 82,
+        "style_en": "Host energy, quick wide attacks, and dangerous set pieces.",
+        "style_es": "Energia de local, ataques por banda y pelota parada peligrosa.",
+        "players": [
+          [
+            "Santiago Gimenez",
+            "box finisher",
+            "definidor de area"
+          ],
+          [
+            "Edson Alvarez",
+            "ball-winning anchor",
+            "ancla recuperadora"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "2",
+      "fifaCode": "RSA",
+      "iso2": "za",
+      "group": "A",
+      "name": {
+        "en": "South Africa",
+        "es": "Sudáfrica"
+      },
+      "flag": "https://flagcdn.com/w160/za.png",
+      "scouting": {
+        "rating": 70,
+        "attack": 68,
+        "midfield": 70,
+        "defense": 72,
+        "tempo": 73,
+        "experience": 64,
+        "style_en": "Compact block, counters, and a keeper who can tilt close games.",
+        "style_es": "Bloque compacto, contragolpe y arquero capaz de inclinar partidos cerrados.",
+        "players": [
+          [
+            "Ronwen Williams",
+            "shot-stopper",
+            "ataja penales"
+          ],
+          [
+            "Teboho Mokoena",
+            "long-range passer",
+            "pase largo y remate"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "3",
+      "fifaCode": "KOR",
+      "iso2": "kr",
+      "group": "A",
+      "name": {
+        "en": "South Korea",
+        "es": "Corea del Sur"
+      },
+      "flag": "https://flagcdn.com/w160/kr.png",
+      "scouting": {
+        "rating": 80,
+        "attack": 80,
+        "midfield": 78,
+        "defense": 75,
+        "tempo": 86,
+        "experience": 78,
+        "style_en": "Relentless pace, late runs, and transition pressure.",
+        "style_es": "Ritmo alto, llegadas tardias y presion en transicion.",
+        "players": [
+          [
+            "Son Heung-min",
+            "direct runner",
+            "carrera directa"
+          ],
+          [
+            "Lee Kang-in",
+            "creative left foot",
+            "zurda creativa"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "4",
+      "fifaCode": "CZE",
+      "iso2": "cz",
+      "group": "A",
+      "name": {
+        "en": "Czech Republic",
+        "es": "Chequia"
+      },
+      "flag": "https://flagcdn.com/w160/cz.png",
+      "scouting": {
+        "rating": 77,
+        "attack": 75,
+        "midfield": 79,
+        "defense": 77,
+        "tempo": 72,
+        "experience": 79,
+        "style_en": "Physical midfield, aerial threat, and disciplined spacing.",
+        "style_es": "Mediocampo fisico, amenaza aerea y orden tactico.",
+        "players": [
+          [
+            "Patrik Schick",
+            "penalty-box striker",
+            "nueve de area"
+          ],
+          [
+            "Tomas Soucek",
+            "aerial midfielder",
+            "volante aereo"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "5",
+      "fifaCode": "CAN",
+      "iso2": "ca",
+      "group": "B",
+      "name": {
+        "en": "Canada",
+        "es": "Canadá"
+      },
+      "flag": "https://flagcdn.com/w160/ca.png",
+      "scouting": {
+        "rating": 79,
+        "attack": 80,
+        "midfield": 76,
+        "defense": 74,
+        "tempo": 87,
+        "experience": 73,
+        "style_en": "High speed on the left side and aggressive pressing bursts.",
+        "style_es": "Muchisima velocidad por izquierda y rafagas de presion alta.",
+        "players": [
+          [
+            "Alphonso Davies",
+            "elite acceleration",
+            "aceleracion elite"
+          ],
+          [
+            "Jonathan David",
+            "movement in the box",
+            "movilidad en el area"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "6",
+      "fifaCode": "BIH",
+      "iso2": "ba",
+      "group": "B",
+      "name": {
+        "en": "Bosnia and Herzegovina",
+        "es": "Bosnia y Herzegovina"
+      },
+      "flag": "https://flagcdn.com/w160/ba.png",
+      "scouting": {
+        "rating": 73,
+        "attack": 75,
+        "midfield": 74,
+        "defense": 70,
+        "tempo": 68,
+        "experience": 80,
+        "style_en": "Experienced spine, patient possession, and target play.",
+        "style_es": "Columna con experiencia, posesion paciente y juego de referencia.",
+        "players": [
+          [
+            "Ermedin Demirovic",
+            "pressing forward",
+            "delantero presionante"
+          ],
+          [
+            "Edin Dzeko",
+            "target striker",
+            "referencia ofensiva"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "7",
+      "fifaCode": "QAT",
+      "iso2": "qa",
+      "group": "B",
+      "name": {
+        "en": "Qatar",
+        "es": "Qatar"
+      },
+      "flag": "https://flagcdn.com/w160/qa.png",
+      "scouting": {
+        "rating": 72,
+        "attack": 72,
+        "midfield": 73,
+        "defense": 71,
+        "tempo": 70,
+        "experience": 78,
+        "style_en": "Compact rotations, quick combinations, and tournament experience.",
+        "style_es": "Rotaciones compactas, asociaciones rapidas y experiencia de torneo.",
+        "players": [
+          [
+            "Akram Afif",
+            "chance creator",
+            "creador de ocasiones"
+          ],
+          [
+            "Almoez Ali",
+            "penalty-area timing",
+            "timing de area"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "8",
+      "fifaCode": "SUI",
+      "iso2": "ch",
+      "group": "B",
+      "name": {
+        "en": "Switzerland",
+        "es": "Suiza"
+      },
+      "flag": "https://flagcdn.com/w160/ch.png",
+      "scouting": {
+        "rating": 83,
+        "attack": 80,
+        "midfield": 84,
+        "defense": 83,
+        "tempo": 76,
+        "experience": 87,
+        "style_en": "Tournament-hardened structure with calm midfield control.",
+        "style_es": "Estructura curtida en torneos y control sereno del mediocampo.",
+        "players": [
+          [
+            "Granit Xhaka",
+            "tempo controller",
+            "control de ritmo"
+          ],
+          [
+            "Manuel Akanji",
+            "line leader",
+            "lider de linea"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "9",
+      "fifaCode": "BRA",
+      "iso2": "br",
+      "group": "C",
+      "name": {
+        "en": "Brazil",
+        "es": "Brasil"
+      },
+      "flag": "https://flagcdn.com/w160/br.png",
+      "scouting": {
+        "rating": 91,
+        "attack": 93,
+        "midfield": 88,
+        "defense": 86,
+        "tempo": 88,
+        "experience": 88,
+        "style_en": "Elite one-v-one attack, flexible creators, and pressure after loss.",
+        "style_es": "Uno contra uno elite, creadores flexibles y presion tras perdida.",
+        "players": [
+          [
+            "Vinicius Junior",
+            "isolation dribbler",
+            "regate en aislamiento"
+          ],
+          [
+            "Rodrygo",
+            "inside creator",
+            "creador interior"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "10",
+      "fifaCode": "MAR",
+      "iso2": "ma",
+      "group": "C",
+      "name": {
+        "en": "Morocco",
+        "es": "Marruecos"
+      },
+      "flag": "https://flagcdn.com/w160/ma.png",
+      "scouting": {
+        "rating": 84,
+        "attack": 81,
+        "midfield": 83,
+        "defense": 86,
+        "tempo": 82,
+        "experience": 82,
+        "style_en": "Defensive confidence, fast full-backs, and efficient counters.",
+        "style_es": "Confianza defensiva, laterales rapidos y contragolpe eficiente.",
+        "players": [
+          [
+            "Achraf Hakimi",
+            "two-way full-back",
+            "lateral ida y vuelta"
+          ],
+          [
+            "Sofyan Amrabat",
+            "duel anchor",
+            "ancla de duelos"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "11",
+      "fifaCode": "HAI",
+      "iso2": "ht",
+      "group": "C",
+      "name": {
+        "en": "Haiti",
+        "es": "Haití"
+      },
+      "flag": "https://flagcdn.com/w160/ht.png",
+      "scouting": {
+        "rating": 66,
+        "attack": 67,
+        "midfield": 65,
+        "defense": 64,
+        "tempo": 76,
+        "experience": 58,
+        "style_en": "Direct play, emotional momentum, and underdog volatility.",
+        "style_es": "Juego directo, impulso emocional y volatilidad de tapado.",
+        "players": [
+          [
+            "Duckens Nazon",
+            "direct finisher",
+            "definidor directo"
+          ],
+          [
+            "Frantzdy Pierrot",
+            "aerial outlet",
+            "salida aerea"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "12",
+      "fifaCode": "SCO",
+      "iso2": "sco",
+      "group": "C",
+      "name": {
+        "en": "Scotland",
+        "es": "Escocia"
+      },
+      "flag": "https://flagcdn.com/w160/gb-sct.png",
+      "scouting": {
+        "rating": 78,
+        "attack": 76,
+        "midfield": 80,
+        "defense": 77,
+        "tempo": 77,
+        "experience": 80,
+        "style_en": "Combative midfield, overlapping width, and set-piece edge.",
+        "style_es": "Mediocampo combativo, amplitud por fuera y ventaja en pelota parada.",
+        "players": [
+          [
+            "Scott McTominay",
+            "late box runs",
+            "llegadas al area"
+          ],
+          [
+            "Andy Robertson",
+            "left-side engine",
+            "motor por izquierda"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "13",
+      "fifaCode": "USA",
+      "iso2": "us",
+      "group": "D",
+      "name": {
+        "en": "United States",
+        "es": "Estados Unidos"
+      },
+      "flag": "https://flagcdn.com/w160/us.png",
+      "scouting": {
+        "rating": 82,
+        "attack": 82,
+        "midfield": 81,
+        "defense": 78,
+        "tempo": 85,
+        "experience": 76,
+        "style_en": "Host lift, vertical pressing, and quick attacking transitions.",
+        "style_es": "Impulso de local, presion vertical y transiciones rapidas.",
+        "players": [
+          [
+            "Christian Pulisic",
+            "final-third spark",
+            "chispa en ataque"
+          ],
+          [
+            "Tyler Adams",
+            "pressing balance",
+            "equilibrio de presion"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "14",
+      "fifaCode": "PAR",
+      "iso2": "py",
+      "group": "D",
+      "name": {
+        "en": "Paraguay",
+        "es": "Paraguay"
+      },
+      "flag": "https://flagcdn.com/w160/py.png",
+      "scouting": {
+        "rating": 76,
+        "attack": 75,
+        "midfield": 75,
+        "defense": 79,
+        "tempo": 73,
+        "experience": 74,
+        "style_en": "Stubborn defending, counter threat, and high duel appetite.",
+        "style_es": "Defensa incomoda, amenaza de contra y mucho duelo.",
+        "players": [
+          [
+            "Miguel Almiron",
+            "counter runner",
+            "corredor de contra"
+          ],
+          [
+            "Julio Enciso",
+            "shot creator",
+            "creador de remate"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "15",
+      "fifaCode": "AUS",
+      "iso2": "au",
+      "group": "D",
+      "name": {
+        "en": "Australia",
+        "es": "Australia"
+      },
+      "flag": "https://flagcdn.com/w160/au.png",
+      "scouting": {
+        "rating": 75,
+        "attack": 72,
+        "midfield": 74,
+        "defense": 77,
+        "tempo": 74,
+        "experience": 80,
+        "style_en": "Tournament grit, aerial battles, and disciplined blocks.",
+        "style_es": "Competitividad de torneo, duelos aereos y bloques disciplinados.",
+        "players": [
+          [
+            "Mat Ryan",
+            "organizing keeper",
+            "arquero organizador"
+          ],
+          [
+            "Jackson Irvine",
+            "duel midfielder",
+            "volante de duelos"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "16",
+      "fifaCode": "TUR",
+      "iso2": "tr",
+      "group": "D",
+      "name": {
+        "en": "Turkey",
+        "es": "Turquía"
+      },
+      "flag": "https://flagcdn.com/w160/tr.png",
+      "scouting": {
+        "rating": 80,
+        "attack": 81,
+        "midfield": 80,
+        "defense": 74,
+        "tempo": 82,
+        "experience": 76,
+        "style_en": "Creative midfield, long-shot threat, and emotional swings.",
+        "style_es": "Mediocampo creativo, amenaza de media distancia y cambios emocionales.",
+        "players": [
+          [
+            "Hakan Calhanoglu",
+            "deep conductor",
+            "director retrasado"
+          ],
+          [
+            "Arda Guler",
+            "creative spark",
+            "chispa creativa"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "17",
+      "fifaCode": "GER",
+      "iso2": "de",
+      "group": "E",
+      "name": {
+        "en": "Germany",
+        "es": "Alemania"
+      },
+      "flag": "https://flagcdn.com/w160/de.png",
+      "scouting": {
+        "rating": 88,
+        "attack": 89,
+        "midfield": 90,
+        "defense": 82,
+        "tempo": 85,
+        "experience": 86,
+        "style_en": "Technical overloads, fast combinations, and ruthless finishing runs.",
+        "style_es": "Superioridades tecnicas, asociaciones rapidas y llegadas agresivas.",
+        "players": [
+          [
+            "Jamal Musiala",
+            "tight-space dribbler",
+            "regate en espacios cortos"
+          ],
+          [
+            "Florian Wirtz",
+            "between-lines creator",
+            "creador entre lineas"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "18",
+      "fifaCode": "CUW",
+      "iso2": "cw",
+      "group": "E",
+      "name": {
+        "en": "Curaçao",
+        "es": "Curazao"
+      },
+      "flag": "https://flagcdn.com/w160/cw.png",
+      "scouting": {
+        "rating": 64,
+        "attack": 65,
+        "midfield": 64,
+        "defense": 62,
+        "tempo": 69,
+        "experience": 57,
+        "style_en": "Historic debut energy with risk-taking in open phases.",
+        "style_es": "Energia de debut historico y riesgo en fases abiertas.",
+        "players": [
+          [
+            "Juninho Bacuna",
+            "line-breaking passer",
+            "pase rompe lineas"
+          ],
+          [
+            "Leandro Bacuna",
+            "set-piece delivery",
+            "centros a balon parado"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "19",
+      "fifaCode": "CIV",
+      "iso2": "ci",
+      "group": "E",
+      "name": {
+        "en": "Ivory Coast",
+        "es": "Costa de Marfil"
+      },
+      "flag": "https://flagcdn.com/w160/ci.png",
+      "scouting": {
+        "rating": 81,
+        "attack": 82,
+        "midfield": 82,
+        "defense": 78,
+        "tempo": 80,
+        "experience": 82,
+        "style_en": "Powerful duels, wide pace, and strong second-ball pressure.",
+        "style_es": "Duelos potentes, velocidad por fuera y presion en segunda pelota.",
+        "players": [
+          [
+            "Franck Kessie",
+            "box-to-box power",
+            "potencia ida y vuelta"
+          ],
+          [
+            "Simon Adingra",
+            "wide acceleration",
+            "aceleracion por banda"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "20",
+      "fifaCode": "ECU",
+      "iso2": "ec",
+      "group": "E",
+      "name": {
+        "en": "Ecuador",
+        "es": "Ecuador"
+      },
+      "flag": "https://flagcdn.com/w160/ec.png",
+      "scouting": {
+        "rating": 82,
+        "attack": 78,
+        "midfield": 85,
+        "defense": 83,
+        "tempo": 80,
+        "experience": 77,
+        "style_en": "Young physical core, strong ball-winning, and clean buildup.",
+        "style_es": "Nucleo joven y fisico, recuperacion fuerte y salida limpia.",
+        "players": [
+          [
+            "Moises Caicedo",
+            "duel magnet",
+            "iman de duelos"
+          ],
+          [
+            "Piero Hincapie",
+            "left-footed defender",
+            "defensor zurdo"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "21",
+      "fifaCode": "NED",
+      "iso2": "nl",
+      "group": "F",
+      "name": {
+        "en": "Netherlands",
+        "es": "Países Bajos"
+      },
+      "flag": "https://flagcdn.com/w160/nl.png",
+      "scouting": {
+        "rating": 87,
+        "attack": 86,
+        "midfield": 85,
+        "defense": 88,
+        "tempo": 81,
+        "experience": 86,
+        "style_en": "Back-line authority, creators between lines, and controlled tempo.",
+        "style_es": "Autoridad defensiva, creadores entre lineas y ritmo controlado.",
+        "players": [
+          [
+            "Virgil van Dijk",
+            "aerial leader",
+            "lider aereo"
+          ],
+          [
+            "Xavi Simons",
+            "half-space creator",
+            "creador en pasillo interior"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "22",
+      "fifaCode": "JPN",
+      "iso2": "jp",
+      "group": "F",
+      "name": {
+        "en": "Japan",
+        "es": "Japón"
+      },
+      "flag": "https://flagcdn.com/w160/jp.png",
+      "scouting": {
+        "rating": 84,
+        "attack": 84,
+        "midfield": 84,
+        "defense": 80,
+        "tempo": 89,
+        "experience": 80,
+        "style_en": "Fast rotations, disciplined pressing, and technical wide threats.",
+        "style_es": "Rotaciones veloces, presion disciplinada y amenaza tecnica por banda.",
+        "players": [
+          [
+            "Takefusa Kubo",
+            "left-foot creator",
+            "zurda creativa"
+          ],
+          [
+            "Kaoru Mitoma",
+            "wing isolation",
+            "uno contra uno por banda"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "23",
+      "fifaCode": "SWE",
+      "iso2": "se",
+      "group": "F",
+      "name": {
+        "en": "Sweden",
+        "es": "Suecia"
+      },
+      "flag": "https://flagcdn.com/w160/se.png",
+      "scouting": {
+        "rating": 79,
+        "attack": 82,
+        "midfield": 78,
+        "defense": 76,
+        "tempo": 77,
+        "experience": 75,
+        "style_en": "Direct attacking talent, aerial edge, and transition finishing.",
+        "style_es": "Talento ofensivo directo, ventaja aerea y definicion en transicion.",
+        "players": [
+          [
+            "Alexander Isak",
+            "smooth finisher",
+            "definidor fino"
+          ],
+          [
+            "Dejan Kulusevski",
+            "carry creator",
+            "creador conduciendo"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "24",
+      "fifaCode": "TUN",
+      "iso2": "tn",
+      "group": "F",
+      "name": {
+        "en": "Tunisia",
+        "es": "Túnez"
+      },
+      "flag": "https://flagcdn.com/w160/tn.png",
+      "scouting": {
+        "rating": 74,
+        "attack": 70,
+        "midfield": 75,
+        "defense": 77,
+        "tempo": 72,
+        "experience": 77,
+        "style_en": "Tight defensive distances, midfield grit, and set-piece patience.",
+        "style_es": "Distancias defensivas cortas, garra media y paciencia en pelota parada.",
+        "players": [
+          [
+            "Ellyes Skhiri",
+            "screening midfielder",
+            "volante de cobertura"
+          ],
+          [
+            "Hannibal Mejbri",
+            "pressing spark",
+            "chispa de presion"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "25",
+      "fifaCode": "BEL",
+      "iso2": "be",
+      "group": "G",
+      "name": {
+        "en": "Belgium",
+        "es": "Bélgica"
+      },
+      "flag": "https://flagcdn.com/w160/be.png",
+      "scouting": {
+        "rating": 85,
+        "attack": 87,
+        "midfield": 85,
+        "defense": 78,
+        "tempo": 82,
+        "experience": 86,
+        "style_en": "Creative veterans, explosive wings, and possession control.",
+        "style_es": "Veteranos creativos, bandas explosivas y control de posesion.",
+        "players": [
+          [
+            "Kevin De Bruyne",
+            "chance engine",
+            "motor creativo"
+          ],
+          [
+            "Jeremy Doku",
+            "dribble chaos",
+            "caos en el regate"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "26",
+      "fifaCode": "EGY",
+      "iso2": "eg",
+      "group": "G",
+      "name": {
+        "en": "Egypt",
+        "es": "Egipto"
+      },
+      "flag": "https://flagcdn.com/w160/eg.png",
+      "scouting": {
+        "rating": 78,
+        "attack": 82,
+        "midfield": 76,
+        "defense": 73,
+        "tempo": 76,
+        "experience": 80,
+        "style_en": "Star-led attack, direct diagonals, and dangerous counters.",
+        "style_es": "Ataque liderado por figuras, diagonales directas y contras peligrosas.",
+        "players": [
+          [
+            "Mohamed Salah",
+            "elite final ball",
+            "ultimo pase elite"
+          ],
+          [
+            "Omar Marmoush",
+            "transition runner",
+            "corredor de transicion"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "27",
+      "fifaCode": "IRN",
+      "iso2": "ir",
+      "group": "G",
+      "name": {
+        "en": "Iran",
+        "es": "Irán"
+      },
+      "flag": "https://flagcdn.com/w160/ir.png",
+      "scouting": {
+        "rating": 79,
+        "attack": 80,
+        "midfield": 77,
+        "defense": 76,
+        "tempo": 74,
+        "experience": 83,
+        "style_en": "Experienced forwards, compact defense, and clinical counters.",
+        "style_es": "Delanteros experimentados, defensa compacta y contras clinicas.",
+        "players": [
+          [
+            "Mehdi Taremi",
+            "penalty-box craft",
+            "oficio de area"
+          ],
+          [
+            "Sardar Azmoun",
+            "vertical striker",
+            "delantero vertical"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "28",
+      "fifaCode": "NZL",
+      "iso2": "nz",
+      "group": "G",
+      "name": {
+        "en": "New Zealand",
+        "es": "Nueva Zelanda"
+      },
+      "flag": "https://flagcdn.com/w160/nz.png",
+      "scouting": {
+        "rating": 68,
+        "attack": 69,
+        "midfield": 66,
+        "defense": 67,
+        "tempo": 69,
+        "experience": 70,
+        "style_en": "Aerial outlet, compact shape, and low-risk buildup.",
+        "style_es": "Referencia aerea, bloque compacto y salida de bajo riesgo.",
+        "players": [
+          [
+            "Chris Wood",
+            "aerial finisher",
+            "definidor aereo"
+          ],
+          [
+            "Liberato Cacace",
+            "left-side runner",
+            "corredor por izquierda"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "29",
+      "fifaCode": "ESP",
+      "iso2": "es",
+      "group": "H",
+      "name": {
+        "en": "Spain",
+        "es": "España"
+      },
+      "flag": "https://flagcdn.com/w160/es.png",
+      "scouting": {
+        "rating": 90,
+        "attack": 89,
+        "midfield": 93,
+        "defense": 86,
+        "tempo": 88,
+        "experience": 84,
+        "style_en": "Possession pressure, elite technicians, and patience around the box.",
+        "style_es": "Presion con posesion, tecnicos elite y paciencia cerca del area.",
+        "players": [
+          [
+            "Lamine Yamal",
+            "wide creator",
+            "creador por banda"
+          ],
+          [
+            "Pedri",
+            "tempo manipulator",
+            "manipulador de ritmo"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "30",
+      "fifaCode": "CPV",
+      "iso2": "cv",
+      "group": "H",
+      "name": {
+        "en": "Cape Verde",
+        "es": "Cabo Verde"
+      },
+      "flag": "https://flagcdn.com/w160/cv.png",
+      "scouting": {
+        "rating": 71,
+        "attack": 70,
+        "midfield": 71,
+        "defense": 72,
+        "tempo": 73,
+        "experience": 65,
+        "style_en": "First World Cup edge, resilient blocks, and quick wide counters.",
+        "style_es": "Impulso de primer Mundial, bloques resistentes y contras por banda.",
+        "players": [
+          [
+            "Ryan Mendes",
+            "veteran winger",
+            "extremo veterano"
+          ],
+          [
+            "Logan Costa",
+            "aerial defender",
+            "central aereo"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "31",
+      "fifaCode": "KSA",
+      "iso2": "sa",
+      "group": "H",
+      "name": {
+        "en": "Saudi Arabia",
+        "es": "Arabia Saudita"
+      },
+      "flag": "https://flagcdn.com/w160/sa.png",
+      "scouting": {
+        "rating": 73,
+        "attack": 72,
+        "midfield": 74,
+        "defense": 72,
+        "tempo": 76,
+        "experience": 78,
+        "style_en": "High emotional ceiling, quick combinations, and tournament belief.",
+        "style_es": "Techo emocional alto, asociaciones rapidas y fe de torneo.",
+        "players": [
+          [
+            "Salem Al-Dawsari",
+            "big-moment winger",
+            "extremo de momentos grandes"
+          ],
+          [
+            "Saleh Al-Shehri",
+            "penalty-area poacher",
+            "cazador de area"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "32",
+      "fifaCode": "URU",
+      "iso2": "uy",
+      "group": "H",
+      "name": {
+        "en": "Uruguay",
+        "es": "Uruguay"
+      },
+      "flag": "https://flagcdn.com/w160/uy.png",
+      "scouting": {
+        "rating": 86,
+        "attack": 86,
+        "midfield": 88,
+        "defense": 83,
+        "tempo": 84,
+        "experience": 86,
+        "style_en": "Aggressive pressing, elite midfield legs, and direct finishing.",
+        "style_es": "Presion agresiva, piernas elite en el medio y definicion directa.",
+        "players": [
+          [
+            "Federico Valverde",
+            "range and power",
+            "rango y potencia"
+          ],
+          [
+            "Darwin Nunez",
+            "vertical threat",
+            "amenaza vertical"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "33",
+      "fifaCode": "FRA",
+      "iso2": "fr",
+      "group": "I",
+      "name": {
+        "en": "France",
+        "es": "Francia"
+      },
+      "flag": "https://flagcdn.com/w160/fr.png",
+      "scouting": {
+        "rating": 92,
+        "attack": 94,
+        "midfield": 89,
+        "defense": 88,
+        "tempo": 90,
+        "experience": 90,
+        "style_en": "Explosive transitions, deep squad quality, and knockout pedigree.",
+        "style_es": "Transiciones explosivas, plantel profundo y pedigree de eliminatorias.",
+        "players": [
+          [
+            "Kylian Mbappe",
+            "open-field speed",
+            "velocidad a campo abierto"
+          ],
+          [
+            "Antoine Griezmann",
+            "connector",
+            "conector"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "34",
+      "fifaCode": "SEN",
+      "iso2": "sn",
+      "group": "I",
+      "name": {
+        "en": "Senegal",
+        "es": "Senegal"
+      },
+      "flag": "https://flagcdn.com/w160/sn.png",
+      "scouting": {
+        "rating": 82,
+        "attack": 82,
+        "midfield": 80,
+        "defense": 81,
+        "tempo": 81,
+        "experience": 83,
+        "style_en": "Physical balance, direct runners, and mature tournament rhythm.",
+        "style_es": "Equilibrio fisico, corredores directos y ritmo maduro de torneo.",
+        "players": [
+          [
+            "Sadio Mane",
+            "inside winger",
+            "extremo interior"
+          ],
+          [
+            "Nicolas Jackson",
+            "pressing striker",
+            "delantero presionante"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "35",
+      "fifaCode": "IRQ",
+      "iso2": "iq",
+      "group": "I",
+      "name": {
+        "en": "Iraq",
+        "es": "Irak"
+      },
+      "flag": "https://flagcdn.com/w160/iq.png",
+      "scouting": {
+        "rating": 69,
+        "attack": 70,
+        "midfield": 69,
+        "defense": 68,
+        "tempo": 72,
+        "experience": 62,
+        "style_en": "High-variance attack, emotional momentum, and quick releases.",
+        "style_es": "Ataque de alta varianza, impulso emocional y salidas rapidas.",
+        "players": [
+          [
+            "Aymen Hussein",
+            "aerial striker",
+            "delantero aereo"
+          ],
+          [
+            "Ali Jasim",
+            "direct dribbler",
+            "regate directo"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "36",
+      "fifaCode": "NOR",
+      "iso2": "no",
+      "group": "I",
+      "name": {
+        "en": "Norway",
+        "es": "Noruega"
+      },
+      "flag": "https://flagcdn.com/w160/no.png",
+      "scouting": {
+        "rating": 83,
+        "attack": 88,
+        "midfield": 84,
+        "defense": 76,
+        "tempo": 80,
+        "experience": 72,
+        "style_en": "Star striker gravity, clean chance creation, and vertical attacks.",
+        "style_es": "Gravedad del nueve estrella, creacion limpia y ataque vertical.",
+        "players": [
+          [
+            "Erling Haaland",
+            "box dominance",
+            "dominio de area"
+          ],
+          [
+            "Martin Odegaard",
+            "chance architect",
+            "arquitecto de ocasiones"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "37",
+      "fifaCode": "ARG",
+      "iso2": "ar",
+      "group": "J",
+      "name": {
+        "en": "Argentina",
+        "es": "Argentina"
+      },
+      "flag": "https://flagcdn.com/w160/ar.png",
+      "scouting": {
+        "rating": 93,
+        "attack": 91,
+        "midfield": 92,
+        "defense": 90,
+        "tempo": 84,
+        "experience": 95,
+        "style_en": "Champion composure, technical control, and ruthless late-game detail.",
+        "style_es": "Compostura de campeon, control tecnico y detalle letal al cierre.",
+        "players": [
+          [
+            "Lionel Messi",
+            "final-third genius",
+            "genio en ultimo tercio"
+          ],
+          [
+            "Julian Alvarez",
+            "pressing finisher",
+            "definidor presionante"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "38",
+      "fifaCode": "ALG",
+      "iso2": "dz",
+      "group": "J",
+      "name": {
+        "en": "Algeria",
+        "es": "Argelia"
+      },
+      "flag": "https://flagcdn.com/w160/dz.png",
+      "scouting": {
+        "rating": 77,
+        "attack": 79,
+        "midfield": 77,
+        "defense": 73,
+        "tempo": 75,
+        "experience": 81,
+        "style_en": "Creative wide play, technical midfield, and counter rhythm.",
+        "style_es": "Juego creativo por banda, mediocampo tecnico y ritmo de contra.",
+        "players": [
+          [
+            "Riyad Mahrez",
+            "wide creator",
+            "creador por banda"
+          ],
+          [
+            "Ismael Bennacer",
+            "press resistance",
+            "resistencia a presion"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "39",
+      "fifaCode": "AUT",
+      "iso2": "at",
+      "group": "J",
+      "name": {
+        "en": "Austria",
+        "es": "Austria"
+      },
+      "flag": "https://flagcdn.com/w160/at.png",
+      "scouting": {
+        "rating": 81,
+        "attack": 79,
+        "midfield": 83,
+        "defense": 80,
+        "tempo": 82,
+        "experience": 80,
+        "style_en": "Well-drilled pressing, smart spacing, and dead-ball quality.",
+        "style_es": "Presion trabajada, espacios inteligentes y calidad en balon parado.",
+        "players": [
+          [
+            "David Alaba",
+            "defensive organizer",
+            "organizador defensivo"
+          ],
+          [
+            "Marcel Sabitzer",
+            "two-way midfielder",
+            "volante mixto"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "40",
+      "fifaCode": "JOR",
+      "iso2": "jo",
+      "group": "J",
+      "name": {
+        "en": "Jordan",
+        "es": "Jordania"
+      },
+      "flag": "https://flagcdn.com/w160/jo.png",
+      "scouting": {
+        "rating": 67,
+        "attack": 68,
+        "midfield": 66,
+        "defense": 66,
+        "tempo": 71,
+        "experience": 60,
+        "style_en": "Underdog energy, direct outlets, and disciplined low blocks.",
+        "style_es": "Energia de tapado, salidas directas y bloque bajo disciplinado.",
+        "players": [
+          [
+            "Mousa Al-Taamari",
+            "solo runner",
+            "conductor individual"
+          ],
+          [
+            "Yazan Al-Naimat",
+            "transition finisher",
+            "definidor de transicion"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "41",
+      "fifaCode": "POR",
+      "iso2": "pt",
+      "group": "K",
+      "name": {
+        "en": "Portugal",
+        "es": "Portugal"
+      },
+      "flag": "https://flagcdn.com/w160/pt.png",
+      "scouting": {
+        "rating": 89,
+        "attack": 91,
+        "midfield": 90,
+        "defense": 85,
+        "tempo": 84,
+        "experience": 88,
+        "style_en": "Deep attacking options, creators everywhere, and set-piece bite.",
+        "style_es": "Muchas opciones de ataque, creadores por todos lados y pelota parada fuerte.",
+        "players": [
+          [
+            "Bruno Fernandes",
+            "chance volume",
+            "volumen creativo"
+          ],
+          [
+            "Bernardo Silva",
+            "control in traffic",
+            "control entre marcas"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "42",
+      "fifaCode": "COD",
+      "iso2": "cd",
+      "group": "K",
+      "name": {
+        "en": "Democratic Republic of the Congo",
+        "es": "RD Congo"
+      },
+      "flag": "https://flagcdn.com/w160/cd.png",
+      "scouting": {
+        "rating": 73,
+        "attack": 74,
+        "midfield": 72,
+        "defense": 74,
+        "tempo": 76,
+        "experience": 70,
+        "style_en": "Powerful transition runners, physical duels, and direct pressure.",
+        "style_es": "Corredores potentes en transicion, duelos fisicos y presion directa.",
+        "players": [
+          [
+            "Chancel Mbemba",
+            "defensive leader",
+            "lider defensivo"
+          ],
+          [
+            "Yoane Wissa",
+            "channel runner",
+            "atacante de canales"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "43",
+      "fifaCode": "UZB",
+      "iso2": "uz",
+      "group": "K",
+      "name": {
+        "en": "Uzbekistan",
+        "es": "Uzbekistán"
+      },
+      "flag": "https://flagcdn.com/w160/uz.png",
+      "scouting": {
+        "rating": 72,
+        "attack": 71,
+        "midfield": 73,
+        "defense": 72,
+        "tempo": 74,
+        "experience": 61,
+        "style_en": "Historic debut, disciplined buildup, and sharp attacking pockets.",
+        "style_es": "Debut historico, salida disciplinada y ataques en bolsillos interiores.",
+        "players": [
+          [
+            "Eldor Shomurodov",
+            "reference striker",
+            "delantero referencia"
+          ],
+          [
+            "Abbosbek Fayzullaev",
+            "young creator",
+            "joven creador"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "44",
+      "fifaCode": "COL",
+      "iso2": "co",
+      "group": "K",
+      "name": {
+        "en": "Colombia",
+        "es": "Colombia"
+      },
+      "flag": "https://flagcdn.com/w160/co.png",
+      "scouting": {
+        "rating": 84,
+        "attack": 85,
+        "midfield": 83,
+        "defense": 80,
+        "tempo": 82,
+        "experience": 83,
+        "style_en": "Wide flair, midfield bite, and dangerous late surges.",
+        "style_es": "Talento por banda, mordida en el medio y empujes finales peligrosos.",
+        "players": [
+          [
+            "Luis Diaz",
+            "left-wing threat",
+            "amenaza por izquierda"
+          ],
+          [
+            "James Rodriguez",
+            "final pass",
+            "ultimo pase"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "45",
+      "fifaCode": "ENG",
+      "iso2": "eng",
+      "group": "L",
+      "name": {
+        "en": "England",
+        "es": "Inglaterra"
+      },
+      "flag": "https://flagcdn.com/w160/gb-eng.png",
+      "scouting": {
+        "rating": 90,
+        "attack": 91,
+        "midfield": 89,
+        "defense": 85,
+        "tempo": 84,
+        "experience": 87,
+        "style_en": "Elite creators, box presence, and controlled tournament pacing.",
+        "style_es": "Creadores elite, presencia de area y ritmo de torneo controlado.",
+        "players": [
+          [
+            "Jude Bellingham",
+            "box-to-box star",
+            "estrella ida y vuelta"
+          ],
+          [
+            "Harry Kane",
+            "complete striker",
+            "delantero completo"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "46",
+      "fifaCode": "CRO",
+      "iso2": "hr",
+      "group": "L",
+      "name": {
+        "en": "Croatia",
+        "es": "Croacia"
+      },
+      "flag": "https://flagcdn.com/w160/hr.png",
+      "scouting": {
+        "rating": 83,
+        "attack": 80,
+        "midfield": 86,
+        "defense": 81,
+        "tempo": 76,
+        "experience": 91,
+        "style_en": "Tournament composure, midfield rhythm, and knockout patience.",
+        "style_es": "Compostura de torneo, ritmo de mediocampo y paciencia de eliminatoria.",
+        "players": [
+          [
+            "Luka Modric",
+            "tempo master",
+            "maestro del ritmo"
+          ],
+          [
+            "Josko Gvardiol",
+            "progressive defender",
+            "defensor progresivo"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "47",
+      "fifaCode": "GHA",
+      "iso2": "gh",
+      "group": "L",
+      "name": {
+        "en": "Ghana",
+        "es": "Ghana"
+      },
+      "flag": "https://flagcdn.com/w160/gh.png",
+      "scouting": {
+        "rating": 75,
+        "attack": 77,
+        "midfield": 75,
+        "defense": 71,
+        "tempo": 78,
+        "experience": 74,
+        "style_en": "Unpredictable attack, physical midfield, and counter punch.",
+        "style_es": "Ataque impredecible, mediocampo fisico y golpe de contra.",
+        "players": [
+          [
+            "Mohammed Kudus",
+            "carry threat",
+            "amenaza conduciendo"
+          ],
+          [
+            "Thomas Partey",
+            "midfield range",
+            "rango en el medio"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "48",
+      "fifaCode": "PAN",
+      "iso2": "pa",
+      "group": "L",
+      "name": {
+        "en": "Panama",
+        "es": "Panamá"
+      },
+      "flag": "https://flagcdn.com/w160/pa.png",
+      "scouting": {
+        "rating": 70,
+        "attack": 68,
+        "midfield": 70,
+        "defense": 71,
+        "tempo": 73,
+        "experience": 72,
+        "style_en": "Concacaf grit, compact defending, and second-ball aggression.",
+        "style_es": "Garra Concacaf, defensa compacta y agresividad en segunda pelota.",
+        "players": [
+          [
+            "Adalberto Carrasquilla",
+            "midfield connector",
+            "conector del medio"
+          ],
+          [
+            "Jose Fajardo",
+            "penalty-box worker",
+            "trabajador de area"
+          ]
+        ]
+      }
+    }
+  ],
+  "stadiums": [
+    {
+      "id": "1",
+      "name": "Estadio Azteca",
+      "fifaName": "Mexico City Stadium",
+      "city": "Mexico City",
+      "country": {
+        "en": "Mexico",
+        "es": "México"
+      },
+      "capacity": 83000,
+      "region": "Central",
+      "timeZone": "America/Mexico_City"
+    },
+    {
+      "id": "2",
+      "name": "Estadio Akron",
+      "fifaName": "Estadio Guadalajara",
+      "city": "Guadalajara (Zapopan)",
+      "country": {
+        "en": "Mexico",
+        "es": "México"
+      },
+      "capacity": 48000,
+      "region": "Central",
+      "timeZone": "America/Mexico_City"
+    },
+    {
+      "id": "3",
+      "name": "Estadio BBVA",
+      "fifaName": "Estadio Monterrey",
+      "city": "Monterrey (Guadalupe)",
+      "country": {
+        "en": "Mexico",
+        "es": "México"
+      },
+      "capacity": 53500,
+      "region": "Central",
+      "timeZone": "America/Monterrey"
+    },
+    {
+      "id": "4",
+      "name": "AT&T Stadium",
+      "fifaName": "Dallas Stadium",
+      "city": "Dallas (Arlington, Texas)",
+      "country": {
+        "en": "United States",
+        "es": "Estados Unidos"
+      },
+      "capacity": 94000,
+      "region": "Central",
+      "timeZone": "America/Chicago"
+    },
+    {
+      "id": "5",
+      "name": "NRG Stadium",
+      "fifaName": "Houston Stadium",
+      "city": "Houston",
+      "country": {
+        "en": "United States",
+        "es": "Estados Unidos"
+      },
+      "capacity": 72000,
+      "region": "Central",
+      "timeZone": "America/Chicago"
+    },
+    {
+      "id": "6",
+      "name": "GEHA Field at Arrowhead Stadium",
+      "fifaName": "Kansas City Stadium",
+      "city": "Kansas City",
+      "country": {
+        "en": "United States",
+        "es": "Estados Unidos"
+      },
+      "capacity": 73000,
+      "region": "Central",
+      "timeZone": "America/Chicago"
+    },
+    {
+      "id": "7",
+      "name": "Mercedes-Benz Stadium",
+      "fifaName": "Atlanta Stadium",
+      "city": "Atlanta",
+      "country": {
+        "en": "United States",
+        "es": "Estados Unidos"
+      },
+      "capacity": 75000,
+      "region": "Eastern",
+      "timeZone": "America/New_York"
+    },
+    {
+      "id": "8",
+      "name": "Hard Rock Stadium",
+      "fifaName": "Miami Stadium",
+      "city": "Miami (Miami Gardens)",
+      "country": {
+        "en": "United States",
+        "es": "Estados Unidos"
+      },
+      "capacity": 65000,
+      "region": "Eastern",
+      "timeZone": "America/New_York"
+    },
+    {
+      "id": "9",
+      "name": "Gillette Stadium",
+      "fifaName": "Boston Stadium",
+      "city": "Boston (Foxborough)",
+      "country": {
+        "en": "United States",
+        "es": "Estados Unidos"
+      },
+      "capacity": 65000,
+      "region": "Eastern",
+      "timeZone": "America/New_York"
+    },
+    {
+      "id": "10",
+      "name": "Lincoln Financial Field",
+      "fifaName": "Philadelphia Stadium",
+      "city": "Philadelphia",
+      "country": {
+        "en": "United States",
+        "es": "Estados Unidos"
+      },
+      "capacity": 69000,
+      "region": "Eastern",
+      "timeZone": "America/New_York"
+    },
+    {
+      "id": "11",
+      "name": "MetLife Stadium",
+      "fifaName": "New York/New Jersey Stadium",
+      "city": "New York/New Jersey (East Rutherford)",
+      "country": {
+        "en": "United States",
+        "es": "Estados Unidos"
+      },
+      "capacity": 82500,
+      "region": "Eastern",
+      "timeZone": "America/New_York"
+    },
+    {
+      "id": "12",
+      "name": "BMO Field",
+      "fifaName": "Toronto Stadium",
+      "city": "Toronto",
+      "country": {
+        "en": "Canada",
+        "es": "Canadá"
+      },
+      "capacity": 45000,
+      "region": "Eastern",
+      "timeZone": "America/Toronto"
+    },
+    {
+      "id": "13",
+      "name": "BC Place",
+      "fifaName": "BC Place Vancouver",
+      "city": "Vancouver",
+      "country": {
+        "en": "Canada",
+        "es": "Canadá"
+      },
+      "capacity": 54000,
+      "region": "Western",
+      "timeZone": "America/Vancouver"
+    },
+    {
+      "id": "14",
+      "name": "Lumen Field",
+      "fifaName": "Seattle Stadium",
+      "city": "Seattle",
+      "country": {
+        "en": "United States",
+        "es": "Estados Unidos"
+      },
+      "capacity": 69000,
+      "region": "Western",
+      "timeZone": "America/Los_Angeles"
+    },
+    {
+      "id": "15",
+      "name": "Levi's Stadium",
+      "fifaName": "San Francisco Bay Area Stadium",
+      "city": "San Francisco Bay Area (Santa Clara)",
+      "country": {
+        "en": "United States",
+        "es": "Estados Unidos"
+      },
+      "capacity": 71000,
+      "region": "Western",
+      "timeZone": "America/Los_Angeles"
+    },
+    {
+      "id": "16",
+      "name": "SoFi Stadium",
+      "fifaName": "Los Angeles Stadium",
+      "city": "Los Angeles (Inglewood)",
+      "country": {
+        "en": "United States",
+        "es": "Estados Unidos"
+      },
+      "capacity": 70000,
+      "region": "Western",
+      "timeZone": "America/Los_Angeles"
+    }
+  ],
+  "groups": [
+    {
+      "name": "A",
+      "teams": [
+        {
+          "teamId": "1",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        },
+        {
+          "teamId": "2",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        },
+        {
+          "teamId": "3",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        },
+        {
+          "teamId": "4",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        }
+      ]
+    },
+    {
+      "name": "B",
+      "teams": [
+        {
+          "teamId": "5",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        },
+        {
+          "teamId": "6",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        },
+        {
+          "teamId": "7",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        },
+        {
+          "teamId": "8",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        }
+      ]
+    },
+    {
+      "name": "C",
+      "teams": [
+        {
+          "teamId": "9",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        },
+        {
+          "teamId": "10",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        },
+        {
+          "teamId": "11",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        },
+        {
+          "teamId": "12",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        }
+      ]
+    },
+    {
+      "name": "D",
+      "teams": [
+        {
+          "teamId": "13",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        },
+        {
+          "teamId": "14",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        },
+        {
+          "teamId": "15",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        },
+        {
+          "teamId": "16",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        }
+      ]
+    },
+    {
+      "name": "E",
+      "teams": [
+        {
+          "teamId": "17",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        },
+        {
+          "teamId": "18",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        },
+        {
+          "teamId": "19",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        },
+        {
+          "teamId": "20",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        }
+      ]
+    },
+    {
+      "name": "F",
+      "teams": [
+        {
+          "teamId": "21",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        },
+        {
+          "teamId": "22",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        },
+        {
+          "teamId": "23",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        },
+        {
+          "teamId": "24",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        }
+      ]
+    },
+    {
+      "name": "G",
+      "teams": [
+        {
+          "teamId": "25",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        },
+        {
+          "teamId": "26",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        },
+        {
+          "teamId": "27",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        },
+        {
+          "teamId": "28",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        }
+      ]
+    },
+    {
+      "name": "H",
+      "teams": [
+        {
+          "teamId": "29",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        },
+        {
+          "teamId": "30",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        },
+        {
+          "teamId": "31",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        },
+        {
+          "teamId": "32",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        }
+      ]
+    },
+    {
+      "name": "I",
+      "teams": [
+        {
+          "teamId": "33",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        },
+        {
+          "teamId": "34",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        },
+        {
+          "teamId": "35",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        },
+        {
+          "teamId": "36",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        }
+      ]
+    },
+    {
+      "name": "J",
+      "teams": [
+        {
+          "teamId": "37",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        },
+        {
+          "teamId": "38",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        },
+        {
+          "teamId": "39",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        },
+        {
+          "teamId": "40",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        }
+      ]
+    },
+    {
+      "name": "K",
+      "teams": [
+        {
+          "teamId": "41",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        },
+        {
+          "teamId": "42",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        },
+        {
+          "teamId": "43",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        },
+        {
+          "teamId": "44",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        }
+      ]
+    },
+    {
+      "name": "L",
+      "teams": [
+        {
+          "teamId": "45",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        },
+        {
+          "teamId": "46",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        },
+        {
+          "teamId": "47",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        },
+        {
+          "teamId": "48",
+          "played": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "points": 0,
+          "gf": 0,
+          "ga": 0,
+          "gd": 0
+        }
+      ]
+    }
+  ],
+  "matches": [
+    {
+      "id": 1,
+      "type": "group",
+      "group": "A",
+      "matchday": 1,
+      "stadiumId": "1",
+      "localDate": "06/11/2026 13:00",
+      "kickoffUtc": "2026-06-11T19:00:00Z",
+      "homeTeamId": "1",
+      "awayTeamId": "2",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 2,
+      "type": "group",
+      "group": "A",
+      "matchday": 1,
+      "stadiumId": "2",
+      "localDate": "06/11/2026 20:00",
+      "kickoffUtc": "2026-06-12T02:00:00Z",
+      "homeTeamId": "3",
+      "awayTeamId": "4",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 3,
+      "type": "group",
+      "group": "B",
+      "matchday": 1,
+      "stadiumId": "12",
+      "localDate": "06/12/2026 15:00",
+      "kickoffUtc": "2026-06-12T19:00:00Z",
+      "homeTeamId": "5",
+      "awayTeamId": "6",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 4,
+      "type": "group",
+      "group": "D",
+      "matchday": 1,
+      "stadiumId": "16",
+      "localDate": "06/12/2026 18:00",
+      "kickoffUtc": "2026-06-13T01:00:00Z",
+      "homeTeamId": "13",
+      "awayTeamId": "14",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 5,
+      "type": "group",
+      "group": "C",
+      "matchday": 1,
+      "stadiumId": "9",
+      "localDate": "06/13/2026 21:00",
+      "kickoffUtc": "2026-06-14T01:00:00Z",
+      "homeTeamId": "11",
+      "awayTeamId": "12",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 6,
+      "type": "group",
+      "group": "D",
+      "matchday": 1,
+      "stadiumId": "13",
+      "localDate": "06/13/2026 21:00",
+      "kickoffUtc": "2026-06-14T04:00:00Z",
+      "homeTeamId": "15",
+      "awayTeamId": "16",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 7,
+      "type": "group",
+      "group": "C",
+      "matchday": 1,
+      "stadiumId": "11",
+      "localDate": "06/13/2026 18:00",
+      "kickoffUtc": "2026-06-13T22:00:00Z",
+      "homeTeamId": "9",
+      "awayTeamId": "10",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 8,
+      "type": "group",
+      "group": "B",
+      "matchday": 1,
+      "stadiumId": "15",
+      "localDate": "06/13/2026 12:00",
+      "kickoffUtc": "2026-06-13T19:00:00Z",
+      "homeTeamId": "7",
+      "awayTeamId": "8",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 9,
+      "type": "group",
+      "group": "E",
+      "matchday": 1,
+      "stadiumId": "10",
+      "localDate": "06/14/2026 19:00",
+      "kickoffUtc": "2026-06-14T23:00:00Z",
+      "homeTeamId": "19",
+      "awayTeamId": "20",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 10,
+      "type": "group",
+      "group": "E",
+      "matchday": 1,
+      "stadiumId": "5",
+      "localDate": "06/14/2026 12:00",
+      "kickoffUtc": "2026-06-14T17:00:00Z",
+      "homeTeamId": "17",
+      "awayTeamId": "18",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 11,
+      "type": "group",
+      "group": "F",
+      "matchday": 1,
+      "stadiumId": "4",
+      "localDate": "06/14/2026 15:00",
+      "kickoffUtc": "2026-06-14T20:00:00Z",
+      "homeTeamId": "21",
+      "awayTeamId": "22",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 12,
+      "type": "group",
+      "group": "F",
+      "matchday": 1,
+      "stadiumId": "3",
+      "localDate": "06/14/2026 20:00",
+      "kickoffUtc": "2026-06-15T02:00:00Z",
+      "homeTeamId": "23",
+      "awayTeamId": "24",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 13,
+      "type": "group",
+      "group": "G",
+      "matchday": 1,
+      "stadiumId": "16",
+      "localDate": "06/15/2026 18:00",
+      "kickoffUtc": "2026-06-16T01:00:00Z",
+      "homeTeamId": "27",
+      "awayTeamId": "28",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 14,
+      "type": "group",
+      "group": "H",
+      "matchday": 1,
+      "stadiumId": "7",
+      "localDate": "06/15/2026 12:00",
+      "kickoffUtc": "2026-06-15T16:00:00Z",
+      "homeTeamId": "29",
+      "awayTeamId": "30",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 15,
+      "type": "group",
+      "group": "G",
+      "matchday": 1,
+      "stadiumId": "14",
+      "localDate": "06/15/2026 12:00",
+      "kickoffUtc": "2026-06-15T19:00:00Z",
+      "homeTeamId": "25",
+      "awayTeamId": "26",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 16,
+      "type": "group",
+      "group": "H",
+      "matchday": 1,
+      "stadiumId": "8",
+      "localDate": "06/15/2026 18:00",
+      "kickoffUtc": "2026-06-15T22:00:00Z",
+      "homeTeamId": "31",
+      "awayTeamId": "32",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 17,
+      "type": "group",
+      "group": "I",
+      "matchday": 1,
+      "stadiumId": "11",
+      "localDate": "06/16/2026 15:00",
+      "kickoffUtc": "2026-06-16T19:00:00Z",
+      "homeTeamId": "33",
+      "awayTeamId": "34",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 18,
+      "type": "group",
+      "group": "I",
+      "matchday": 1,
+      "stadiumId": "9",
+      "localDate": "06/16/2026 18:00",
+      "kickoffUtc": "2026-06-16T22:00:00Z",
+      "homeTeamId": "35",
+      "awayTeamId": "36",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 19,
+      "type": "group",
+      "group": "J",
+      "matchday": 1,
+      "stadiumId": "6",
+      "localDate": "06/16/2026 20:00",
+      "kickoffUtc": "2026-06-17T01:00:00Z",
+      "homeTeamId": "37",
+      "awayTeamId": "38",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 20,
+      "type": "group",
+      "group": "J",
+      "matchday": 1,
+      "stadiumId": "15",
+      "localDate": "06/16/2026 21:00",
+      "kickoffUtc": "2026-06-17T04:00:00Z",
+      "homeTeamId": "39",
+      "awayTeamId": "40",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 21,
+      "type": "group",
+      "group": "K",
+      "matchday": 1,
+      "stadiumId": "5",
+      "localDate": "06/17/2026 12:00",
+      "kickoffUtc": "2026-06-17T17:00:00Z",
+      "homeTeamId": "41",
+      "awayTeamId": "42",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 22,
+      "type": "group",
+      "group": "L",
+      "matchday": 1,
+      "stadiumId": "4",
+      "localDate": "06/17/2026 15:00",
+      "kickoffUtc": "2026-06-17T20:00:00Z",
+      "homeTeamId": "45",
+      "awayTeamId": "46",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 23,
+      "type": "group",
+      "group": "K",
+      "matchday": 1,
+      "stadiumId": "1",
+      "localDate": "06/17/2026 20:00",
+      "kickoffUtc": "2026-06-18T02:00:00Z",
+      "homeTeamId": "43",
+      "awayTeamId": "44",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 24,
+      "type": "group",
+      "group": "L",
+      "matchday": 1,
+      "stadiumId": "12",
+      "localDate": "06/17/2026 19:00",
+      "kickoffUtc": "2026-06-17T23:00:00Z",
+      "homeTeamId": "47",
+      "awayTeamId": "48",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 25,
+      "type": "group",
+      "group": "A",
+      "matchday": 2,
+      "stadiumId": "2",
+      "localDate": "06/18/2026 19:00",
+      "kickoffUtc": "2026-06-19T01:00:00Z",
+      "homeTeamId": "1",
+      "awayTeamId": "3",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 26,
+      "type": "group",
+      "group": "B",
+      "matchday": 2,
+      "stadiumId": "16",
+      "localDate": "06/18/2026 12:00",
+      "kickoffUtc": "2026-06-18T19:00:00Z",
+      "homeTeamId": "8",
+      "awayTeamId": "6",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 27,
+      "type": "group",
+      "group": "B",
+      "matchday": 2,
+      "stadiumId": "13",
+      "localDate": "06/18/2026 15:00",
+      "kickoffUtc": "2026-06-18T22:00:00Z",
+      "homeTeamId": "5",
+      "awayTeamId": "7",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 28,
+      "type": "group",
+      "group": "A",
+      "matchday": 2,
+      "stadiumId": "7",
+      "localDate": "06/18/2026 12:00",
+      "kickoffUtc": "2026-06-18T16:00:00Z",
+      "homeTeamId": "4",
+      "awayTeamId": "2",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 29,
+      "type": "group",
+      "group": "C",
+      "matchday": 2,
+      "stadiumId": "10",
+      "localDate": "06/19/2026 21:00",
+      "kickoffUtc": "2026-06-20T01:00:00Z",
+      "homeTeamId": "9",
+      "awayTeamId": "11",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 30,
+      "type": "group",
+      "group": "C",
+      "matchday": 2,
+      "stadiumId": "9",
+      "localDate": "06/19/2026 18:00",
+      "kickoffUtc": "2026-06-19T22:00:00Z",
+      "homeTeamId": "12",
+      "awayTeamId": "10",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 31,
+      "type": "group",
+      "group": "D",
+      "matchday": 2,
+      "stadiumId": "14",
+      "localDate": "06/19/2026 12:00",
+      "kickoffUtc": "2026-06-19T19:00:00Z",
+      "homeTeamId": "13",
+      "awayTeamId": "15",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 32,
+      "type": "group",
+      "group": "D",
+      "matchday": 2,
+      "stadiumId": "15",
+      "localDate": "06/19/2026 20:00",
+      "kickoffUtc": "2026-06-20T03:00:00Z",
+      "homeTeamId": "16",
+      "awayTeamId": "14",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 33,
+      "type": "group",
+      "group": "E",
+      "matchday": 2,
+      "stadiumId": "12",
+      "localDate": "06/20/2026 16:00",
+      "kickoffUtc": "2026-06-20T20:00:00Z",
+      "homeTeamId": "17",
+      "awayTeamId": "19",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 34,
+      "type": "group",
+      "group": "E",
+      "matchday": 2,
+      "stadiumId": "6",
+      "localDate": "06/20/2026 19:00",
+      "kickoffUtc": "2026-06-21T00:00:00Z",
+      "homeTeamId": "20",
+      "awayTeamId": "18",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 35,
+      "type": "group",
+      "group": "F",
+      "matchday": 2,
+      "stadiumId": "5",
+      "localDate": "06/20/2026 12:00",
+      "kickoffUtc": "2026-06-20T17:00:00Z",
+      "homeTeamId": "21",
+      "awayTeamId": "23",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 36,
+      "type": "group",
+      "group": "F",
+      "matchday": 2,
+      "stadiumId": "3",
+      "localDate": "06/20/2026 22:00",
+      "kickoffUtc": "2026-06-21T04:00:00Z",
+      "homeTeamId": "24",
+      "awayTeamId": "22",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 37,
+      "type": "group",
+      "group": "G",
+      "matchday": 2,
+      "stadiumId": "16",
+      "localDate": "06/21/2026 12:00",
+      "kickoffUtc": "2026-06-21T19:00:00Z",
+      "homeTeamId": "25",
+      "awayTeamId": "27",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 38,
+      "type": "group",
+      "group": "G",
+      "matchday": 2,
+      "stadiumId": "13",
+      "localDate": "06/21/2026 18:00",
+      "kickoffUtc": "2026-06-22T01:00:00Z",
+      "homeTeamId": "28",
+      "awayTeamId": "26",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 39,
+      "type": "group",
+      "group": "H",
+      "matchday": 2,
+      "stadiumId": "7",
+      "localDate": "06/21/2026 12:00",
+      "kickoffUtc": "2026-06-21T16:00:00Z",
+      "homeTeamId": "29",
+      "awayTeamId": "31",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 40,
+      "type": "group",
+      "group": "H",
+      "matchday": 2,
+      "stadiumId": "8",
+      "localDate": "06/21/2026 18:00",
+      "kickoffUtc": "2026-06-21T22:00:00Z",
+      "homeTeamId": "32",
+      "awayTeamId": "30",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 41,
+      "type": "group",
+      "group": "I",
+      "matchday": 2,
+      "stadiumId": "10",
+      "localDate": "06/22/2026 17:00",
+      "kickoffUtc": "2026-06-22T21:00:00Z",
+      "homeTeamId": "33",
+      "awayTeamId": "35",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 42,
+      "type": "group",
+      "group": "I",
+      "matchday": 2,
+      "stadiumId": "11",
+      "localDate": "06/22/2026 20:00",
+      "kickoffUtc": "2026-06-23T00:00:00Z",
+      "homeTeamId": "36",
+      "awayTeamId": "34",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 43,
+      "type": "group",
+      "group": "J",
+      "matchday": 2,
+      "stadiumId": "4",
+      "localDate": "06/22/2026 12:00",
+      "kickoffUtc": "2026-06-22T17:00:00Z",
+      "homeTeamId": "37",
+      "awayTeamId": "39",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 44,
+      "type": "group",
+      "group": "J",
+      "matchday": 2,
+      "stadiumId": "15",
+      "localDate": "06/22/2026 20:00",
+      "kickoffUtc": "2026-06-23T03:00:00Z",
+      "homeTeamId": "40",
+      "awayTeamId": "38",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 45,
+      "type": "group",
+      "group": "K",
+      "matchday": 2,
+      "stadiumId": "5",
+      "localDate": "06/23/2026 12:00",
+      "kickoffUtc": "2026-06-23T17:00:00Z",
+      "homeTeamId": "41",
+      "awayTeamId": "43",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 46,
+      "type": "group",
+      "group": "L",
+      "matchday": 2,
+      "stadiumId": "12",
+      "localDate": "06/23/2026 19:00",
+      "kickoffUtc": "2026-06-23T23:00:00Z",
+      "homeTeamId": "48",
+      "awayTeamId": "46",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 47,
+      "type": "group",
+      "group": "K",
+      "matchday": 2,
+      "stadiumId": "2",
+      "localDate": "06/23/2026 20:00",
+      "kickoffUtc": "2026-06-24T02:00:00Z",
+      "homeTeamId": "44",
+      "awayTeamId": "42",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 48,
+      "type": "group",
+      "group": "L",
+      "matchday": 2,
+      "stadiumId": "9",
+      "localDate": "06/23/2026 16:00",
+      "kickoffUtc": "2026-06-23T20:00:00Z",
+      "homeTeamId": "45",
+      "awayTeamId": "47",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 49,
+      "type": "group",
+      "group": "C",
+      "matchday": 3,
+      "stadiumId": "8",
+      "localDate": "06/24/2026 18:00",
+      "kickoffUtc": "2026-06-24T22:00:00Z",
+      "homeTeamId": "12",
+      "awayTeamId": "9",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 50,
+      "type": "group",
+      "group": "C",
+      "matchday": 3,
+      "stadiumId": "7",
+      "localDate": "06/24/2026 18:00",
+      "kickoffUtc": "2026-06-24T22:00:00Z",
+      "homeTeamId": "10",
+      "awayTeamId": "11",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 51,
+      "type": "group",
+      "group": "A",
+      "matchday": 3,
+      "stadiumId": "3",
+      "localDate": "06/24/2026 19:00",
+      "kickoffUtc": "2026-06-25T01:00:00Z",
+      "homeTeamId": "2",
+      "awayTeamId": "3",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 52,
+      "type": "group",
+      "group": "A",
+      "matchday": 3,
+      "stadiumId": "1",
+      "localDate": "06/24/2026 19:00",
+      "kickoffUtc": "2026-06-25T01:00:00Z",
+      "homeTeamId": "4",
+      "awayTeamId": "1",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 53,
+      "type": "group",
+      "group": "B",
+      "matchday": 3,
+      "stadiumId": "14",
+      "localDate": "06/24/2026 12:00",
+      "kickoffUtc": "2026-06-24T19:00:00Z",
+      "homeTeamId": "6",
+      "awayTeamId": "7",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 54,
+      "type": "group",
+      "group": "B",
+      "matchday": 3,
+      "stadiumId": "13",
+      "localDate": "06/24/2026 12:00",
+      "kickoffUtc": "2026-06-24T19:00:00Z",
+      "homeTeamId": "8",
+      "awayTeamId": "5",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 55,
+      "type": "group",
+      "group": "E",
+      "matchday": 3,
+      "stadiumId": "10",
+      "localDate": "06/25/2026 16:00",
+      "kickoffUtc": "2026-06-25T20:00:00Z",
+      "homeTeamId": "18",
+      "awayTeamId": "19",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 56,
+      "type": "group",
+      "group": "E",
+      "matchday": 3,
+      "stadiumId": "11",
+      "localDate": "06/25/2026 16:00",
+      "kickoffUtc": "2026-06-25T20:00:00Z",
+      "homeTeamId": "20",
+      "awayTeamId": "17",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 57,
+      "type": "group",
+      "group": "D",
+      "matchday": 3,
+      "stadiumId": "15",
+      "localDate": "06/25/2026 19:00",
+      "kickoffUtc": "2026-06-26T02:00:00Z",
+      "homeTeamId": "14",
+      "awayTeamId": "15",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 58,
+      "type": "group",
+      "group": "D",
+      "matchday": 3,
+      "stadiumId": "16",
+      "localDate": "06/25/2026 19:00",
+      "kickoffUtc": "2026-06-26T02:00:00Z",
+      "homeTeamId": "16",
+      "awayTeamId": "13",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 59,
+      "type": "group",
+      "group": "F",
+      "matchday": 3,
+      "stadiumId": "4",
+      "localDate": "06/25/2026 18:00",
+      "kickoffUtc": "2026-06-25T23:00:00Z",
+      "homeTeamId": "22",
+      "awayTeamId": "23",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 60,
+      "type": "group",
+      "group": "F",
+      "matchday": 3,
+      "stadiumId": "6",
+      "localDate": "06/25/2026 18:00",
+      "kickoffUtc": "2026-06-25T23:00:00Z",
+      "homeTeamId": "24",
+      "awayTeamId": "21",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 61,
+      "type": "group",
+      "group": "I",
+      "matchday": 3,
+      "stadiumId": "12",
+      "localDate": "06/26/2026 15:00",
+      "kickoffUtc": "2026-06-26T19:00:00Z",
+      "homeTeamId": "34",
+      "awayTeamId": "35",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 62,
+      "type": "group",
+      "group": "I",
+      "matchday": 3,
+      "stadiumId": "9",
+      "localDate": "06/26/2026 15:00",
+      "kickoffUtc": "2026-06-26T19:00:00Z",
+      "homeTeamId": "36",
+      "awayTeamId": "33",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 63,
+      "type": "group",
+      "group": "G",
+      "matchday": 3,
+      "stadiumId": "14",
+      "localDate": "06/26/2026 20:00",
+      "kickoffUtc": "2026-06-27T03:00:00Z",
+      "homeTeamId": "26",
+      "awayTeamId": "27",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 64,
+      "type": "group",
+      "group": "G",
+      "matchday": 3,
+      "stadiumId": "13",
+      "localDate": "06/26/2026 20:00",
+      "kickoffUtc": "2026-06-27T03:00:00Z",
+      "homeTeamId": "28",
+      "awayTeamId": "25",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 65,
+      "type": "group",
+      "group": "H",
+      "matchday": 3,
+      "stadiumId": "5",
+      "localDate": "06/26/2026 19:00",
+      "kickoffUtc": "2026-06-27T00:00:00Z",
+      "homeTeamId": "30",
+      "awayTeamId": "31",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 66,
+      "type": "group",
+      "group": "H",
+      "matchday": 3,
+      "stadiumId": "2",
+      "localDate": "06/26/2026 18:00",
+      "kickoffUtc": "2026-06-27T00:00:00Z",
+      "homeTeamId": "32",
+      "awayTeamId": "29",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 67,
+      "type": "group",
+      "group": "L",
+      "matchday": 3,
+      "stadiumId": "11",
+      "localDate": "06/27/2026 17:00",
+      "kickoffUtc": "2026-06-27T21:00:00Z",
+      "homeTeamId": "48",
+      "awayTeamId": "45",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 68,
+      "type": "group",
+      "group": "L",
+      "matchday": 3,
+      "stadiumId": "10",
+      "localDate": "06/27/2026 17:00",
+      "kickoffUtc": "2026-06-27T21:00:00Z",
+      "homeTeamId": "46",
+      "awayTeamId": "47",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 69,
+      "type": "group",
+      "group": "J",
+      "matchday": 3,
+      "stadiumId": "6",
+      "localDate": "06/27/2026 21:00",
+      "kickoffUtc": "2026-06-28T02:00:00Z",
+      "homeTeamId": "38",
+      "awayTeamId": "39",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 70,
+      "type": "group",
+      "group": "J",
+      "matchday": 3,
+      "stadiumId": "4",
+      "localDate": "06/27/2026 21:00",
+      "kickoffUtc": "2026-06-28T02:00:00Z",
+      "homeTeamId": "40",
+      "awayTeamId": "37",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 71,
+      "type": "group",
+      "group": "K",
+      "matchday": 3,
+      "stadiumId": "8",
+      "localDate": "06/27/2026 19:30",
+      "kickoffUtc": "2026-06-27T23:30:00Z",
+      "homeTeamId": "44",
+      "awayTeamId": "41",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 72,
+      "type": "group",
+      "group": "K",
+      "matchday": 3,
+      "stadiumId": "7",
+      "localDate": "06/27/2026 19:30",
+      "kickoffUtc": "2026-06-27T23:30:00Z",
+      "homeTeamId": "42",
+      "awayTeamId": "43",
+      "homeLabel": null,
+      "awayLabel": null,
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 73,
+      "type": "r32",
+      "group": "R32",
+      "matchday": 4,
+      "stadiumId": "16",
+      "localDate": "06/28/2026 12:00",
+      "kickoffUtc": "2026-06-28T19:00:00Z",
+      "homeTeamId": null,
+      "awayTeamId": null,
+      "homeLabel": "Runner-up Group A",
+      "awayLabel": "Runner-up Group B",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 74,
+      "type": "r32",
+      "group": "R32",
+      "matchday": 4,
+      "stadiumId": "9",
+      "localDate": "06/29/2026 16:30",
+      "kickoffUtc": "2026-06-29T20:30:00Z",
+      "homeTeamId": null,
+      "awayTeamId": null,
+      "homeLabel": "Winner Group E",
+      "awayLabel": "3rd Group A/B/C/D/F",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 75,
+      "type": "r32",
+      "group": "R32",
+      "matchday": 4,
+      "stadiumId": "3",
+      "localDate": "06/29/2026 19:00",
+      "kickoffUtc": "2026-06-30T01:00:00Z",
+      "homeTeamId": null,
+      "awayTeamId": null,
+      "homeLabel": "Winner Group F",
+      "awayLabel": "Runner-up Group C",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 76,
+      "type": "r32",
+      "group": "R32",
+      "matchday": 4,
+      "stadiumId": "5",
+      "localDate": "06/29/2026 12:00",
+      "kickoffUtc": "2026-06-29T17:00:00Z",
+      "homeTeamId": null,
+      "awayTeamId": null,
+      "homeLabel": "Winner Group C",
+      "awayLabel": "Runner-up Group F",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 77,
+      "type": "r32",
+      "group": "R32",
+      "matchday": 4,
+      "stadiumId": "11",
+      "localDate": "06/30/2026 17:00",
+      "kickoffUtc": "2026-06-30T21:00:00Z",
+      "homeTeamId": null,
+      "awayTeamId": null,
+      "homeLabel": "Winner Group I",
+      "awayLabel": "3rd Group C/D/F/G/H",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 78,
+      "type": "r32",
+      "group": "R32",
+      "matchday": 4,
+      "stadiumId": "4",
+      "localDate": "06/30/2026 12:00",
+      "kickoffUtc": "2026-06-30T17:00:00Z",
+      "homeTeamId": null,
+      "awayTeamId": null,
+      "homeLabel": "Runner-up Group E",
+      "awayLabel": "Runner-up Group I",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 79,
+      "type": "r32",
+      "group": "R32",
+      "matchday": 4,
+      "stadiumId": "1",
+      "localDate": "06/30/2026 19:00",
+      "kickoffUtc": "2026-07-01T01:00:00Z",
+      "homeTeamId": null,
+      "awayTeamId": null,
+      "homeLabel": "Winner Group A",
+      "awayLabel": "3rd Group C/E/F/H/I",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 80,
+      "type": "r32",
+      "group": "R32",
+      "matchday": 4,
+      "stadiumId": "7",
+      "localDate": "07/01/2026 12:00",
+      "kickoffUtc": "2026-07-01T16:00:00Z",
+      "homeTeamId": null,
+      "awayTeamId": null,
+      "homeLabel": "Winner Group L",
+      "awayLabel": "3rd Group E/H/I/J/K",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 81,
+      "type": "r32",
+      "group": "R32",
+      "matchday": 4,
+      "stadiumId": "15",
+      "localDate": "07/01/2026 17:00",
+      "kickoffUtc": "2026-07-02T00:00:00Z",
+      "homeTeamId": null,
+      "awayTeamId": null,
+      "homeLabel": "Winner Group D",
+      "awayLabel": "3rd Group B/E/F/I/J",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 82,
+      "type": "r32",
+      "group": "R32",
+      "matchday": 4,
+      "stadiumId": "14",
+      "localDate": "07/01/2026 13:00",
+      "kickoffUtc": "2026-07-01T20:00:00Z",
+      "homeTeamId": null,
+      "awayTeamId": null,
+      "homeLabel": "Winner Group G",
+      "awayLabel": "3rd Group A/E/H/I/J",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 83,
+      "type": "r32",
+      "group": "R32",
+      "matchday": 4,
+      "stadiumId": "12",
+      "localDate": "07/02/2026 19:00",
+      "kickoffUtc": "2026-07-02T23:00:00Z",
+      "homeTeamId": null,
+      "awayTeamId": null,
+      "homeLabel": "Runner-up Group K",
+      "awayLabel": "Runner-up Group L",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 84,
+      "type": "r32",
+      "group": "R32",
+      "matchday": 4,
+      "stadiumId": "16",
+      "localDate": "07/02/2026 12:00",
+      "kickoffUtc": "2026-07-02T19:00:00Z",
+      "homeTeamId": null,
+      "awayTeamId": null,
+      "homeLabel": "Winner Group H",
+      "awayLabel": "Runner-up Group J",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 85,
+      "type": "r32",
+      "group": "R32",
+      "matchday": 4,
+      "stadiumId": "13",
+      "localDate": "07/02/2026 20:00",
+      "kickoffUtc": "2026-07-03T03:00:00Z",
+      "homeTeamId": null,
+      "awayTeamId": null,
+      "homeLabel": "Winner Group B",
+      "awayLabel": "3rd Group E/F/G/I/J",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 86,
+      "type": "r32",
+      "group": "R32",
+      "matchday": 4,
+      "stadiumId": "8",
+      "localDate": "07/03/2026 18:00",
+      "kickoffUtc": "2026-07-03T22:00:00Z",
+      "homeTeamId": null,
+      "awayTeamId": null,
+      "homeLabel": "Winner Group J",
+      "awayLabel": "Runner-up Group H",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 87,
+      "type": "r32",
+      "group": "R32",
+      "matchday": 4,
+      "stadiumId": "6",
+      "localDate": "07/03/2026 20:30",
+      "kickoffUtc": "2026-07-04T01:30:00Z",
+      "homeTeamId": null,
+      "awayTeamId": null,
+      "homeLabel": "Winner Group K",
+      "awayLabel": "3rd Group D/E/I/J/L",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 88,
+      "type": "r32",
+      "group": "R32",
+      "matchday": 4,
+      "stadiumId": "4",
+      "localDate": "07/03/2026 13:00",
+      "kickoffUtc": "2026-07-03T18:00:00Z",
+      "homeTeamId": null,
+      "awayTeamId": null,
+      "homeLabel": "Runner-up Group D",
+      "awayLabel": "Runner-up Group G",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 89,
+      "type": "r16",
+      "group": "R16",
+      "matchday": 5,
+      "stadiumId": "10",
+      "localDate": "07/04/2026 17:00",
+      "kickoffUtc": "2026-07-04T21:00:00Z",
+      "homeTeamId": null,
+      "awayTeamId": null,
+      "homeLabel": "Winner Match 74",
+      "awayLabel": "Winner Match 77",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 90,
+      "type": "r16",
+      "group": "R16",
+      "matchday": 5,
+      "stadiumId": "5",
+      "localDate": "07/04/2026 12:00",
+      "kickoffUtc": "2026-07-04T17:00:00Z",
+      "homeTeamId": null,
+      "awayTeamId": null,
+      "homeLabel": "Winner Match 73",
+      "awayLabel": "Winner Match 75",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 91,
+      "type": "r16",
+      "group": "R16",
+      "matchday": 5,
+      "stadiumId": "11",
+      "localDate": "07/05/2026 16:00",
+      "kickoffUtc": "2026-07-05T20:00:00Z",
+      "homeTeamId": null,
+      "awayTeamId": null,
+      "homeLabel": "Winner Match 76",
+      "awayLabel": "Winner Match 78",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 92,
+      "type": "r16",
+      "group": "R16",
+      "matchday": 5,
+      "stadiumId": "1",
+      "localDate": "07/05/2026 18:00",
+      "kickoffUtc": "2026-07-06T00:00:00Z",
+      "homeTeamId": null,
+      "awayTeamId": null,
+      "homeLabel": "Winner Match 79",
+      "awayLabel": "Winner Match 80",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 93,
+      "type": "r16",
+      "group": "R16",
+      "matchday": 5,
+      "stadiumId": "4",
+      "localDate": "07/06/2026 14:00",
+      "kickoffUtc": "2026-07-06T19:00:00Z",
+      "homeTeamId": null,
+      "awayTeamId": null,
+      "homeLabel": "Winner Match 83",
+      "awayLabel": "Winner Match 84",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 94,
+      "type": "r16",
+      "group": "R16",
+      "matchday": 5,
+      "stadiumId": "14",
+      "localDate": "07/06/2026 17:00",
+      "kickoffUtc": "2026-07-07T00:00:00Z",
+      "homeTeamId": null,
+      "awayTeamId": null,
+      "homeLabel": "Winner Match 81",
+      "awayLabel": "Winner Match 82",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 95,
+      "type": "r16",
+      "group": "R16",
+      "matchday": 5,
+      "stadiumId": "7",
+      "localDate": "07/07/2026 12:00",
+      "kickoffUtc": "2026-07-07T16:00:00Z",
+      "homeTeamId": null,
+      "awayTeamId": null,
+      "homeLabel": "Winner Match 86",
+      "awayLabel": "Winner Match 88",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 96,
+      "type": "r16",
+      "group": "R16",
+      "matchday": 5,
+      "stadiumId": "13",
+      "localDate": "07/07/2026 13:00",
+      "kickoffUtc": "2026-07-07T20:00:00Z",
+      "homeTeamId": null,
+      "awayTeamId": null,
+      "homeLabel": "Winner Match 85",
+      "awayLabel": "Winner Match 87",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 97,
+      "type": "qf",
+      "group": "QF",
+      "matchday": 6,
+      "stadiumId": "9",
+      "localDate": "07/09/2026 16:00",
+      "kickoffUtc": "2026-07-09T20:00:00Z",
+      "homeTeamId": null,
+      "awayTeamId": null,
+      "homeLabel": "Winner Match 89",
+      "awayLabel": "Winner Match 90",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 98,
+      "type": "qf",
+      "group": "QF",
+      "matchday": 6,
+      "stadiumId": "16",
+      "localDate": "07/10/2026 12:00",
+      "kickoffUtc": "2026-07-10T19:00:00Z",
+      "homeTeamId": null,
+      "awayTeamId": null,
+      "homeLabel": "Winner Match 93",
+      "awayLabel": "Winner Match 94",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 99,
+      "type": "qf",
+      "group": "QF",
+      "matchday": 6,
+      "stadiumId": "8",
+      "localDate": "07/11/2026 17:00",
+      "kickoffUtc": "2026-07-11T21:00:00Z",
+      "homeTeamId": null,
+      "awayTeamId": null,
+      "homeLabel": "Winner Match 91",
+      "awayLabel": "Winner Match 92",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 100,
+      "type": "qf",
+      "group": "QF",
+      "matchday": 6,
+      "stadiumId": "6",
+      "localDate": "07/11/2026 20:00",
+      "kickoffUtc": "2026-07-12T01:00:00Z",
+      "homeTeamId": null,
+      "awayTeamId": null,
+      "homeLabel": "Winner Match 95",
+      "awayLabel": "Winner Match 96",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 101,
+      "type": "sf",
+      "group": "SF",
+      "matchday": 7,
+      "stadiumId": "4",
+      "localDate": "07/14/2026 14:00",
+      "kickoffUtc": "2026-07-14T19:00:00Z",
+      "homeTeamId": null,
+      "awayTeamId": null,
+      "homeLabel": "Winner Match 97",
+      "awayLabel": "Winner Match 98",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 102,
+      "type": "sf",
+      "group": "SF",
+      "matchday": 7,
+      "stadiumId": "7",
+      "localDate": "07/15/2026 15:00",
+      "kickoffUtc": "2026-07-15T19:00:00Z",
+      "homeTeamId": null,
+      "awayTeamId": null,
+      "homeLabel": "Winner Match 99",
+      "awayLabel": "Winner Match 100",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 103,
+      "type": "third",
+      "group": "3RD",
+      "matchday": 8,
+      "stadiumId": "8",
+      "localDate": "07/18/2026 17:00",
+      "kickoffUtc": "2026-07-18T21:00:00Z",
+      "homeTeamId": null,
+      "awayTeamId": null,
+      "homeLabel": "Loser Match 101",
+      "awayLabel": "Loser Match 102",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    },
+    {
+      "id": 104,
+      "type": "final",
+      "group": "FINAL",
+      "matchday": 9,
+      "stadiumId": "11",
+      "localDate": "07/19/2026 15:00",
+      "kickoffUtc": "2026-07-19T19:00:00Z",
+      "homeTeamId": null,
+      "awayTeamId": null,
+      "homeLabel": "Winner Match 101",
+      "awayLabel": "Winner Match 102",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "notstarted"
+    }
+  ]
+}
