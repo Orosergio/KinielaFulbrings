@@ -206,12 +206,24 @@ export async function syncPublicWorldCup() {
       const result = await sql`
         UPDATE matches
         SET
-          home_team_id = COALESCE(${Number(game.home_team_id) || null}, home_team_id),
-          away_team_id = COALESCE(${Number(game.away_team_id) || null}, away_team_id),
+          home_team_id = COALESCE(
+            ${Number(game.home_team_id) || null}::integer,
+            home_team_id
+          ),
+          away_team_id = COALESCE(
+            ${Number(game.away_team_id) || null}::integer,
+            away_team_id
+          ),
           status = ${status},
           minute = ${publicApiMinute(game.time_elapsed)},
-          home_score = CASE WHEN ${status} = 'SCHEDULED' THEN NULL ELSE ${homeScore} END,
-          away_score = CASE WHEN ${status} = 'SCHEDULED' THEN NULL ELSE ${awayScore} END,
+          home_score = CASE
+            WHEN ${status}::text = 'SCHEDULED' THEN NULL
+            ELSE ${homeScore}::integer
+          END,
+          away_score = CASE
+            WHEN ${status}::text = 'SCHEDULED' THEN NULL
+            ELSE ${awayScore}::integer
+          END,
           source_updated_at = now(),
           updated_at = now()
         WHERE id = ${matchId}
