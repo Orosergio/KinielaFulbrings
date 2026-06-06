@@ -1,8 +1,8 @@
 import type { Config } from "@netlify/functions";
-import { syncFootballData } from "./_shared/sync-football";
+import { syncMatchData } from "./_shared/sync-football";
 
 export default async () => {
-  const result = await syncFootballData();
+  const result = await syncMatchData();
   console.log("Match sync:", result);
 };
 

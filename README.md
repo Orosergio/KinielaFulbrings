@@ -8,7 +8,8 @@ Aplicación multiusuario para organizar quinielas privadas del Mundial 2026.
 - Netlify Identity para registro, acceso y recuperación de cuentas.
 - Netlify Functions para autorización y reglas del juego.
 - Neon PostgreSQL para perfiles, grupos, membresías, partidos y predicciones.
-- `football-data.org` como proveedor configurable de marcadores.
+- `worldcup26.ir` como proveedor público de marcadores.
+- `football-data.org` como proveedor alternativo configurable.
 
 GitHub Pages ya no es el destino correcto: una aplicación con cuentas y datos
 compartidos necesita funciones de servidor. GitHub conserva el código y ejecuta
@@ -60,7 +61,8 @@ La migración está en `db/migrations/001_initial_schema.sql`.
 Variables requeridas:
 
 - `DATABASE_URL`: conexión pooled de Neon.
-- `FOOTBALL_DATA_API_TOKEN`: token de `football-data.org` para sincronización.
+- `FOOTBALL_DATA_API_TOKEN`: opcional; si existe, usa `football-data.org` en
+  lugar del proveedor público.
 
 Configuración:
 
