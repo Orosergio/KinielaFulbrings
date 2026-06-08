@@ -19,7 +19,7 @@ CI; Netlify construye y publica la aplicación.
 
 - Una predicción solo puede escribirse antes de `matches.kickoff_at`.
 - La fecha límite se valida en la Function y en un trigger de PostgreSQL.
-- Los picks de otros miembros no se devuelven hasta que inicia el partido.
+- Los picks de otros miembros son visibles dentro del mismo grupo para transparencia.
 - Solo miembros del mismo grupo pueden consultar su tabla.
 - Los puntos se calculan en PostgreSQL al finalizar el partido.
 

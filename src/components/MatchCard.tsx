@@ -240,26 +240,24 @@ export function MatchCard({
 
       {error && <p className="inline-error">{error}</p>}
 
-      {locked && (
-        <div className="group-picks">
-          <span className="group-picks-label">
-            {language === "es" ? "Picks del grupo" : "Pool picks"}
-          </span>
-          {groupPredictions.length ? (
-            groupPredictions.map((item) => (
-              <span className="member-pick" key={item.userId}>
-                {members.find((member) => member.id === item.userId)?.displayName ??
-                  "Jugador"}{" "}
-                <b>
-                  {item.homeScore}-{item.awayScore}
-                </b>
-              </span>
-            ))
-          ) : (
-            <span className="muted-text">{t("reveal")}</span>
-          )}
-        </div>
-      )}
+      <div className="group-picks">
+        <span className="group-picks-label">
+          {language === "es" ? "Picks del grupo" : "Pool picks"}
+        </span>
+        {groupPredictions.length ? (
+          groupPredictions.map((item) => (
+            <span className="member-pick" key={item.userId}>
+              {members.find((member) => member.id === item.userId)?.displayName ??
+                "Jugador"}{" "}
+              <b>
+                {item.homeScore}-{item.awayScore}
+              </b>
+            </span>
+          ))
+        ) : (
+          <span className="muted-text">{t("reveal")}</span>
+        )}
+      </div>
     </article>
   );
 }

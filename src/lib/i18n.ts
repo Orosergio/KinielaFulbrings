@@ -31,7 +31,7 @@ const copy = {
     save: "Guardar pick",
     saved: "Guardado",
     locked: "Bloqueado",
-    reveal: "Los picks del grupo aparecen al iniciar el partido.",
+    reveal: "Aún no hay picks de otros miembros.",
     noPool: "Crea tu primera quiniela",
     noPoolDetail:
       "Usa un grupo para amigos y otro para familia. Cada uno mantiene su propia tabla.",
@@ -80,7 +80,7 @@ const copy = {
     save: "Save pick",
     saved: "Saved",
     locked: "Locked",
-    reveal: "Pool picks appear once the match begins.",
+    reveal: "No other member picks yet.",
     noPool: "Create your first pool",
     noPoolDetail:
       "Use one pool for friends and another for family. Each has its own standings.",

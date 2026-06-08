@@ -93,13 +93,7 @@ export default async (request: Request) => {
           p.points,
           p.updated_at AS "updatedAt"
         FROM predictions p
-        JOIN matches m ON m.id = p.match_id
         WHERE p.pool_id = ${selectedPoolId}::uuid
-          AND (
-            p.user_id = ${user.id}
-            OR now() >= m.kickoff_at
-            OR m.status <> 'SCHEDULED'
-          )
         ORDER BY p.match_id, p.user_id
       `;
 
