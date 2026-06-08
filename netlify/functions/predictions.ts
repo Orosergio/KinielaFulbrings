@@ -2,7 +2,7 @@ import type { Config } from "@netlify/functions";
 import { z } from "zod";
 import { requireUser } from "./_shared/auth";
 import { db } from "./_shared/db";
-import { handleError, json } from "./_shared/http";
+import { handleError, HttpError, json } from "./_shared/http";
 import { requirePoolMember } from "./_shared/pool-access";
 
 const bodySchema = z.object({
@@ -19,6 +19,26 @@ export default async (request: Request) => {
     await requirePoolMember(payload.poolId, user.id);
 
     const sql = db();
+    const [match] = await sql`
+      SELECT
+        id,
+        (now() >= kickoff_at OR status <> 'SCHEDULED') AS locked
+      FROM matches
+      WHERE id = ${payload.matchId}
+    `;
+
+    if (!match) {
+      throw new HttpError(404, "El partido no existe.", "MATCH_NOT_FOUND");
+    }
+
+    if (match.locked) {
+      throw new HttpError(
+        409,
+        "El partido ya comenzó. La predicción quedó bloqueada.",
+        "PREDICTION_LOCKED",
+      );
+    }
+
     const [prediction] = await sql`
       INSERT INTO predictions (
         pool_id, user_id, match_id, home_score, away_score

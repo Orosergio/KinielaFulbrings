@@ -1,5 +1,7 @@
 import { db } from "./db";
 
+const EXPECTED_MATCH_COUNT = 104;
+
 type ProviderMatch = {
   id: number;
   utcDate: string;
@@ -137,10 +139,21 @@ export async function syncFootballData() {
         status = 'SUCCESS',
         matches_seen = ${providerMatches.length},
         matches_updated = ${updated},
+        detail = ${JSON.stringify({
+          expectedMatches: EXPECTED_MATCH_COUNT,
+          complete: providerMatches.length >= EXPECTED_MATCH_COUNT && updated >= EXPECTED_MATCH_COUNT,
+        })},
         finished_at = now()
       WHERE id = ${run.id}
     `;
-    return { skipped: false, seen: providerMatches.length, updated };
+    return {
+      provider: "football-data.org",
+      skipped: false,
+      seen: providerMatches.length,
+      updated,
+      expected: EXPECTED_MATCH_COUNT,
+      complete: providerMatches.length >= EXPECTED_MATCH_COUNT && updated >= EXPECTED_MATCH_COUNT,
+    };
   } catch (error) {
     await sql`
       UPDATE sync_runs
@@ -206,6 +219,7 @@ export async function syncPublicWorldCup() {
       const result = await sql`
         UPDATE matches
         SET
+          provider_match_id = ${matchId},
           home_team_id = COALESCE(
             ${Number(game.home_team_id) || null}::integer,
             home_team_id
@@ -238,10 +252,20 @@ export async function syncPublicWorldCup() {
         status = 'SUCCESS',
         matches_seen = ${games.length},
         matches_updated = ${updated},
+        detail = ${JSON.stringify({
+          expectedMatches: EXPECTED_MATCH_COUNT,
+          complete: games.length >= EXPECTED_MATCH_COUNT && updated >= EXPECTED_MATCH_COUNT,
+        })},
         finished_at = now()
       WHERE id = ${run.id}
     `;
-    return { provider: "worldcup26.ir", seen: games.length, updated };
+    return {
+      provider: "worldcup26.ir",
+      seen: games.length,
+      updated,
+      expected: EXPECTED_MATCH_COUNT,
+      complete: games.length >= EXPECTED_MATCH_COUNT && updated >= EXPECTED_MATCH_COUNT,
+    };
   } catch (error) {
     await sql`
       UPDATE sync_runs

@@ -66,6 +66,20 @@ export default async (request: Request) => {
       ORDER BY m.kickoff_at, m.id
     `;
 
+    const [syncStatus] = await sql`
+      SELECT
+        provider,
+        status,
+        matches_seen::int AS "matchesSeen",
+        matches_updated::int AS "matchesUpdated",
+        detail,
+        started_at AS "startedAt",
+        finished_at AS "finishedAt"
+      FROM sync_runs
+      ORDER BY started_at DESC
+      LIMIT 1
+    `;
+
     let members: unknown[] = [];
     let predictions: unknown[] = [];
     let leaderboard: unknown[] = [];
@@ -130,6 +144,7 @@ export default async (request: Request) => {
       matches,
       predictions,
       leaderboard,
+      syncStatus: syncStatus ?? null,
     });
   } catch (error) {
     return handleError(error);

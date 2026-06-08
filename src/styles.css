@@ -505,7 +505,8 @@ h3,
 .page-section,
 .standings-panel,
 .members-panel,
-.focus-section {
+.focus-section,
+.command-section {
   min-width: 0;
   margin-bottom: 30px;
 }
@@ -956,6 +957,104 @@ h3,
   gap: 28px;
 }
 
+.command-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 370px;
+  align-items: start;
+  gap: 28px;
+}
+
+.rules-panel {
+  display: grid;
+  min-width: 0;
+  gap: 14px;
+}
+
+.score-rules-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.score-rule {
+  min-height: 154px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--surface);
+}
+
+.score-rule strong {
+  display: inline-flex;
+  align-items: baseline;
+  color: var(--green-dark);
+  font-family: "Manrope", sans-serif;
+  font-size: 30px;
+  line-height: 1;
+}
+
+.score-rule > span {
+  margin-left: 4px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.score-rule h3 {
+  margin: 14px 0 6px;
+  font-size: 14px;
+}
+
+.score-rule p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.rule-notes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.rule-notes article {
+  display: flex;
+  gap: 10px;
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--surface-raised);
+}
+
+.rule-notes svg {
+  flex: 0 0 auto;
+  color: var(--green-dark);
+}
+
+.rule-notes strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 13px;
+}
+
+.rule-notes p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.leaderboard-dashboard {
+  margin-bottom: 0;
+}
+
+.group-grid.members-only {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .member-list {
   display: grid;
   gap: 3px;
@@ -1401,6 +1500,7 @@ h3,
   }
 
   .dashboard-grid,
+  .command-grid,
   .group-grid {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -1408,6 +1508,10 @@ h3,
   .standings-panel,
   .members-panel {
     width: 100%;
+  }
+
+  .score-rules-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .auth-layout {
@@ -1471,6 +1575,11 @@ h3,
     border-top: 1px solid var(--line);
     background: color-mix(in srgb, var(--surface) 96%, transparent);
     backdrop-filter: blur(12px);
+  }
+
+  .score-rules-grid,
+  .rule-notes {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .mobile-nav button {

@@ -18,10 +18,12 @@ CI; Netlify construye y publica la aplicación.
 ## Reglas de seguridad
 
 - Una predicción solo puede escribirse antes de `matches.kickoff_at`.
-- La fecha límite se valida en la Function y en un trigger de PostgreSQL.
+- La fecha límite se valida en React, en la Function y en un trigger de PostgreSQL.
 - Los picks de otros miembros son visibles dentro del mismo grupo para transparencia.
 - Solo miembros del mismo grupo pueden consultar su tabla.
 - Los puntos se calculan en PostgreSQL al finalizar el partido.
+- La sección "Mi grupo" muestra las reglas de puntos, cobertura del proveedor de
+  marcadores y el dashboard completo del grupo.
 
 Puntuación: 7 por marcador exacto, 4 por signo y un gol exacto, 3 por signo,
 1 por un gol exacto.

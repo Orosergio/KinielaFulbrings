@@ -80,5 +80,14 @@ export function demoBootstrap(): BootstrapData {
       { userId: "laib", displayName: "Laib", points: 9, pickCount: 4, exacts: 0 },
       { userId: "richi", displayName: "Richi", points: 7, pickCount: 4, exacts: 1 },
     ],
+    syncStatus: {
+      provider: "worldcup26.ir",
+      status: "SUCCESS",
+      matchesSeen: 104,
+      matchesUpdated: 104,
+      detail: JSON.stringify({ expectedMatches: 104, complete: true }),
+      startedAt: new Date().toISOString(),
+      finishedAt: new Date().toISOString(),
+    },
   };
 }

@@ -10,13 +10,16 @@ import {
   ChevronDown,
   CircleUserRound,
   Copy,
+  Award,
   House,
   Languages,
   LayoutGrid,
   ListChecks,
+  LockKeyhole,
   LogOut,
   Moon,
   Plus,
+  RadioTower,
   RefreshCw,
   Sun,
   Trophy,
@@ -90,6 +93,124 @@ function Leaderboard({
         </li>
       ))}
     </ol>
+  );
+}
+
+function formatSyncTime(value: string | null, language: Language) {
+  if (!value) return language === "es" ? "sin registro" : "not recorded";
+  return new Intl.DateTimeFormat(language === "es" ? "es-MX" : "en-US", {
+    day: "numeric",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(new Date(value));
+}
+
+function RulesDashboard({
+  data,
+  language,
+}: {
+  data: BootstrapData;
+  language: Language;
+}) {
+  const t = (key: Parameters<typeof translate>[1]) => translate(language, key);
+  const rules = [
+    {
+      points: 7,
+      title: language === "es" ? "Marcador exacto" : "Exact score",
+      body:
+        language === "es"
+          ? "Aciertas ganador/empate y ambos goles."
+          : "You hit winner/draw and both goal totals.",
+    },
+    {
+      points: 4,
+      title: language === "es" ? "Signo + un gol" : "Result + one goal",
+      body:
+        language === "es"
+          ? "Aciertas el signo y un marcador de equipo."
+          : "You hit the result and one team's score.",
+    },
+    {
+      points: 3,
+      title: language === "es" ? "Solo signo" : "Result only",
+      body:
+        language === "es"
+          ? "Aciertas local, empate o visita."
+          : "You hit home win, draw, or away win.",
+    },
+    {
+      points: 1,
+      title: language === "es" ? "Un gol exacto" : "One exact goal",
+      body:
+        language === "es"
+          ? "Aciertas los goles de un equipo, aunque falle el signo."
+          : "You hit one team's goals, even with the wrong result.",
+    },
+  ];
+  const sync = data.syncStatus;
+
+  return (
+    <section className="command-section">
+      <div className="section-heading">
+        <div>
+          <Award size={19} />
+          <h2>{language === "es" ? "Reglas y dashboard" : "Rules and dashboard"}</h2>
+        </div>
+      </div>
+
+      <div className="command-grid">
+        <div className="rules-panel">
+          <div className="score-rules-grid">
+            {rules.map((rule) => (
+              <article className="score-rule" key={rule.points}>
+                <strong>{rule.points}</strong>
+                <span>{t("points")}</span>
+                <h3>{rule.title}</h3>
+                <p>{rule.body}</p>
+              </article>
+            ))}
+          </div>
+
+          <div className="rule-notes">
+            <article>
+              <LockKeyhole size={18} />
+              <div>
+                <strong>{language === "es" ? "Cierre automático" : "Automatic lock"}</strong>
+                <p>
+                  {language === "es"
+                    ? "Cada pick se bloquea al kickoff. La UI se cierra sola y PostgreSQL también rechaza cambios tardíos."
+                    : "Each pick locks at kickoff. The UI closes itself and PostgreSQL also rejects late changes."}
+                </p>
+              </div>
+            </article>
+            <article>
+              <RadioTower size={18} />
+              <div>
+                <strong>{language === "es" ? "Marcadores en vivo" : "Live scores"}</strong>
+                <p>
+                  {sync
+                    ? `${sync.provider} · ${sync.matchesUpdated}/${data.matches.length} ${language === "es" ? "partidos conectados" : "matches connected"} · ${formatSyncTime(sync.finishedAt, language)}`
+                    : language === "es"
+                      ? "Sin sincronización registrada todavía."
+                      : "No sync run recorded yet."}
+                </p>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <aside className="standings-panel leaderboard-dashboard">
+          <div className="section-heading">
+            <div>
+              <Trophy size={19} />
+              <h2>{t("leaderboard")}</h2>
+            </div>
+          </div>
+          <Leaderboard data={data} />
+        </aside>
+      </div>
+    </section>
   );
 }
 
@@ -385,16 +506,9 @@ function GroupView({
         </div>
       </section>
 
-      <div className="group-grid">
-        <section className="page-section">
-          <div className="section-heading">
-            <div>
-              <Trophy size={19} />
-              <h2>{t("leaderboard")}</h2>
-            </div>
-          </div>
-          <Leaderboard data={data} />
-        </section>
+      <RulesDashboard data={data} language={language} />
+
+      <div className="group-grid members-only">
         <section className="members-panel">
           <div className="section-heading">
             <div>
@@ -591,6 +705,15 @@ export default function App() {
   const save = useCallback(
     async (matchId: number, homeScore: number, awayScore: number) => {
       if (!data?.selectedPoolId) throw new Error("Select a pool");
+      const match = data.matches.find((item) => item.id === matchId);
+      if (!match || !isPickable(match)) {
+        throw new Error(
+          language === "es"
+            ? "Este partido ya no acepta picks."
+            : "This match no longer accepts picks.",
+        );
+      }
+
       if (demoMode) {
         setData((current) => {
           if (!current) return current;
@@ -641,7 +764,7 @@ export default function App() {
         };
       });
     },
-    [data?.selectedPoolId],
+    [data?.matches, data?.selectedPoolId, language],
   );
 
   async function addPool(mode: "create" | "join", value: string) {

@@ -111,7 +111,8 @@ export function MatchCard({
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
-  const locked = isLocked(match);
+  const [now, setNow] = useState(() => Date.now());
+  const locked = isLocked(match, now);
   const home = match.homeTeamId ? teams.get(match.homeTeamId) : undefined;
   const away = match.awayTeamId ? teams.get(match.awayTeamId) : undefined;
   const stadium = match.stadiumId ? stadiums.get(match.stadiumId) : undefined;
@@ -121,6 +122,21 @@ export function MatchCard({
     setHomeScore(prediction?.homeScore ?? 0);
     setAwayScore(prediction?.awayScore ?? 0);
   }, [prediction?.awayScore, prediction?.homeScore]);
+
+  useEffect(() => {
+    setNow(Date.now());
+    if (match.status !== "SCHEDULED") return;
+
+    const kickoffAt = new Date(match.kickoffAt).getTime();
+    const delay = kickoffAt - Date.now();
+    if (delay <= 0) return;
+
+    const timeout = window.setTimeout(
+      () => setNow(Date.now()),
+      Math.min(delay + 250, 2_147_483_647),
+    );
+    return () => window.clearTimeout(timeout);
+  }, [match.kickoffAt, match.status]);
 
   const kickoff = useMemo(
     () =>
@@ -139,6 +155,17 @@ export function MatchCard({
   );
 
   async function save() {
+    if (isLocked(match, Date.now())) {
+      setSaved(false);
+      setError(
+        language === "es"
+          ? "El partido ya comenzó. La predicción quedó bloqueada."
+          : "The match has started. This prediction is locked.",
+      );
+      setNow(Date.now());
+      return;
+    }
+
     setSaving(true);
     setSaved(false);
     setError("");

@@ -72,6 +72,16 @@ export type LeaderboardRow = {
   exacts: number;
 };
 
+export type SyncStatus = {
+  provider: string;
+  status: "RUNNING" | "SUCCESS" | "FAILED";
+  matchesSeen: number;
+  matchesUpdated: number;
+  detail: string | null;
+  startedAt: string;
+  finishedAt: string | null;
+};
+
 export type BootstrapData = {
   serverNow: string;
   currentUser: User;
@@ -81,6 +91,7 @@ export type BootstrapData = {
   matches: Match[];
   predictions: Prediction[];
   leaderboard: LeaderboardRow[];
+  syncStatus: SyncStatus | null;
 };
 
 export type StaticTeam = {
