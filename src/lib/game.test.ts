@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { Match } from "../types";
-import { isLocked, predictionPoints } from "./game";
+import { calendarMatches, isLocked, predictionPoints } from "./game";
 
 function match(overrides: Partial<Match> = {}): Match {
   return {
@@ -67,5 +67,25 @@ describe("isLocked", () => {
         kickoff,
       ),
     ).toBe(true);
+  });
+});
+
+describe("calendarMatches", () => {
+  it("keeps completed and past matches in the tournament calendar", () => {
+    const completed = match({
+      id: 1,
+      status: "FINISHED",
+      kickoffAt: "2026-06-11T19:00:00.000Z",
+      homeScore: 2,
+      awayScore: 1,
+    });
+    const upcoming = match({
+      id: 2,
+      kickoffAt: "2026-06-13T19:00:00.000Z",
+    });
+
+    expect(calendarMatches([upcoming, completed]).map((item) => item.id)).toEqual([
+      1, 2,
+    ]);
   });
 });

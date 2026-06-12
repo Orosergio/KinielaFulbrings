@@ -545,6 +545,10 @@ h3,
   gap: 28px;
 }
 
+.dashboard-main {
+  min-width: 0;
+}
+
 .match-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -906,6 +910,10 @@ h3,
   border-color: var(--green);
   background: var(--green-soft);
   color: var(--green-dark);
+}
+
+.date-strip button.past:not(.active) {
+  color: var(--muted);
 }
 
 .date-strip b {

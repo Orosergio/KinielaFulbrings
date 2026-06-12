@@ -59,3 +59,11 @@ export function pendingMatches(
     (match) => isPickable(match, now) && !completed.has(match.id),
   );
 }
+
+export function calendarMatches(matches: Match[]) {
+  return [...matches].sort(
+    (left, right) =>
+      new Date(left.kickoffAt).getTime() - new Date(right.kickoffAt).getTime() ||
+      left.id - right.id,
+  );
+}

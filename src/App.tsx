@@ -25,7 +25,7 @@ import {
   Trophy,
   Users,
 } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import dataset from "../data/worldcup-2026.json";
 import { AuthScreen } from "./components/AuthScreen";
 import { MatchCard } from "./components/MatchCard";
@@ -33,7 +33,7 @@ import { PasswordSetup } from "./components/PasswordSetup";
 import { PoolDialog } from "./components/PoolDialog";
 import { createPool, getBootstrap, joinPool, savePrediction } from "./lib/api";
 import { demoBootstrap } from "./lib/demo";
-import { isPickable, pendingMatches } from "./lib/game";
+import { calendarMatches, isPickable, pendingMatches } from "./lib/game";
 import { translate } from "./lib/i18n";
 import type {
   BootstrapData,
@@ -266,6 +266,13 @@ function Dashboard({
   const upcoming = data.matches
     .filter((match) => new Date(match.kickoffAt).getTime() > Date.now())
     .slice(0, 3);
+  const recentResults = data.matches
+    .filter((match) => match.status === "FINISHED")
+    .sort(
+      (left, right) =>
+        new Date(right.kickoffAt).getTime() - new Date(left.kickoffAt).getTime(),
+    )
+    .slice(0, 3);
   const next = pending[0];
 
   return (
@@ -334,30 +341,59 @@ function Dashboard({
       )}
 
       <div className="dashboard-grid">
-        <section className="page-section">
-          <div className="section-heading">
-            <div>
-              <CalendarDays size={19} />
-              <h2>{t("upcoming")}</h2>
+        <div className="dashboard-main">
+          <section className="page-section">
+            <div className="section-heading">
+              <div>
+                <CalendarDays size={19} />
+                <h2>{t("upcoming")}</h2>
+              </div>
+              <button className="text-button" onClick={() => setView("picks")}>
+                {language === "es" ? "Ver todos" : "View all"}
+              </button>
             </div>
-            <button className="text-button" onClick={() => setView("picks")}>
-              {language === "es" ? "Ver todos" : "View all"}
-            </button>
-          </div>
-          <div className="match-list">
-            {upcoming.map((match) => (
-              <MatchCard
-                key={match.id}
-                match={match}
-                language={language}
-                currentUserId={data.currentUser.id}
-                predictions={data.predictions}
-                members={data.members}
-                onSave={save}
-              />
-            ))}
-          </div>
-        </section>
+            <div className="match-list">
+              {upcoming.map((match) => (
+                <MatchCard
+                  key={match.id}
+                  match={match}
+                  language={language}
+                  currentUserId={data.currentUser.id}
+                  predictions={data.predictions}
+                  members={data.members}
+                  onSave={save}
+                />
+              ))}
+            </div>
+          </section>
+
+          {recentResults.length > 0 && (
+            <section className="page-section">
+              <div className="section-heading">
+                <div>
+                  <Trophy size={19} />
+                  <h2>{t("recentResults")}</h2>
+                </div>
+                <button className="text-button" onClick={() => setView("picks")}>
+                  {language === "es" ? "Ver calendario" : "View calendar"}
+                </button>
+              </div>
+              <div className="match-list">
+                {recentResults.map((match) => (
+                  <MatchCard
+                    key={match.id}
+                    match={match}
+                    language={language}
+                    currentUserId={data.currentUser.id}
+                    predictions={data.predictions}
+                    members={data.members}
+                    onSave={save}
+                  />
+                ))}
+              </div>
+            </section>
+          )}
+        </div>
 
         <aside className="standings-panel">
           <div className="section-heading">
@@ -383,17 +419,34 @@ function PicksView({
 }: Pick<AppContentProps, "data" | "language" | "save">) {
   const t = (key: Parameters<typeof translate>[1]) => translate(language, key);
   const pending = pendingMatches(data.matches, data.predictions, data.currentUser.id);
-  const futureMatches = data.matches.filter(
-    (match) => new Date(match.kickoffAt).getTime() > Date.now() - 4 * 60 * 60 * 1000,
-  );
-  const days = Array.from(new Set(futureMatches.map((match) => dayKey(match.kickoffAt))));
-  const initialDay = pending[0] ? dayKey(pending[0].kickoffAt) : days[0];
-  const [selectedDay, setSelectedDay] = useState(initialDay);
+  const matches = calendarMatches(data.matches);
+  const days = Array.from(new Set(matches.map((match) => dayKey(match.kickoffAt))));
+  const today = dayKey(new Date().toISOString());
+  const initialDay = days.includes(today)
+    ? today
+    : pending[0]
+      ? dayKey(pending[0].kickoffAt)
+      : days[days.length - 1];
+  const [selectedDay, setSelectedDay] = useState(initialDay ?? "");
+  const dateStripRef = useRef<HTMLDivElement>(null);
   const focus = pending[0];
-  const dayMatches = futureMatches.filter(
+  const dayMatches = matches.filter(
     (match) =>
       dayKey(match.kickoffAt) === selectedDay && match.id !== focus?.id,
   );
+
+  useEffect(() => {
+    if (!selectedDay || !days.includes(selectedDay)) {
+      setSelectedDay(initialDay ?? "");
+    }
+  }, [days, initialDay, selectedDay]);
+
+  useEffect(() => {
+    const active = dateStripRef.current?.querySelector<HTMLButtonElement>(
+      "button.active",
+    );
+    active?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+  }, [selectedDay]);
 
   return (
     <>
@@ -431,15 +484,26 @@ function PicksView({
       )}
 
       <section className="page-section">
-        <div className="date-strip" aria-label="Match dates">
+        <div className="date-strip" aria-label="Match dates" ref={dateStripRef}>
           {days.map((day) => {
-            const representative = futureMatches.find(
+            const matchesForDay = matches.filter(
               (match) => dayKey(match.kickoffAt) === day,
             );
-            const count = pending.filter((match) => dayKey(match.kickoffAt) === day).length;
+            const representative = matchesForDay[0];
+            const isPast = matchesForDay.every(
+              (match) => new Date(match.kickoffAt).getTime() <= Date.now(),
+            );
+            const count = pending.filter(
+              (match) => dayKey(match.kickoffAt) === day,
+            ).length;
             return (
               <button
-                className={selectedDay === day ? "active" : ""}
+                className={[
+                  selectedDay === day ? "active" : "",
+                  isPast ? "past" : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
                 key={day}
                 onClick={() => setSelectedDay(day)}
               >

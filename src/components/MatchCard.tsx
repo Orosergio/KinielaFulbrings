@@ -153,6 +153,22 @@ export function MatchCard({
   const groupPredictions = predictions.filter(
     (item) => item.matchId === match.id && item.userId !== currentUserId,
   );
+  const statusLabel =
+    match.status === "LIVE"
+      ? `${t("live")}${match.minute ? ` · ${match.minute}'` : ""}`
+      : match.status === "FINISHED"
+        ? t("finished")
+        : match.status === "PAUSED"
+          ? t("paused")
+          : match.status === "POSTPONED"
+            ? t("postponed")
+            : match.status === "CANCELLED"
+              ? t("cancelled")
+              : locked
+                ? t("locked")
+                : prediction
+                  ? t("saved")
+                  : t("pending");
 
   async function save() {
     if (isLocked(match, Date.now())) {
@@ -191,13 +207,7 @@ export function MatchCard({
         </span>
         <span className={`status status-${match.status.toLowerCase()}`}>
           {match.status === "LIVE" && <span className="live-dot" />}
-          {match.status === "LIVE"
-            ? `${t("live")}${match.minute ? ` · ${match.minute}'` : ""}`
-            : locked
-              ? t("locked")
-              : prediction
-                ? t("saved")
-                : t("pending")}
+          {statusLabel}
         </span>
       </header>
 
