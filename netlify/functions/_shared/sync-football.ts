@@ -1,4 +1,5 @@
 import { db } from "./db";
+import { scoreStateChanged } from "../../../src/lib/game";
 
 const EXPECTED_MATCH_COUNT = 104;
 
@@ -19,6 +20,9 @@ type LocalMatch = {
   id: number;
   providerMatchId: number | null;
   kickoffAt: string;
+  status: string;
+  homeScore: number | null;
+  awayScore: number | null;
   homeCode: string | null;
   awayCode: string | null;
 };
@@ -93,6 +97,9 @@ export async function syncFootballData() {
         m.id,
         m.provider_match_id AS "providerMatchId",
         m.kickoff_at AS "kickoffAt",
+        m.status,
+        m.home_score AS "homeScore",
+        m.away_score AS "awayScore",
         home.fifa_code AS "homeCode",
         away.fifa_code AS "awayCode"
       FROM matches m
@@ -108,6 +115,35 @@ export async function syncFootballData() {
       const status = normalizeStatus(provider.status);
       const homeScore = provider.score.fullTime?.home ?? provider.score.halfTime?.home ?? null;
       const awayScore = provider.score.fullTime?.away ?? provider.score.halfTime?.away ?? null;
+
+      if (
+        !scoreStateChanged(local, {
+          status,
+          homeScore,
+          awayScore,
+        })
+      ) {
+        await sql`
+          UPDATE matches
+          SET
+            provider_match_id = ${provider.id},
+            kickoff_at = ${provider.utcDate},
+            home_team_id = COALESCE(
+              (SELECT id FROM teams WHERE fifa_code = ${provider.homeTeam.tla ?? ""}),
+              home_team_id
+            ),
+            away_team_id = COALESCE(
+              (SELECT id FROM teams WHERE fifa_code = ${provider.awayTeam.tla ?? ""}),
+              away_team_id
+            ),
+            minute = ${provider.minute ?? null},
+            source_updated_at = now(),
+            updated_at = now()
+          WHERE id = ${local.id}
+        `;
+        updated += 1;
+        continue;
+      }
 
       await sql`
         UPDATE matches
@@ -207,14 +243,60 @@ export async function syncPublicWorldCup() {
     }
     const payload = (await response.json()) as { games?: PublicApiMatch[] };
     const games = payload.games ?? [];
+    const localMatches = (await sql`
+      SELECT
+        id,
+        provider_match_id AS "providerMatchId",
+        kickoff_at AS "kickoffAt",
+        status,
+        home_score AS "homeScore",
+        away_score AS "awayScore",
+        NULL::text AS "homeCode",
+        NULL::text AS "awayCode"
+      FROM matches
+    `) as LocalMatch[];
+    const localMatchesById = new Map(
+      localMatches.map((match) => [match.id, match]),
+    );
     let updated = 0;
 
     for (const game of games) {
       const matchId = Number(game.id);
       if (!Number.isInteger(matchId)) continue;
+      const local = localMatchesById.get(matchId);
+      if (!local) continue;
       const status = publicApiStatus(game);
       const homeScore = Number(game.home_score ?? 0);
       const awayScore = Number(game.away_score ?? 0);
+
+      if (
+        !scoreStateChanged(local, {
+          status,
+          homeScore: status === "SCHEDULED" ? null : homeScore,
+          awayScore: status === "SCHEDULED" ? null : awayScore,
+        })
+      ) {
+        const result = await sql`
+          UPDATE matches
+          SET
+            provider_match_id = ${matchId},
+            home_team_id = COALESCE(
+              ${Number(game.home_team_id) || null}::integer,
+              home_team_id
+            ),
+            away_team_id = COALESCE(
+              ${Number(game.away_team_id) || null}::integer,
+              away_team_id
+            ),
+            minute = ${publicApiMinute(game.time_elapsed)},
+            source_updated_at = now(),
+            updated_at = now()
+          WHERE id = ${matchId}
+          RETURNING id
+        `;
+        if (result.length) updated += 1;
+        continue;
+      }
 
       const result = await sql`
         UPDATE matches

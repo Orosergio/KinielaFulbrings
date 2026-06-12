@@ -67,3 +67,14 @@ export function calendarMatches(matches: Match[]) {
       left.id - right.id,
   );
 }
+
+export function scoreStateChanged(
+  current: { status: string; homeScore: number | null; awayScore: number | null },
+  next: { status: string; homeScore: number | null; awayScore: number | null },
+) {
+  return (
+    current.status !== next.status ||
+    current.homeScore !== next.homeScore ||
+    current.awayScore !== next.awayScore
+  );
+}

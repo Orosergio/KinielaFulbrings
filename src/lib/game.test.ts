@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 import type { Match } from "../types";
-import { calendarMatches, isLocked, predictionPoints } from "./game";
+import {
+  calendarMatches,
+  isLocked,
+  predictionPoints,
+  scoreStateChanged,
+} from "./game";
 
 function match(overrides: Partial<Match> = {}): Match {
   return {
@@ -87,5 +92,23 @@ describe("calendarMatches", () => {
     expect(calendarMatches([upcoming, completed]).map((item) => item.id)).toEqual([
       1, 2,
     ]);
+  });
+});
+
+describe("scoreStateChanged", () => {
+  const finished = { status: "FINISHED", homeScore: 2, awayScore: 0 };
+
+  it("skips scoring when a repeated provider update has the same result", () => {
+    expect(scoreStateChanged(finished, { ...finished })).toBe(false);
+  });
+
+  it("recalculates scoring when the result changes", () => {
+    expect(
+      scoreStateChanged(finished, {
+        status: "FINISHED",
+        homeScore: 2,
+        awayScore: 1,
+      }),
+    ).toBe(true);
   });
 });
