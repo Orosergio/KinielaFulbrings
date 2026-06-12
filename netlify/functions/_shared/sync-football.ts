@@ -22,7 +22,7 @@ type ProviderMatch = {
 
 type LocalMatch = {
   id: number;
-  providerMatchId: number | null;
+  providerMatchId: number | string | null;
   kickoffAt: string;
   status: string;
   homeScore: number | null;
@@ -33,6 +33,16 @@ type LocalMatch = {
   homeCode: string | null;
   awayCode: string | null;
 };
+
+function sameProviderMatchId(
+  localProviderMatchId: number | string | null,
+  providerMatchId: number,
+) {
+  return (
+    localProviderMatchId !== null &&
+    Number(localProviderMatchId) === providerMatchId
+  );
+}
 
 function normalizeStatus(status: string) {
   switch (status) {
@@ -54,7 +64,7 @@ function normalizeStatus(status: string) {
 }
 
 function sameFixture(provider: ProviderMatch, local: LocalMatch) {
-  if (local.providerMatchId === provider.id) return true;
+  if (sameProviderMatchId(local.providerMatchId, provider.id)) return true;
   if (!provider.homeTeam.tla || !provider.awayTeam.tla) return false;
 
   const timeDifference = Math.abs(
@@ -269,7 +279,7 @@ export async function syncFootballData() {
       });
       const minute = provider.minute ?? null;
       const metadataChanged =
-        local.providerMatchId !== provider.id ||
+        !sameProviderMatchId(local.providerMatchId, provider.id) ||
         new Date(local.kickoffAt).getTime() !==
           new Date(provider.utcDate).getTime() ||
         local.minute !== minute ||
@@ -463,7 +473,7 @@ export async function syncPublicWorldCup() {
       const homeTeamId = Number(game.home_team_id) || null;
       const awayTeamId = Number(game.away_team_id) || null;
       const metadataChanged =
-        local.providerMatchId !== matchId ||
+        !sameProviderMatchId(local.providerMatchId, matchId) ||
         local.minute !== minute ||
         (homeTeamId !== null && local.homeTeamId !== homeTeamId) ||
         (awayTeamId !== null && local.awayTeamId !== awayTeamId);
