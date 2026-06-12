@@ -5,7 +5,8 @@ import {
 } from "../../../src/lib/game";
 
 const EXPECTED_MATCH_COUNT = 104;
-const FETCH_TIMEOUT_MS = 10_000;
+const PRIMARY_FETCH_TIMEOUT_MS = 10_000;
+const PUBLIC_FETCH_TIMEOUT_MS = 22_000;
 
 type ProviderMatch = {
   id: number;
@@ -213,7 +214,7 @@ export async function syncFootballData() {
       "https://api.football-data.org/v4/competitions/WC/matches?season=2026",
       {
         headers: { "X-Auth-Token": token },
-        signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+        signal: AbortSignal.timeout(PRIMARY_FETCH_TIMEOUT_MS),
       },
     );
     if (!response.ok) {
@@ -412,7 +413,7 @@ export async function syncPublicWorldCup() {
 
   try {
     const response = await fetch("https://worldcup26.ir/get/games", {
-      signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+      signal: AbortSignal.timeout(PUBLIC_FETCH_TIMEOUT_MS),
     });
     if (!response.ok) {
       throw new Error(`worldcup26.ir returned ${response.status}`);

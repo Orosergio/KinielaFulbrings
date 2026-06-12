@@ -19,6 +19,8 @@ CI; Netlify construye y publica la aplicación.
 
 - Una predicción solo puede escribirse antes de `matches.kickoff_at`.
 - La fecha límite se valida en React, en la Function y en un trigger de PostgreSQL.
+- Las actualizaciones de marcador en vivo no modifican predicciones ni puntos
+  hasta que el partido termina.
 - Los picks de otros miembros son visibles dentro del mismo grupo para transparencia.
 - Solo miembros del mismo grupo pueden consultar su tabla.
 - Los puntos se calculan en PostgreSQL al finalizar el partido.

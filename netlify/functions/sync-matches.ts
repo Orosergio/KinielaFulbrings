@@ -15,9 +15,18 @@ export default async (request: Request) => {
     return new Response("Not found", { status: 404 });
   }
 
-  const result = await syncMatchData();
-  console.log("Match sync:", result);
-  return Response.json(result);
+  try {
+    const result = await syncMatchData();
+    console.log("Match sync:", result);
+    return Response.json(result);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error("Match sync failed:", message);
+    return Response.json({
+      ok: false,
+      error: "MATCH_SYNC_FAILED",
+    });
+  }
 };
 
 export const config: Config = {
