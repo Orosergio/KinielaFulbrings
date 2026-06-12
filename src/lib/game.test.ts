@@ -4,8 +4,11 @@ import {
   calendarMatches,
   isLocked,
   predictionPoints,
+  safeProviderState,
   scoreStateChanged,
+  syncHealth,
 } from "./game";
+import type { SyncStatus } from "../types";
 
 function match(overrides: Partial<Match> = {}): Match {
   return {
@@ -110,5 +113,70 @@ describe("scoreStateChanged", () => {
         awayScore: 1,
       }),
     ).toBe(true);
+  });
+});
+
+describe("safeProviderState", () => {
+  it("does not regress a finished match when a provider sends stale data", () => {
+    const current = { status: "FINISHED", homeScore: 2, awayScore: 0 };
+    expect(
+      safeProviderState(current, {
+        status: "SCHEDULED",
+        homeScore: null,
+        awayScore: null,
+      }),
+    ).toEqual(current);
+  });
+
+  it("accepts a corrected final score", () => {
+    expect(
+      safeProviderState(
+        { status: "FINISHED", homeScore: 2, awayScore: 0 },
+        { status: "FINISHED", homeScore: 2, awayScore: 1 },
+      ),
+    ).toEqual({ status: "FINISHED", homeScore: 2, awayScore: 1 });
+  });
+});
+
+describe("syncHealth", () => {
+  const serverNow = "2026-06-12T12:10:00.000Z";
+  const sync: SyncStatus = {
+    provider: "worldcup26.ir",
+    status: "SUCCESS",
+    matchesSeen: 104,
+    matchesUpdated: 104,
+    detail: JSON.stringify({ complete: true }),
+    startedAt: "2026-06-12T12:07:00.000Z",
+    finishedAt: "2026-06-12T12:07:04.000Z",
+  };
+
+  it("reports a recent complete synchronization as healthy", () => {
+    expect(syncHealth(sync, serverNow, 104)).toEqual({
+      state: "healthy",
+      reason: "ok",
+    });
+  });
+
+  it("reports failed and stale synchronizations as errors", () => {
+    expect(syncHealth({ ...sync, status: "FAILED" }, serverNow, 104).state).toBe(
+      "error",
+    );
+    expect(
+      syncHealth(
+        {
+          ...sync,
+          startedAt: "2026-06-12T11:50:00.000Z",
+          finishedAt: "2026-06-12T11:50:04.000Z",
+        },
+        serverNow,
+        104,
+      ).reason,
+    ).toBe("stale");
+  });
+
+  it("reports incomplete provider coverage as an error", () => {
+    expect(
+      syncHealth({ ...sync, matchesUpdated: 103 }, serverNow, 104).reason,
+    ).toBe("incomplete");
   });
 });

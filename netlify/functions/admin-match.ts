@@ -28,6 +28,21 @@ export default async (request: Request, context: Context) => {
       throw new HttpError(400, "Partido inválido.", "INVALID_MATCH");
     }
     const payload = bodySchema.parse(await request.json());
+    const activeStatus =
+      payload.status === "LIVE" ||
+      payload.status === "PAUSED" ||
+      payload.status === "FINISHED";
+    const hasBothScores =
+      payload.homeScore !== null && payload.awayScore !== null;
+    const hasAnyScore =
+      payload.homeScore !== null || payload.awayScore !== null;
+    if ((activeStatus && !hasBothScores) || (!activeStatus && hasAnyScore)) {
+      throw new HttpError(
+        400,
+        "El estado y el marcador del partido no son consistentes.",
+        "INVALID_MATCH_STATE",
+      );
+    }
     const sql = db();
     const [match] = await sql`
       UPDATE matches

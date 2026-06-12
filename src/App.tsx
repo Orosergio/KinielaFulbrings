@@ -33,7 +33,13 @@ import { PasswordSetup } from "./components/PasswordSetup";
 import { PoolDialog } from "./components/PoolDialog";
 import { createPool, getBootstrap, joinPool, savePrediction } from "./lib/api";
 import { demoBootstrap } from "./lib/demo";
-import { calendarMatches, isPickable, pendingMatches } from "./lib/game";
+import {
+  calendarMatches,
+  isPickable,
+  pendingMatches,
+  syncHealth as getSyncHealth,
+  type SyncHealth,
+} from "./lib/game";
 import { translate } from "./lib/i18n";
 import type {
   BootstrapData,
@@ -106,6 +112,38 @@ function formatSyncTime(value: string | null, language: Language) {
   }).format(new Date(value));
 }
 
+function syncHealthMessage(health: SyncHealth, language: Language) {
+  if (health.state === "healthy") {
+    return language === "es"
+      ? "Marcadores conectados y verificados."
+      : "Scores connected and verified.";
+  }
+  if (health.state === "syncing") {
+    return language === "es"
+      ? "Actualizando marcadores ahora."
+      : "Updating scores now.";
+  }
+
+  switch (health.reason) {
+    case "failed":
+      return language === "es"
+        ? "La última actualización falló."
+        : "The latest score update failed.";
+    case "stale":
+      return language === "es"
+        ? "Los marcadores están atrasados."
+        : "Score updates are delayed.";
+    case "incomplete":
+      return language === "es"
+        ? "El proveedor devolvió información incompleta."
+        : "The provider returned incomplete data.";
+    default:
+      return language === "es"
+        ? "No hay una actualización válida registrada."
+        : "No valid score update is recorded.";
+  }
+}
+
 function RulesDashboard({
   data,
   language,
@@ -149,6 +187,7 @@ function RulesDashboard({
     },
   ];
   const sync = data.syncStatus;
+  const health = getSyncHealth(sync, data.serverNow, data.matches.length);
 
   return (
     <section className="command-section">
@@ -184,12 +223,14 @@ function RulesDashboard({
                 </p>
               </div>
             </article>
-            <article>
+            <article className={`sync-note sync-${health.state}`}>
               <RadioTower size={18} />
               <div>
                 <strong>{language === "es" ? "Marcadores en vivo" : "Live scores"}</strong>
                 <p>
-                  {sync
+                  {health.state !== "healthy"
+                    ? syncHealthMessage(health, language)
+                    : sync
                     ? `${sync.provider} · ${sync.matchesUpdated}/${data.matches.length} ${language === "es" ? "partidos conectados" : "matches connected"} · ${formatSyncTime(sync.finishedAt, language)}`
                     : language === "es"
                       ? "Sin sincronización registrada todavía."
@@ -274,6 +315,11 @@ function Dashboard({
     )
     .slice(0, 3);
   const next = pending[0];
+  const health = getSyncHealth(
+    data.syncStatus,
+    data.serverNow,
+    data.matches.length,
+  );
 
   return (
     <>
@@ -286,9 +332,9 @@ function Dashboard({
               : `Hi, ${data.currentUser.displayName}`}
           </h1>
         </div>
-        <p className="server-status">
+        <p className={`server-status sync-${health.state}`}>
           <span />
-          {t("syncNote")}
+          {syncHealthMessage(health, language)}
         </p>
       </section>
 
@@ -472,6 +518,7 @@ function PicksView({
             </span>
           </div>
           <MatchCard
+            key={focus.id}
             focus
             match={focus}
             language={language}
@@ -662,13 +709,47 @@ function BracketView({
 }
 
 function AppContent(props: AppContentProps) {
+  const health = getSyncHealth(
+    props.data.syncStatus,
+    props.data.serverNow,
+    props.data.matches.length,
+  );
+  let content;
+
   if (!props.data.selectedPoolId) {
-    return <EmptyPool language={props.language} onOpen={props.openPools} />;
+    content = <EmptyPool language={props.language} onOpen={props.openPools} />;
+  } else if (props.view === "picks") {
+    content = <PicksView {...props} />;
+  } else if (props.view === "group") {
+    content = <GroupView {...props} />;
+  } else if (props.view === "bracket") {
+    content = <BracketView {...props} />;
+  } else {
+    content = <Dashboard {...props} />;
   }
-  if (props.view === "picks") return <PicksView {...props} />;
-  if (props.view === "group") return <GroupView {...props} />;
-  if (props.view === "bracket") return <BracketView {...props} />;
-  return <Dashboard {...props} />;
+
+  return (
+    <>
+      {health.state === "error" && (
+        <section className="sync-alert" role="alert">
+          <RadioTower size={20} />
+          <div>
+            <strong>
+              {props.language === "es"
+                ? "Actualización de marcadores interrumpida"
+                : "Score updates interrupted"}
+            </strong>
+            <p>{syncHealthMessage(health, props.language)}</p>
+          </div>
+          <button className="secondary-button" onClick={() => void props.refresh()}>
+            <RefreshCw size={16} />
+            {props.language === "es" ? "Revisar estado" : "Check status"}
+          </button>
+        </section>
+      )}
+      {content}
+    </>
+  );
 }
 
 export default function App() {

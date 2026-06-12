@@ -56,7 +56,7 @@ npm run db:migrate
 npm run db:seed
 ```
 
-La migración está en `db/migrations/001_initial_schema.sql`.
+Las migraciones incrementales están en `db/migrations`.
 
 ## Netlify
 
@@ -65,6 +65,8 @@ Variables requeridas:
 - `DATABASE_URL`: conexión pooled de Neon.
 - `FOOTBALL_DATA_API_TOKEN`: opcional; si existe, usa `football-data.org` en
   lugar del proveedor público.
+- `SYNC_SECRET`: opcional; habilita una invocación manual protegida de la
+  función programada.
 
 Configuración:
 
@@ -72,6 +74,9 @@ Configuración:
 - Publish: `dist`
 - Functions: `netlify/functions`
 - Sincronización: cada 2 minutos en producción.
+- Salud: `GET /api/health` valida conexión, cobertura de 104 partidos,
+  actualidad del proveedor e integridad de puntos.
+- Monitoreo: GitHub Actions consulta producción cada 5 minutos.
 
 Después del primer deploy, habilita Identity y decide si el registro será
 abierto o solo por invitación. Para un grupo privado se recomienda invitación o

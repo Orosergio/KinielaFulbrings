@@ -121,7 +121,12 @@ export function MatchCard({
   useEffect(() => {
     setHomeScore(prediction?.homeScore ?? 0);
     setAwayScore(prediction?.awayScore ?? 0);
-  }, [prediction?.awayScore, prediction?.homeScore]);
+  }, [match.id, prediction?.awayScore, prediction?.homeScore]);
+
+  useEffect(() => {
+    setSaved(false);
+    setError("");
+  }, [match.id]);
 
   useEffect(() => {
     setNow(Date.now());
