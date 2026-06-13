@@ -92,6 +92,66 @@ export function safeProviderState(
   return wouldRegressFinished || wouldRegressLive ? current : next;
 }
 
+// A football match needs at least ~105 wall-clock minutes (two halves plus
+// halftime); a FINISHED report earlier than this is a provider glitch.
+const MIN_FINISH_AFTER_KICKOFF_MS = 100 * 60 * 1000;
+// Latest a match could plausibly still be running after kickoff (covers
+// extra time, penalties, and long stoppages).
+const UNFINISH_WINDOW_MS = 4.5 * 60 * 60 * 1000;
+
+export function resolveProviderState(
+  current: {
+    status: string;
+    homeScore: number | null;
+    awayScore: number | null;
+    kickoffAt: string;
+  },
+  next: { status: string; homeScore: number | null; awayScore: number | null },
+  now = Date.now(),
+) {
+  const kickoff = new Date(current.kickoffAt).getTime();
+
+  if (
+    next.status === "FINISHED" &&
+    Number.isFinite(kickoff) &&
+    now < kickoff + MIN_FINISH_AFTER_KICKOFF_MS
+  ) {
+    // Premature FINISHED: keep tracking the live score instead of freezing
+    // the match and scoring predictions against a glitched result.
+    if (current.status === "LIVE" || current.status === "PAUSED") {
+      return {
+        status: current.status,
+        homeScore: next.homeScore,
+        awayScore: next.awayScore,
+      };
+    }
+    return {
+      status: current.status,
+      homeScore: current.homeScore,
+      awayScore: current.awayScore,
+    };
+  }
+
+  if (
+    current.status === "FINISHED" &&
+    (next.status === "LIVE" || next.status === "PAUSED") &&
+    Number.isFinite(kickoff) &&
+    now >= kickoff &&
+    now < kickoff + UNFINISH_WINDOW_MS
+  ) {
+    // Recover from a premature FINISHED while the match could genuinely
+    // still be running; scoring is rolled back by the database trigger.
+    return next;
+  }
+
+  const resolved = safeProviderState(current, next);
+  return {
+    status: resolved.status,
+    homeScore: resolved.homeScore,
+    awayScore: resolved.awayScore,
+  };
+}
+
 export type SyncHealth = {
   state: "healthy" | "syncing" | "error";
   reason: "ok" | "missing" | "running" | "failed" | "stale" | "incomplete";

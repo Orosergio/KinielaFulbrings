@@ -4,6 +4,7 @@ import {
   calendarMatches,
   isLocked,
   predictionPoints,
+  resolveProviderState,
   safeProviderState,
   scoreStateChanged,
   syncHealth,
@@ -135,6 +136,81 @@ describe("safeProviderState", () => {
         { status: "FINISHED", homeScore: 2, awayScore: 1 },
       ),
     ).toEqual({ status: "FINISHED", homeScore: 2, awayScore: 1 });
+  });
+});
+
+describe("resolveProviderState", () => {
+  const kickoffAt = "2026-06-12T23:00:00.000Z";
+  const kickoff = Date.parse(kickoffAt);
+
+  it("ignores a FINISHED report before the match could physically end", () => {
+    expect(
+      resolveProviderState(
+        { status: "LIVE", homeScore: 0, awayScore: 0, kickoffAt },
+        { status: "FINISHED", homeScore: 0, awayScore: 0 },
+        kickoff + 30 * 60 * 1000,
+      ),
+    ).toEqual({ status: "LIVE", homeScore: 0, awayScore: 0 });
+  });
+
+  it("keeps tracking provider scores while rejecting a premature finish", () => {
+    expect(
+      resolveProviderState(
+        { status: "LIVE", homeScore: 0, awayScore: 0, kickoffAt },
+        { status: "FINISHED", homeScore: 1, awayScore: 0 },
+        kickoff + 30 * 60 * 1000,
+      ),
+    ).toEqual({ status: "LIVE", homeScore: 1, awayScore: 0 });
+  });
+
+  it("leaves a scheduled match untouched on a premature finish", () => {
+    expect(
+      resolveProviderState(
+        { status: "SCHEDULED", homeScore: null, awayScore: null, kickoffAt },
+        { status: "FINISHED", homeScore: 0, awayScore: 0 },
+        kickoff + 30 * 60 * 1000,
+      ),
+    ).toEqual({ status: "SCHEDULED", homeScore: null, awayScore: null });
+  });
+
+  it("accepts FINISHED once the match could really be over", () => {
+    expect(
+      resolveProviderState(
+        { status: "LIVE", homeScore: 1, awayScore: 0, kickoffAt },
+        { status: "FINISHED", homeScore: 1, awayScore: 0 },
+        kickoff + 110 * 60 * 1000,
+      ),
+    ).toEqual({ status: "FINISHED", homeScore: 1, awayScore: 0 });
+  });
+
+  it("rolls a glitched FINISHED back to LIVE while the match can still run", () => {
+    expect(
+      resolveProviderState(
+        { status: "FINISHED", homeScore: 0, awayScore: 0, kickoffAt },
+        { status: "LIVE", homeScore: 1, awayScore: 0 },
+        kickoff + 2 * 60 * 60 * 1000,
+      ),
+    ).toEqual({ status: "LIVE", homeScore: 1, awayScore: 0 });
+  });
+
+  it("keeps a final sticky once the match window has passed", () => {
+    expect(
+      resolveProviderState(
+        { status: "FINISHED", homeScore: 1, awayScore: 0, kickoffAt },
+        { status: "LIVE", homeScore: 2, awayScore: 0 },
+        kickoff + 6 * 60 * 60 * 1000,
+      ),
+    ).toEqual({ status: "FINISHED", homeScore: 1, awayScore: 0 });
+  });
+
+  it("still blocks regressions to SCHEDULED on live matches", () => {
+    expect(
+      resolveProviderState(
+        { status: "LIVE", homeScore: 1, awayScore: 0, kickoffAt },
+        { status: "SCHEDULED", homeScore: null, awayScore: null },
+        kickoff + 2 * 60 * 60 * 1000,
+      ),
+    ).toEqual({ status: "LIVE", homeScore: 1, awayScore: 0 });
   });
 });
 

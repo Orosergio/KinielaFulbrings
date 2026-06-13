@@ -1,7 +1,15 @@
 import { timingSafeEqual } from "node:crypto";
 import type { Config } from "@netlify/functions";
+import { z } from "zod";
 import { db } from "./_shared/db";
 import { json } from "./_shared/http";
+import {
+  publicApiMinute,
+  publicApiStatus,
+  scoreValue,
+  statusNeedsScores,
+  type PublicApiMatch,
+} from "./_shared/sync-football";
 
 const MIGRATION_NAME = "003_live_score_updates.sql";
 
@@ -44,6 +52,18 @@ END;
 $$;
 `;
 
+const bodySchema = z
+  .object({
+    action: z.enum(["migrate", "repair-match"]).default("migrate"),
+    matchId: z.number().int().positive().optional(),
+  })
+  .refine(
+    (body) => body.action !== "repair-match" || body.matchId !== undefined,
+    { message: "matchId is required for repair-match" },
+  );
+
+type Sql = ReturnType<typeof db>;
+
 function authorized(request: Request) {
   const secret = Netlify.env.get("MIGRATE_SECRET");
   const supplied = request.headers.get("x-kiniela-migrate-secret");
@@ -55,26 +75,22 @@ function authorized(request: Request) {
   );
 }
 
-export default async (request: Request) => {
-  if (!authorized(request)) {
-    return new Response("Not found", { status: 404 });
-  }
-
-  const sql = db();
-  const before = (await sql`
-    SELECT name FROM schema_migrations ORDER BY name
+async function ensureMigration(sql: Sql) {
+  const applied = (await sql`
+    SELECT name FROM schema_migrations WHERE name = ${MIGRATION_NAME}
   `) as { name: string }[];
-  const alreadyApplied = before.some((row) => row.name === MIGRATION_NAME);
+  if (applied.length) return { alreadyApplied: true, appliedNow: false };
 
-  if (!alreadyApplied) {
-    await sql.query(MIGRATION_SQL);
-    await sql`
-      INSERT INTO schema_migrations (name)
-      VALUES (${MIGRATION_NAME})
-      ON CONFLICT (name) DO NOTHING
-    `;
-  }
+  await sql.query(MIGRATION_SQL);
+  await sql`
+    INSERT INTO schema_migrations (name)
+    VALUES (${MIGRATION_NAME})
+    ON CONFLICT (name) DO NOTHING
+  `;
+  return { alreadyApplied: false, appliedNow: true };
+}
 
+async function migrationReport(sql: Sql) {
   const migrations = await sql`
     SELECT name, applied_at AS "appliedAt"
     FROM schema_migrations
@@ -104,14 +120,115 @@ export default async (request: Request) => {
     ORDER BY kickoff_at
     LIMIT 12
   `;
+  return { migrations, scoringFunction: scoringFunction?.def ?? null, runs, recentMatches };
+}
+
+// Writes the provider's current truth for one match, deliberately bypassing
+// the sticky-FINISHED rule, so a glitched final can be rolled back. The
+// score_match_predictions trigger recomputes or clears points.
+async function repairMatch(sql: Sql, matchId: number) {
+  const response = await fetch("https://worldcup26.ir/get/games", {
+    signal: AbortSignal.timeout(22_000),
+  });
+  if (!response.ok) {
+    return json(
+      { error: `Provider returned ${response.status}`, code: "PROVIDER_ERROR" },
+      502,
+    );
+  }
+  const payload = (await response.json()) as { games?: PublicApiMatch[] };
+  const game = (payload.games ?? []).find(
+    (item) => Number(item.id) === matchId,
+  );
+  if (!game) {
+    return json(
+      { error: "Match not present in provider feed.", code: "MATCH_NOT_FOUND" },
+      404,
+    );
+  }
+
+  const status = publicApiStatus(game);
+  const homeScore = statusNeedsScores(status) ? scoreValue(game.home_score) : null;
+  const awayScore = statusNeedsScores(status) ? scoreValue(game.away_score) : null;
+  if (statusNeedsScores(status) && (homeScore === null || awayScore === null)) {
+    return json(
+      { error: "Provider feed has inconsistent scores.", code: "INVALID_PROVIDER_STATE" },
+      422,
+    );
+  }
+  const minute = publicApiMinute(game.time_elapsed);
+
+  const [match] = await sql`
+    UPDATE matches
+    SET
+      status = ${status},
+      home_score = ${homeScore},
+      away_score = ${awayScore},
+      minute = ${minute},
+      source_updated_at = now(),
+      updated_at = now()
+    WHERE id = ${matchId}
+    RETURNING id, status, minute,
+              home_score AS "homeScore", away_score AS "awayScore",
+              kickoff_at AS "kickoffAt", updated_at AS "updatedAt"
+  `;
+  if (!match) {
+    return json(
+      { error: "Match does not exist locally.", code: "MATCH_NOT_FOUND" },
+      404,
+    );
+  }
+
+  const [predictions] = await sql`
+    SELECT COUNT(*)::int AS total, COUNT(points)::int AS scored
+    FROM predictions
+    WHERE match_id = ${matchId}
+  `;
 
   return json({
-    alreadyApplied,
-    appliedNow: !alreadyApplied,
-    migrations,
-    scoringFunction: scoringFunction?.def ?? null,
-    runs,
-    recentMatches,
+    action: "repair-match",
+    provider: {
+      id: game.id,
+      finished: game.finished,
+      timeElapsed: game.time_elapsed,
+      homeScore: game.home_score,
+      awayScore: game.away_score,
+    },
+    match,
+    predictions,
+  });
+}
+
+export default async (request: Request) => {
+  if (!authorized(request)) {
+    return new Response("Not found", { status: 404 });
+  }
+
+  const rawBody = await request.text();
+  let body: unknown = {};
+  if (rawBody) {
+    try {
+      body = JSON.parse(rawBody);
+    } catch {
+      return json({ error: "Body must be JSON.", code: "INVALID_BODY" }, 400);
+    }
+  }
+  const parsed = bodySchema.safeParse(body);
+  if (!parsed.success) {
+    return json({ error: parsed.error.message, code: "INVALID_BODY" }, 400);
+  }
+
+  const sql = db();
+  const migration = await ensureMigration(sql);
+
+  if (parsed.data.action === "repair-match") {
+    const result = await repairMatch(sql, parsed.data.matchId as number);
+    return result;
+  }
+
+  return json({
+    ...migration,
+    ...(await migrationReport(sql)),
   });
 };
 

@@ -1,6 +1,6 @@
 import { db } from "./db";
 import {
-  safeProviderState,
+  resolveProviderState,
   scoreStateChanged,
 } from "../../../src/lib/game";
 
@@ -86,13 +86,13 @@ function sameFixture(provider: ProviderMatch, local: LocalMatch) {
   );
 }
 
-function scoreValue(value: unknown) {
+export function scoreValue(value: unknown) {
   if (value === null || value === undefined || value === "") return null;
   const score = Number(value);
   return Number.isInteger(score) && score >= 0 && score <= 30 ? score : null;
 }
 
-function statusNeedsScores(status: string) {
+export function statusNeedsScores(status: string) {
   return status === "LIVE" || status === "PAUSED" || status === "FINISHED";
 }
 
@@ -273,7 +273,7 @@ export async function syncFootballData() {
         reportedHomeScore,
         reportedAwayScore,
       );
-      const nextState = safeProviderState(local, {
+      const nextState = resolveProviderState(local, {
         status: reportedStatus,
         homeScore: reportedHomeScore,
         awayScore: reportedAwayScore,
@@ -375,7 +375,7 @@ export async function syncFootballData() {
   }
 }
 
-type PublicApiMatch = {
+export type PublicApiMatch = {
   id: string;
   home_team_id?: string;
   away_team_id?: string;
@@ -385,7 +385,7 @@ type PublicApiMatch = {
   time_elapsed?: string;
 };
 
-function publicApiStatus(match: PublicApiMatch) {
+export function publicApiStatus(match: PublicApiMatch) {
   if (String(match.finished ?? "").toUpperCase() === "TRUE") return "FINISHED";
   const elapsed = String(match.time_elapsed ?? "").toLowerCase();
   if (elapsed === "notstarted" || elapsed === "") return "SCHEDULED";
@@ -395,7 +395,7 @@ function publicApiStatus(match: PublicApiMatch) {
   return "LIVE";
 }
 
-function publicApiMinute(value?: string) {
+export function publicApiMinute(value?: string) {
   // "45+2" must read as 45, never 452: matches_minute_valid caps minute at 180
   // and a violation aborts the whole sync run.
   const leadingDigits = /^\s*(\d{1,3})/.exec(String(value ?? ""));
@@ -469,7 +469,7 @@ export async function syncPublicWorldCup() {
         reportedHomeScore,
         reportedAwayScore,
       );
-      const nextState = safeProviderState(local, {
+      const nextState = resolveProviderState(local, {
         status: reportedStatus,
         homeScore: reportedHomeScore,
         awayScore: reportedAwayScore,
