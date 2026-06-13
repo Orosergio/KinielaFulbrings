@@ -730,7 +730,7 @@ function AppContent(props: AppContentProps) {
 
   return (
     <>
-      {health.state === "error" && (
+      {health.state === "error" && health.reason !== "missing" && (
         <section className="sync-alert" role="alert">
           <RadioTower size={20} />
           <div>

@@ -71,10 +71,16 @@ Variables requeridas:
 - `SYNC_SECRET`: opcional; habilita una invocación manual protegida de la
   función programada.
 - `MIGRATE_SECRET`: opcional; habilita `POST /api/admin/migrate` (header
-  `x-kiniela-migrate-secret`) para aplicar la migración pendiente
-  `003_live_score_updates.sql` en producción de forma idempotente. Mientras
-  esta variable no exista, el endpoint responde 404. Borra la variable (y, si
-  quieres, el endpoint) después de usarlo.
+  `x-kiniela-migrate-secret`). Sin body aplica la migración pendiente
+  `003_live_score_updates.sql` de forma idempotente y devuelve el estado de
+  `schema_migrations`, las últimas corridas de sync y los partidos recientes.
+  Con body `{"action": "repair-match", "matchId": N}` fuerza el estado actual
+  del proveedor para ese partido (ignorando la regla de FINISHED pegajoso),
+  útil si un glitch del proveedor dejó un partido finalizado por error; el
+  trigger recalcula o anula los puntos solo. Por seguridad rechaza un
+  `FINISHED` imposiblemente temprano (antes de que el partido pudiera terminar)
+  con código `PREMATURE_FINISH`. Mientras la variable no exista, el endpoint
+  responde 404.
 
 > **Importante**: las migraciones NO corren en el build de Netlify. Tras
 > desplegar código que dependa de una migración nueva hay que aplicarla con

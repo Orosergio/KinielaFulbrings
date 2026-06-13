@@ -10,6 +10,7 @@ import {
   statusNeedsScores,
   type PublicApiMatch,
 } from "./_shared/sync-football";
+import { MIN_FINISH_AFTER_KICKOFF_MS } from "../../src/lib/game";
 
 const MIGRATION_NAME = "003_live_score_updates.sql";
 
@@ -157,6 +158,36 @@ async function repairMatch(sql: Sql, matchId: number) {
     );
   }
   const minute = publicApiMinute(game.time_elapsed);
+
+  // repair-match deliberately bypasses the sticky-FINISHED rule so a glitched
+  // final can be rolled back, but it must never go the other way and lock in a
+  // final that is physically impossible (before a match could have ended). That
+  // is always a provider glitch, never something an operator wants to persist.
+  if (status === "FINISHED") {
+    const [existing] = await sql`
+      SELECT kickoff_at AS "kickoffAt" FROM matches WHERE id = ${matchId}
+    `;
+    if (!existing) {
+      return json(
+        { error: "Match does not exist locally.", code: "MATCH_NOT_FOUND" },
+        404,
+      );
+    }
+    const kickoff = new Date(existing.kickoffAt as string).getTime();
+    if (
+      Number.isFinite(kickoff) &&
+      Date.now() < kickoff + MIN_FINISH_AFTER_KICKOFF_MS
+    ) {
+      return json(
+        {
+          error:
+            "Provider reports an impossible early FINISHED; refusing to lock a glitched final.",
+          code: "PREMATURE_FINISH",
+        },
+        422,
+      );
+    }
+  }
 
   const [match] = await sql`
     UPDATE matches

@@ -94,7 +94,7 @@ export function safeProviderState(
 
 // A football match needs at least ~105 wall-clock minutes (two halves plus
 // halftime); a FINISHED report earlier than this is a provider glitch.
-const MIN_FINISH_AFTER_KICKOFF_MS = 100 * 60 * 1000;
+export const MIN_FINISH_AFTER_KICKOFF_MS = 100 * 60 * 1000;
 // Latest a match could plausibly still be running after kickoff (covers
 // extra time, penalties, and long stoppages).
 const UNFINISH_WINDOW_MS = 4.5 * 60 * 60 * 1000;

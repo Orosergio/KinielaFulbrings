@@ -96,6 +96,19 @@ export function statusNeedsScores(status: string) {
   return status === "LIVE" || status === "PAUSED" || status === "FINISHED";
 }
 
+// football-data.org sends `minute` as a raw integer; the public provider sends
+// strings parsed by publicApiMinute. Both must satisfy matches_minute_valid
+// (NULL or 0..180) or the write aborts the whole sync run, so clamp anything
+// out of range or non-integer to null.
+export function clampMinute(value: number | null | undefined) {
+  return typeof value === "number" &&
+    Number.isInteger(value) &&
+    value >= 0 &&
+    value <= 180
+    ? value
+    : null;
+}
+
 function requireScores(
   matchId: number,
   status: string,
@@ -278,7 +291,7 @@ export async function syncFootballData() {
         homeScore: reportedHomeScore,
         awayScore: reportedAwayScore,
       });
-      const minute = provider.minute ?? null;
+      const minute = clampMinute(provider.minute);
       const metadataChanged =
         !sameProviderMatchId(local.providerMatchId, provider.id) ||
         new Date(local.kickoffAt).getTime() !==
@@ -400,8 +413,7 @@ export function publicApiMinute(value?: string) {
   // and a violation aborts the whole sync run.
   const leadingDigits = /^\s*(\d{1,3})/.exec(String(value ?? ""));
   if (!leadingDigits) return null;
-  const minute = Number.parseInt(leadingDigits[1], 10);
-  return minute <= 180 ? minute : null;
+  return clampMinute(Number.parseInt(leadingDigits[1], 10));
 }
 
 export async function syncPublicWorldCup() {
