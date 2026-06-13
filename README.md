@@ -66,9 +66,22 @@ Variables requeridas:
 
 - `DATABASE_URL`: conexión pooled de Neon.
 - `FOOTBALL_DATA_API_TOKEN`: opcional; si existe, usa `football-data.org` en
-  lugar del proveedor público.
+  lugar del proveedor público. Muy recomendado: el proveedor público
+  (`worldcup26.ir`) presenta timeouts y errores 500 intermitentes desde AWS.
 - `SYNC_SECRET`: opcional; habilita una invocación manual protegida de la
   función programada.
+- `MIGRATE_SECRET`: opcional; habilita `POST /api/admin/migrate` (header
+  `x-kiniela-migrate-secret`) para aplicar la migración pendiente
+  `003_live_score_updates.sql` en producción de forma idempotente. Mientras
+  esta variable no exista, el endpoint responde 404. Borra la variable (y, si
+  quieres, el endpoint) después de usarlo.
+
+> **Importante**: las migraciones NO corren en el build de Netlify. Tras
+> desplegar código que dependa de una migración nueva hay que aplicarla con
+> `npm run db:migrate` (con `DATABASE_URL` apuntando a producción) o vía
+> `/api/admin/migrate`. La falla de marcadores en vivo del 12-13 de junio de
+> 2026 (`PREDICTION_LOCKED` en cada gol) fue exactamente esto: el código del
+> trigger corregido estaba en `003_live_score_updates.sql` sin aplicar.
 
 Configuración:
 

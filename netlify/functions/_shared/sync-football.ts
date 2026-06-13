@@ -396,8 +396,12 @@ function publicApiStatus(match: PublicApiMatch) {
 }
 
 function publicApiMinute(value?: string) {
-  const minute = Number.parseInt(String(value ?? "").replace(/\D/g, ""), 10);
-  return Number.isFinite(minute) ? minute : null;
+  // "45+2" must read as 45, never 452: matches_minute_valid caps minute at 180
+  // and a violation aborts the whole sync run.
+  const leadingDigits = /^\s*(\d{1,3})/.exec(String(value ?? ""));
+  if (!leadingDigits) return null;
+  const minute = Number.parseInt(leadingDigits[1], 10);
+  return minute <= 180 ? minute : null;
 }
 
 export async function syncPublicWorldCup() {
