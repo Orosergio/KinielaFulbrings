@@ -76,7 +76,7 @@ export default async (request: Request) => {
         started_at AS "startedAt",
         finished_at AS "finishedAt"
       FROM sync_runs
-      ORDER BY started_at DESC
+      ORDER BY (status = 'SUCCESS') DESC, started_at DESC
       LIMIT 1
     `;
 

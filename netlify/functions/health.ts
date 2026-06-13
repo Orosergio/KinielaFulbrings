@@ -88,7 +88,12 @@ export default async () => {
     const runHealthy =
       health?.syncStatus === "SUCCESS" ||
       (health?.syncStatus === "RUNNING" &&
-        Number(health.runAgeSeconds) <= 60);
+        Number(health.runAgeSeconds) <= 60) ||
+      // A transient provider failure should not flip monitoring while a
+      // recent success keeps the data fresh; staleness below still catches
+      // sustained outages.
+      (health?.syncStatus === "FAILED" &&
+        Number(health.syncAgeSeconds) <= STALE_AFTER_SECONDS);
     const syncHealthy =
       runHealthy &&
       Number(health.syncAgeSeconds) <= STALE_AFTER_SECONDS &&
