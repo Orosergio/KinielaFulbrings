@@ -7,6 +7,9 @@ import {
 const EXPECTED_MATCH_COUNT = 104;
 const PRIMARY_FETCH_TIMEOUT_MS = 10_000;
 const PUBLIC_FETCH_TIMEOUT_MS = 22_000;
+const PUBLIC_FETCH_TOTAL_BUDGET_MS = 26_000;
+const PUBLIC_FETCH_RETRY_DELAY_MS = 400;
+const PUBLIC_PROVIDER_URL = "https://worldcup26.ir/get/games";
 
 type ProviderMatch = {
   id: number;
@@ -107,6 +110,65 @@ export function clampMinute(value: number | null | undefined) {
     value <= 180
     ? value
     : null;
+}
+
+type PublicFetchOptions = {
+  attemptTimeoutMs?: number;
+  totalBudgetMs?: number;
+  retryDelayMs?: number;
+  now?: () => number;
+  sleep?: (milliseconds: number) => Promise<void>;
+};
+
+function retryableProviderStatus(status: number) {
+  return status === 408 || status === 425 || status === 429 || status >= 500;
+}
+
+export async function fetchPublicProvider(
+  fetcher: typeof fetch = fetch,
+  options: PublicFetchOptions = {},
+) {
+  const attemptTimeoutMs =
+    options.attemptTimeoutMs ?? PUBLIC_FETCH_TIMEOUT_MS;
+  const totalBudgetMs =
+    options.totalBudgetMs ?? PUBLIC_FETCH_TOTAL_BUDGET_MS;
+  const retryDelayMs =
+    options.retryDelayMs ?? PUBLIC_FETCH_RETRY_DELAY_MS;
+  const now = options.now ?? Date.now;
+  const sleep =
+    options.sleep ??
+    ((milliseconds: number) =>
+      new Promise<void>((resolve) => setTimeout(resolve, milliseconds)));
+  const startedAt = now();
+  let lastError: unknown = new Error("Public provider fetch failed");
+
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    const remainingMs = totalBudgetMs - (now() - startedAt);
+    if (remainingMs <= 0) break;
+
+    let response: Response | null = null;
+    try {
+      response = await fetcher(PUBLIC_PROVIDER_URL, {
+        signal: AbortSignal.timeout(
+          Math.max(1, Math.min(attemptTimeoutMs, remainingMs)),
+        ),
+      });
+    } catch (error) {
+      lastError = error;
+    }
+    if (response?.ok) return response;
+    if (response) {
+      lastError = new Error(`worldcup26.ir returned ${response.status}`);
+      if (!retryableProviderStatus(response.status)) throw lastError;
+    }
+
+    if (attempt === 1) break;
+    const retryBudgetMs = totalBudgetMs - (now() - startedAt);
+    if (retryBudgetMs <= retryDelayMs) break;
+    if (retryDelayMs > 0) await sleep(retryDelayMs);
+  }
+
+  throw lastError;
 }
 
 function requireScores(
@@ -428,12 +490,7 @@ export async function syncPublicWorldCup() {
   }
 
   try {
-    const response = await fetch("https://worldcup26.ir/get/games", {
-      signal: AbortSignal.timeout(PUBLIC_FETCH_TIMEOUT_MS),
-    });
-    if (!response.ok) {
-      throw new Error(`worldcup26.ir returned ${response.status}`);
-    }
+    const response = await fetchPublicProvider();
     const payload = (await response.json()) as { games?: PublicApiMatch[] };
     const games = payload.games ?? [];
     const localMatches = (await sql`

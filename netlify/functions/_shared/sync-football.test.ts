@@ -1,12 +1,57 @@
 import { describe, expect, it } from "vitest";
 import {
   clampMinute,
+  fetchPublicProvider,
   publicApiMinute,
   publicApiStatus,
   scoreValue,
   statusNeedsScores,
   type PublicApiMatch,
 } from "./sync-football";
+
+describe("fetchPublicProvider", () => {
+  it("retries a transient provider response once", async () => {
+    const responses = [
+      new Response("temporary failure", { status: 500 }),
+      new Response('{"games":[]}', { status: 200 }),
+    ];
+    const fetcher = async () => responses.shift()!;
+
+    const response = await fetchPublicProvider(fetcher as typeof fetch, {
+      retryDelayMs: 0,
+    });
+
+    expect(response.status).toBe(200);
+    expect(responses).toHaveLength(0);
+  });
+
+  it("retries a transient network failure once", async () => {
+    let attempts = 0;
+    const fetcher = async () => {
+      attempts += 1;
+      if (attempts === 1) throw new TypeError("fetch failed");
+      return new Response('{"games":[]}', { status: 200 });
+    };
+
+    await expect(
+      fetchPublicProvider(fetcher as typeof fetch, { retryDelayMs: 0 }),
+    ).resolves.toHaveProperty("status", 200);
+    expect(attempts).toBe(2);
+  });
+
+  it("does not retry a permanent provider response", async () => {
+    let attempts = 0;
+    const fetcher = async () => {
+      attempts += 1;
+      return new Response("bad request", { status: 400 });
+    };
+
+    await expect(
+      fetchPublicProvider(fetcher as typeof fetch, { retryDelayMs: 0 }),
+    ).rejects.toThrow("worldcup26.ir returned 400");
+    expect(attempts).toBe(1);
+  });
+});
 
 describe("clampMinute", () => {
   it("keeps integers within the matches_minute_valid range", () => {
