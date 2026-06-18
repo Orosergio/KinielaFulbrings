@@ -14,6 +14,13 @@ const bodySchema = z.object({
 
 export default async (request: Request) => {
   try {
+    if (request.method !== "PUT") {
+      return json(
+        { error: "Method not allowed.", code: "METHOD_NOT_ALLOWED" },
+        405,
+      );
+    }
+
     const user = await requireUser();
     const payload = bodySchema.parse(await request.json());
     await requirePoolMember(payload.poolId, user.id);
@@ -69,5 +76,4 @@ export default async (request: Request) => {
 
 export const config: Config = {
   path: "/api/predictions",
-  method: "PUT",
 };

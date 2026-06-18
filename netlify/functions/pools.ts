@@ -27,6 +27,13 @@ function inviteCode() {
 
 export default async (request: Request) => {
   try {
+    if (request.method !== "POST") {
+      return json(
+        { error: "Method not allowed.", code: "METHOD_NOT_ALLOWED" },
+        405,
+      );
+    }
+
     const user = await requireUser();
     await upsertProfile(user);
     const payload = bodySchema.parse(await request.json());
@@ -75,5 +82,4 @@ export default async (request: Request) => {
 
 export const config: Config = {
   path: "/api/pools",
-  method: "POST",
 };
