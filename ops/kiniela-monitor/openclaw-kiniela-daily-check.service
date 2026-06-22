@@ -1,0 +1,11 @@
+[Unit]
+Description=Kiniela production health check for OpenClaw agents
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+Environment=KINIELA_BASE_URL=https://kiniela-mundial-2026.netlify.app
+Environment=KINIELA_EXPECTED_MATCH_COUNT=104
+Environment=KINIELA_MAX_SYNC_AGE_SECONDS=600
+ExecStart=/usr/bin/node /home/opsadmin/.openclaw/kiniela-monitor/kiniela_daily_check.mjs

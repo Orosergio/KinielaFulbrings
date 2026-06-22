@@ -1,0 +1,12 @@
+[Unit]
+Description=Run Kiniela production health check daily
+
+[Timer]
+OnBootSec=5min
+OnCalendar=*-*-* 08:10:00
+Persistent=true
+RandomizedDelaySec=10min
+Unit=openclaw-kiniela-daily-check.service
+
+[Install]
+WantedBy=timers.target
