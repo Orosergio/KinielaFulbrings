@@ -3,7 +3,7 @@ import { db } from "./_shared/db";
 import { json } from "./_shared/http";
 
 const EXPECTED_MATCH_COUNT = 104;
-const STALE_AFTER_SECONDS = 8 * 60;
+const STALE_AFTER_SECONDS = 15 * 60;
 
 export default async () => {
   try {

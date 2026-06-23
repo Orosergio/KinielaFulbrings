@@ -7,5 +7,5 @@ Wants=network-online.target
 Type=oneshot
 Environment=KINIELA_BASE_URL=https://kiniela-mundial-2026.netlify.app
 Environment=KINIELA_EXPECTED_MATCH_COUNT=104
-Environment=KINIELA_MAX_SYNC_AGE_SECONDS=600
+Environment=KINIELA_MAX_SYNC_AGE_SECONDS=1000
 ExecStart=/usr/bin/node /home/opsadmin/.openclaw/kiniela-monitor/kiniela_daily_check.mjs
