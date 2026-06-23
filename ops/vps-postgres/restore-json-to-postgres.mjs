@@ -133,6 +133,9 @@ try {
     await transaction`
       ALTER TABLE predictions DISABLE TRIGGER predictions_deadline_guard
     `;
+    await transaction`
+      ALTER TABLE pools DISABLE TRIGGER pools_add_owner
+    `;
 
     const counts = {};
     for (const table of [
@@ -149,6 +152,9 @@ try {
       counts[table] = await insertRows(transaction, table);
     }
 
+    await transaction`
+      ALTER TABLE pools ENABLE TRIGGER pools_add_owner
+    `;
     await transaction`
       ALTER TABLE predictions ENABLE TRIGGER predictions_deadline_guard
     `;
