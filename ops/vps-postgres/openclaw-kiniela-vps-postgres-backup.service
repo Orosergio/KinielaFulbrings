@@ -1,0 +1,9 @@
+[Unit]
+Description=Kiniela VPS Postgres backup
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/opsadmin/.openclaw/kiniela-postgres/ops
+ExecStart=/home/opsadmin/.openclaw/kiniela-postgres/ops/backup-vps-postgres.sh

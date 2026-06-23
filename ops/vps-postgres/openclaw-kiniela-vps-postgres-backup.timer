@@ -1,0 +1,11 @@
+[Unit]
+Description=Run Kiniela VPS Postgres backup hourly
+
+[Timer]
+OnBootSec=10min
+OnUnitActiveSec=1h
+Persistent=true
+Unit=openclaw-kiniela-vps-postgres-backup.service
+
+[Install]
+WantedBy=timers.target

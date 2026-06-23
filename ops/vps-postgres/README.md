@@ -40,6 +40,20 @@ Start the fallback database from this folder:
 ./start-postgres.sh
 ```
 
+Create a backup of the VPS database:
+
+```sh
+./backup-vps-postgres.sh
+```
+
+Install the hourly backup timer:
+
+```sh
+cp openclaw-kiniela-vps-postgres-backup.* ~/.config/systemd/user/
+systemctl --user daemon-reload
+systemctl --user enable --now openclaw-kiniela-vps-postgres-backup.timer
+```
+
 Netlify environment for the fallback:
 
 ```sh
