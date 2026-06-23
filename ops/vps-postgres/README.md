@@ -23,6 +23,23 @@ sudo chown 999:999 certs/server.key certs/server.crt
 docker compose up -d
 ```
 
+Ubuntu 24.04 package names:
+
+```sh
+sudo apt update
+sudo apt install -y docker.io docker-compose-v2
+sudo systemctl enable --now docker
+sudo usermod -aG docker opsadmin
+```
+
+Then log out and back in so the `docker` group is active.
+
+Start the fallback database from this folder:
+
+```sh
+./start-postgres.sh
+```
+
 Netlify environment for the fallback:
 
 ```sh
@@ -34,3 +51,15 @@ DATABASE_URL=postgres://kiniela_app:<password>@<vps-host>:5432/kiniela?sslmode=r
 
 Return to Neon by restoring the old Neon `DATABASE_URL` and removing or setting
 `DATABASE_DRIVER=neon-http`.
+
+If `pg_dump` is blocked by client/server version mismatch, use the JSON fallback:
+
+```sh
+# Export from Neon:
+DATABASE_URL='<neon-url>' node ops/vps-postgres/export-neon-json.mjs
+
+# Restore into VPS Postgres after migrations:
+DATABASE_URL='<vps-url>' node scripts/migrate-db.mjs
+DATABASE_URL='<vps-url>' KINIELA_BACKUP_FILE='<backup-json>' \
+  node ops/vps-postgres/restore-json-to-postgres.mjs
+```
