@@ -161,7 +161,7 @@ export function syncHealth(
   sync: SyncStatus | null,
   serverNow: string,
   expectedMatches: number,
-  staleAfterMs = 8 * 60 * 1000,
+  staleAfterMs = 15 * 60 * 1000,
 ): SyncHealth {
   if (!sync) return { state: "error", reason: "missing" };
 

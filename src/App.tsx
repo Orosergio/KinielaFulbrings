@@ -32,6 +32,7 @@ import { MatchCard } from "./components/MatchCard";
 import { PasswordSetup } from "./components/PasswordSetup";
 import { PoolDialog } from "./components/PoolDialog";
 import { createPool, getBootstrap, joinPool, savePrediction } from "./lib/api";
+import { bracketMatches, bracketMatchLabel, bracketStages } from "./lib/bracket";
 import { demoBootstrap } from "./lib/demo";
 import {
   calendarMatches,
@@ -651,13 +652,7 @@ function BracketView({
   data,
   language,
 }: Pick<AppContentProps, "data" | "language">) {
-  const stages = [
-    { id: "r32", label: language === "es" ? "Ronda de 32" : "Round of 32" },
-    { id: "r16", label: language === "es" ? "Octavos" : "Round of 16" },
-    { id: "qf", label: language === "es" ? "Cuartos" : "Quarterfinals" },
-    { id: "sf", label: language === "es" ? "Semifinales" : "Semifinals" },
-    { id: "final", label: language === "es" ? "Final" : "Final" },
-  ];
+  const stages = bracketStages(language);
 
   const teamName = (match: Match, side: "home" | "away") => {
     const teamId = side === "home" ? match.homeTeamId : match.awayTeamId;
@@ -685,21 +680,22 @@ function BracketView({
           <div className="bracket-column" key={stage.id}>
             <h2>{stage.label}</h2>
             <div className="bracket-matches">
-              {data.matches
-                .filter((match) => match.stage === stage.id)
-                .map((match) => (
-                  <article className="bracket-match" key={match.id}>
-                    <span>#{match.id}</span>
-                    <div>
-                      <strong>{teamName(match, "home")}</strong>
-                      <b>{match.homeScore ?? "–"}</b>
-                    </div>
-                    <div>
-                      <strong>{teamName(match, "away")}</strong>
-                      <b>{match.awayScore ?? "–"}</b>
-                    </div>
-                  </article>
-                ))}
+              {bracketMatches(data.matches, stage).map((match) => (
+                <article className="bracket-match" key={match.id}>
+                  <span>
+                    #{match.id} - {bracketMatchLabel(match, language)} -{" "}
+                    {formatDay(match.kickoffAt, language)}
+                  </span>
+                  <div>
+                    <strong>{teamName(match, "home")}</strong>
+                    <b>{match.homeScore ?? "-"}</b>
+                  </div>
+                  <div>
+                    <strong>{teamName(match, "away")}</strong>
+                    <b>{match.awayScore ?? "-"}</b>
+                  </div>
+                </article>
+              ))}
             </div>
           </div>
         ))}
