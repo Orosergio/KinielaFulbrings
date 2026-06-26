@@ -294,6 +294,11 @@ export function MatchCard({
               <b>
                 {item.homeScore}-{item.awayScore}
               </b>
+              {item.points !== null && (
+                <small className="member-pick-points">
+                  +{item.points} {t("points")}
+                </small>
+              )}
             </span>
           ))
         ) : (
