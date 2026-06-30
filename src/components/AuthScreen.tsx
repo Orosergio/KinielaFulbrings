@@ -89,7 +89,11 @@ export function AuthScreen({ language }: Props) {
         </p>
         <div className="auth-rule">
           <Trophy size={20} />
-          <span>{es ? "7 puntos por marcador exacto" : "7 points for an exact score"}</span>
+          <span>
+            {es
+              ? "7 por marcador exacto + 2 por clasificado"
+              : "7 for exact score + 2 for the advancer"}
+          </span>
         </div>
       </section>
 

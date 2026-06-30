@@ -49,6 +49,7 @@ import type {
   BootstrapData,
   Language,
   Match,
+  MatchWinnerSide,
   Theme,
   StaticTeam,
   View,
@@ -182,6 +183,14 @@ function RulesDashboard({
           : "You hit home win, draw, or away win.",
     },
     {
+      points: 2,
+      title: language === "es" ? "Clasificado" : "Advancer",
+      body:
+        language === "es"
+          ? "En eliminatorias, aciertas el equipo que avanza. Los penales solo deciden este bonus."
+          : "In knockouts, you hit the team that advances. Penalties only decide this bonus.",
+    },
+    {
       points: 1,
       title: language === "es" ? "Un gol exacto" : "One exact goal",
       body:
@@ -288,7 +297,12 @@ type AppContentProps = {
   view: View;
   setView: (view: View) => void;
   refresh: () => Promise<void>;
-  save: (matchId: number, homeScore: number, awayScore: number) => Promise<void>;
+  save: (
+    matchId: number,
+    homeScore: number,
+    awayScore: number,
+    advancingSide: MatchWinnerSide | null,
+  ) => Promise<void>;
   openPools: () => void;
 };
 
@@ -953,7 +967,12 @@ export default function App() {
   }, [identityUser, refresh]);
 
   const save = useCallback(
-    async (matchId: number, homeScore: number, awayScore: number) => {
+    async (
+      matchId: number,
+      homeScore: number,
+      awayScore: number,
+      advancingSide: MatchWinnerSide | null,
+    ) => {
       if (!data?.selectedPoolId) throw new Error("Select a pool");
       const match = data.matches.find((item) => item.id === matchId);
       if (!match || !isPickable(match)) {
@@ -983,6 +1002,9 @@ export default function App() {
                 matchId,
                 homeScore,
                 awayScore,
+                advancingSide,
+                scorePoints: null,
+                advancementPoints: null,
                 points: null,
                 updatedAt: new Date().toISOString(),
               },
@@ -996,6 +1018,7 @@ export default function App() {
         matchId,
         homeScore,
         awayScore,
+        advancingSide,
       });
       setData((current) => {
         if (!current) return current;

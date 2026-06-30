@@ -21,6 +21,51 @@ export function predictionPoints(
   return 0;
 }
 
+export function isKnockoutStage(stage: string) {
+  return stage !== "group";
+}
+
+export function predictedAdvancingSide(
+  predictedHome: number,
+  predictedAway: number,
+): MatchWinnerSide | null {
+  if (predictedHome > predictedAway) return "home";
+  if (predictedAway > predictedHome) return "away";
+  return null;
+}
+
+export function predictionAdvancementPoints(
+  predictedSide: MatchWinnerSide | null | undefined,
+  actualSide: MatchWinnerSide | null | undefined,
+  stage: string,
+) {
+  if (!isKnockoutStage(stage) || !predictedSide || !actualSide) return 0;
+  return predictedSide === actualSide ? 2 : 0;
+}
+
+export function predictionTotalPoints({
+  predictedHome,
+  predictedAway,
+  predictedAdvancingSide: advancingSide,
+  actualHome,
+  actualAway,
+  actualWinnerSide,
+  stage,
+}: {
+  predictedHome: number;
+  predictedAway: number;
+  predictedAdvancingSide?: MatchWinnerSide | null;
+  actualHome: number;
+  actualAway: number;
+  actualWinnerSide?: MatchWinnerSide | null;
+  stage: string;
+}) {
+  return (
+    predictionPoints(predictedHome, predictedAway, actualHome, actualAway) +
+    predictionAdvancementPoints(advancingSide, actualWinnerSide, stage)
+  );
+}
+
 type MatchResultState = {
   status: string;
   homeScore: number | null;

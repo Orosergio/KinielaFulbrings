@@ -57,11 +57,25 @@ export default async () => {
             AND (
               m.home_score IS NULL OR
               m.away_score IS NULL OR
-              p.points IS DISTINCT FROM prediction_points(
+              p.score_points IS DISTINCT FROM prediction_points(
                 p.home_score,
                 p.away_score,
                 m.home_score,
                 m.away_score
+              ) OR
+              p.advancement_points IS DISTINCT FROM prediction_advancement_points(
+                p.advancing_side,
+                m.winner_side,
+                m.stage
+              ) OR
+              p.points IS DISTINCT FROM prediction_total_points(
+                p.home_score,
+                p.away_score,
+                p.advancing_side,
+                m.home_score,
+                m.away_score,
+                m.winner_side,
+                m.stage
               )
             )
         ) AS "pointMismatches",
@@ -69,7 +83,12 @@ export default async () => {
           SELECT COUNT(*)::int
           FROM predictions p
           JOIN matches m ON m.id = p.match_id
-          WHERE m.status <> 'FINISHED' AND p.points IS NOT NULL
+          WHERE m.status <> 'FINISHED'
+            AND (
+              p.points IS NOT NULL OR
+              p.score_points IS NOT NULL OR
+              p.advancement_points IS NOT NULL
+            )
         ) AS "unfinishedWithPoints",
         (
           SELECT COUNT(*)::int

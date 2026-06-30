@@ -10,7 +10,25 @@ const bodySchema = z.object({
   matchId: z.number().int().positive(),
   homeScore: z.number().int().min(0).max(30),
   awayScore: z.number().int().min(0).max(30),
+  advancingSide: z.enum(["home", "away"]).nullable().optional(),
 });
+
+function resolvedAdvancingSide({
+  stage,
+  homeScore,
+  awayScore,
+  advancingSide,
+}: {
+  stage: string;
+  homeScore: number;
+  awayScore: number;
+  advancingSide?: "home" | "away" | null;
+}) {
+  if (stage === "group") return null;
+  if (homeScore > awayScore) return "home";
+  if (awayScore > homeScore) return "away";
+  return advancingSide ?? null;
+}
 
 export default async (request: Request) => {
   try {
@@ -29,6 +47,9 @@ export default async (request: Request) => {
     const [match] = await sql`
       SELECT
         id,
+        stage,
+        home_team_id AS "homeTeamId",
+        away_team_id AS "awayTeamId",
         (now() >= kickoff_at OR status <> 'SCHEDULED') AS locked
       FROM matches
       WHERE id = ${payload.matchId}
@@ -46,24 +67,51 @@ export default async (request: Request) => {
       );
     }
 
+    if (!match.homeTeamId || !match.awayTeamId) {
+      throw new HttpError(
+        409,
+        "Este partido todavía no tiene equipos definidos.",
+        "MATCH_TEAMS_PENDING",
+      );
+    }
+
+    const advancingSide = resolvedAdvancingSide({
+      stage: match.stage as string,
+      homeScore: payload.homeScore,
+      awayScore: payload.awayScore,
+      advancingSide: payload.advancingSide,
+    });
+    if (match.stage !== "group" && advancingSide === null) {
+      throw new HttpError(
+        400,
+        "Elige quién avanza para guardar un empate en eliminatoria.",
+        "ADVANCING_SIDE_REQUIRED",
+      );
+    }
+
     const [prediction] = await sql`
       INSERT INTO predictions (
-        pool_id, user_id, match_id, home_score, away_score
+        pool_id, user_id, match_id, home_score, away_score, advancing_side
       ) VALUES (
         ${payload.poolId}::uuid,
         ${user.id},
         ${payload.matchId},
         ${payload.homeScore},
-        ${payload.awayScore}
+        ${payload.awayScore},
+        ${advancingSide}
       )
       ON CONFLICT (pool_id, user_id, match_id) DO UPDATE SET
         home_score = EXCLUDED.home_score,
-        away_score = EXCLUDED.away_score
+        away_score = EXCLUDED.away_score,
+        advancing_side = EXCLUDED.advancing_side
       RETURNING
         user_id AS "userId",
         match_id AS "matchId",
         home_score AS "homeScore",
         away_score AS "awayScore",
+        advancing_side AS "advancingSide",
+        score_points AS "scorePoints",
+        advancement_points AS "advancementPoints",
         points,
         updated_at AS "updatedAt"
     `;

@@ -1,4 +1,5 @@
 import type { BootstrapData, Prediction } from "../types";
+import type { MatchWinnerSide } from "../types";
 
 type ApiErrorBody = {
   error?: string;
@@ -47,6 +48,7 @@ export function savePrediction(payload: {
   matchId: number;
   homeScore: number;
   awayScore: number;
+  advancingSide?: MatchWinnerSide | null;
 }) {
   return request<{ prediction: Prediction }>("/api/predictions", {
     method: "PUT",

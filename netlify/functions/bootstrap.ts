@@ -107,6 +107,9 @@ export default async (request: Request) => {
           p.match_id AS "matchId",
           p.home_score AS "homeScore",
           p.away_score AS "awayScore",
+          p.advancing_side AS "advancingSide",
+          p.score_points AS "scorePoints",
+          p.advancement_points AS "advancementPoints",
           p.points,
           p.updated_at AS "updatedAt"
         FROM predictions p
@@ -121,7 +124,7 @@ export default async (request: Request) => {
           pr.avatar_url AS "avatarUrl",
           COALESCE(SUM(p.points), 0)::int AS points,
           COUNT(p.match_id)::int AS "pickCount",
-          COUNT(p.match_id) FILTER (WHERE p.points = 7)::int AS exacts
+          COUNT(p.match_id) FILTER (WHERE p.score_points = 7)::int AS exacts
         FROM pool_members pm
         JOIN profiles pr ON pr.id = pm.user_id
         LEFT JOIN predictions p

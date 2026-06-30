@@ -4,7 +4,9 @@ import {
   calendarMatches,
   isLocked,
   matchWinnerSide,
+  predictionAdvancementPoints,
   predictionPoints,
+  predictionTotalPoints,
   resolveProviderState,
   safeProviderState,
   scoreLabel,
@@ -57,6 +59,31 @@ describe("predictionPoints", () => {
 
   it("awards 0 when nothing matches", () => {
     expect(predictionPoints(0, 3, 2, 1)).toBe(0);
+  });
+});
+
+describe("prediction advancement bonus", () => {
+  it("awards 2 extra points for the knockout advancer", () => {
+    expect(predictionAdvancementPoints("away", "away", "r32")).toBe(2);
+    expect(predictionAdvancementPoints("home", "away", "r32")).toBe(0);
+  });
+
+  it("does not award an advancer bonus in group matches", () => {
+    expect(predictionAdvancementPoints("home", "home", "group")).toBe(0);
+  });
+
+  it("keeps exact score and advancer as separate parts of the total", () => {
+    expect(
+      predictionTotalPoints({
+        predictedHome: 1,
+        predictedAway: 1,
+        predictedAdvancingSide: "away",
+        actualHome: 1,
+        actualAway: 1,
+        actualWinnerSide: "away",
+        stage: "r32",
+      }),
+    ).toBe(9);
   });
 });
 

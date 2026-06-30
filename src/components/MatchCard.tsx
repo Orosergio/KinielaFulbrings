@@ -3,14 +3,17 @@ import { useEffect, useMemo, useState } from "react";
 import dataset from "../../data/worldcup-2026.json";
 import {
   hasPenaltyShootout,
+  isKnockoutStage,
   isLocked,
   matchWinnerSide,
   ownPrediction,
+  predictedAdvancingSide,
 } from "../lib/game";
 import { translate } from "../lib/i18n";
 import type {
   Language,
   Match,
+  MatchWinnerSide,
   Member,
   Prediction,
   StaticStadium,
@@ -33,7 +36,12 @@ type Props = {
   currentUserId: string;
   predictions: Prediction[];
   members: Member[];
-  onSave: (matchId: number, homeScore: number, awayScore: number) => Promise<void>;
+  onSave: (
+    matchId: number,
+    homeScore: number,
+    awayScore: number,
+    advancingSide: MatchWinnerSide | null,
+  ) => Promise<void>;
   focus?: boolean;
 };
 
@@ -61,7 +69,7 @@ function TeamSide({
           ? language === "es"
             ? "Avanza"
             : "Advances"
-          : team?.fifaCode ?? "—"}
+          : team?.fifaCode ?? "-"}
       </small>
     </div>
   );
@@ -109,6 +117,59 @@ function ScoreControl({
   );
 }
 
+function sideTeam(
+  side: MatchWinnerSide,
+  home?: StaticTeam,
+  away?: StaticTeam,
+) {
+  return side === "home" ? home : away;
+}
+
+function sideName({
+  side,
+  language,
+  home,
+  away,
+  match,
+}: {
+  side: MatchWinnerSide;
+  language: Language;
+  home?: StaticTeam;
+  away?: StaticTeam;
+  match: Match;
+}) {
+  const team = sideTeam(side, home, away);
+  const fallback = side === "home" ? match.homeLabel : match.awayLabel;
+  return team?.name[language] ?? fallback ?? "TBD";
+}
+
+function sideCode({
+  side,
+  home,
+  away,
+}: {
+  side: MatchWinnerSide;
+  home?: StaticTeam;
+  away?: StaticTeam;
+}) {
+  return sideTeam(side, home, away)?.fifaCode ?? side.toUpperCase();
+}
+
+function pointsBreakdown(prediction: Prediction, language: Language) {
+  const pieces: string[] = [];
+  if (prediction.scorePoints !== null) {
+    pieces.push(
+      `${language === "es" ? "marcador" : "score"} +${prediction.scorePoints}`,
+    );
+  }
+  if (prediction.advancementPoints !== null) {
+    pieces.push(
+      `${language === "es" ? "clasificado" : "advancer"} +${prediction.advancementPoints}`,
+    );
+  }
+  return pieces.join(" · ");
+}
+
 export function MatchCard({
   match,
   language,
@@ -119,24 +180,55 @@ export function MatchCard({
   focus = false,
 }: Props) {
   const prediction = ownPrediction(predictions, match.id, currentUserId);
+  const initialAdvancingSide =
+    prediction?.advancingSide ??
+    predictedAdvancingSide(prediction?.homeScore ?? 0, prediction?.awayScore ?? 0);
   const [homeScore, setHomeScore] = useState(prediction?.homeScore ?? 0);
   const [awayScore, setAwayScore] = useState(prediction?.awayScore ?? 0);
+  const [advancingSide, setAdvancingSide] =
+    useState<MatchWinnerSide | null>(initialAdvancingSide);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
   const [now, setNow] = useState(() => Date.now());
   const locked = isLocked(match, now);
+  const knockout = isKnockoutStage(match.stage);
   const home = match.homeTeamId ? teams.get(match.homeTeamId) : undefined;
   const away = match.awayTeamId ? teams.get(match.awayTeamId) : undefined;
   const stadium = match.stadiumId ? stadiums.get(match.stadiumId) : undefined;
   const winnerSide = matchWinnerSide(match);
   const hasShootout = hasPenaltyShootout(match);
+  const inferredAdvancingSide = predictedAdvancingSide(homeScore, awayScore);
+  const pickAdvancingSide = knockout
+    ? inferredAdvancingSide ?? advancingSide
+    : null;
+  const needsAdvancementChoice =
+    knockout && homeScore === awayScore && home !== undefined && away !== undefined;
   const t = (key: Parameters<typeof translate>[1]) => translate(language, key);
 
   useEffect(() => {
-    setHomeScore(prediction?.homeScore ?? 0);
-    setAwayScore(prediction?.awayScore ?? 0);
-  }, [match.id, prediction?.awayScore, prediction?.homeScore]);
+    const nextHomeScore = prediction?.homeScore ?? 0;
+    const nextAwayScore = prediction?.awayScore ?? 0;
+    setHomeScore(nextHomeScore);
+    setAwayScore(nextAwayScore);
+    setAdvancingSide(
+      prediction?.advancingSide ??
+        predictedAdvancingSide(nextHomeScore, nextAwayScore),
+    );
+  }, [
+    match.id,
+    prediction?.advancingSide,
+    prediction?.awayScore,
+    prediction?.homeScore,
+  ]);
+
+  useEffect(() => {
+    if (!knockout) {
+      setAdvancingSide(null);
+    } else if (inferredAdvancingSide) {
+      setAdvancingSide(inferredAdvancingSide);
+    }
+  }, [inferredAdvancingSide, knockout]);
 
   useEffect(() => {
     setSaved(false);
@@ -202,11 +294,21 @@ export function MatchCard({
       return;
     }
 
+    if (knockout && pickAdvancingSide === null) {
+      setSaved(false);
+      setError(
+        language === "es"
+          ? "Elige quién avanza para guardar un empate en eliminatoria."
+          : "Choose who advances to save a tied knockout pick.",
+      );
+      return;
+    }
+
     setSaving(true);
     setSaved(false);
     setError("");
     try {
-      await onSave(match.id, homeScore, awayScore);
+      await onSave(match.id, homeScore, awayScore, pickAdvancingSide);
       setSaved(true);
       window.setTimeout(() => setSaved(false), 1800);
     } catch (caught) {
@@ -215,6 +317,17 @@ export function MatchCard({
       setSaving(false);
     }
   }
+
+  const ownAdvancingLabel =
+    prediction?.advancingSide && knockout
+      ? `${language === "es" ? "Avanza" : "Advances"} ${sideName({
+          side: prediction.advancingSide,
+          language,
+          home,
+          away,
+          match,
+        })}`
+      : null;
 
   return (
     <article className={`match-card ${focus ? "focus-card" : ""}`}>
@@ -271,35 +384,86 @@ export function MatchCard({
 
       {!locked && home && away ? (
         <div className="pick-editor">
-          <ScoreControl
-            value={homeScore}
-            onChange={setHomeScore}
-            label={home.name[language]}
-          />
-          <span className="score-divider">:</span>
-          <ScoreControl
-            value={awayScore}
-            onChange={setAwayScore}
-            label={away.name[language]}
-          />
-          <button className="primary-button save-pick" onClick={save} disabled={saving}>
-            {saved ? <Check size={18} /> : <Save size={18} />}
-            {saving ? "…" : saved ? t("saved") : t("save")}
-          </button>
+          <div className="score-pick-row">
+            <ScoreControl
+              value={homeScore}
+              onChange={setHomeScore}
+              label={home.name[language]}
+            />
+            <span className="score-divider">:</span>
+            <ScoreControl
+              value={awayScore}
+              onChange={setAwayScore}
+              label={away.name[language]}
+            />
+            <button
+              className="primary-button save-pick"
+              onClick={save}
+              disabled={saving}
+            >
+              {saved ? <Check size={18} /> : <Save size={18} />}
+              {saving ? "..." : saved ? t("saved") : t("save")}
+            </button>
+          </div>
+
+          {knockout && (
+            <div
+              className={`advancement-pick ${needsAdvancementChoice ? "needs-choice" : ""}`}
+            >
+              <span>{language === "es" ? "Avanza" : "Advances"}</span>
+              {needsAdvancementChoice ? (
+                <div className="advancement-options">
+                  {(["home", "away"] as const).map((side) => {
+                    const team = sideTeam(side, home, away);
+                    const active = pickAdvancingSide === side;
+                    return (
+                      <button
+                        type="button"
+                        className={active ? "active" : ""}
+                        key={side}
+                        onClick={() => setAdvancingSide(side)}
+                      >
+                        {team && <img src={team.flag} alt="" width="20" height="14" />}
+                        <b>{sideName({ side, language, home, away, match })}</b>
+                      </button>
+                    );
+                  })}
+                </div>
+              ) : pickAdvancingSide ? (
+                <strong>
+                  {sideName({
+                    side: pickAdvancingSide,
+                    language,
+                    home,
+                    away,
+                    match,
+                  })}
+                </strong>
+              ) : null}
+            </div>
+          )}
         </div>
       ) : prediction ? (
         <div className="sealed-pick">
           <LockKeyhole size={17} />
-          <span>
-            {language === "es" ? "Tu pick" : "Your pick"}:{" "}
-            <strong>
-              {prediction.homeScore} : {prediction.awayScore}
-            </strong>
+          <span className="sealed-pick-main">
+            <span>
+              {language === "es" ? "Tu pick" : "Your pick"}:{" "}
+              <strong>
+                {prediction.homeScore} : {prediction.awayScore}
+              </strong>
+            </span>
+            {ownAdvancingLabel && <small>{ownAdvancingLabel}</small>}
           </span>
           {prediction.points !== null && (
-            <b>
-              +{prediction.points} {t("points")}
-            </b>
+            <span className="sealed-points">
+              <b>
+                +{prediction.points} {t("points")}
+              </b>
+              {pointsBreakdown(prediction, language) && (
+                <small>{pointsBreakdown(prediction, language)}</small>
+              )}
+            </span>
           )}
         </div>
       ) : (
@@ -327,8 +491,17 @@ export function MatchCard({
               <b>
                 {item.homeScore}-{item.awayScore}
               </b>
+              {knockout && item.advancingSide && (
+                <small className="member-pick-advances">
+                  {language === "es" ? "Av." : "Adv."}{" "}
+                  {sideCode({ side: item.advancingSide, home, away })}
+                </small>
+              )}
               {item.points !== null && (
-                <small className="member-pick-points">
+                <small
+                  className="member-pick-points"
+                  title={pointsBreakdown(item, language)}
+                >
                   +{item.points} {t("points")}
                 </small>
               )}

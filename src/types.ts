@@ -64,6 +64,9 @@ export type Prediction = {
   matchId: number;
   homeScore: number;
   awayScore: number;
+  advancingSide: MatchWinnerSide | null;
+  scorePoints: number | null;
+  advancementPoints: number | null;
   points: number | null;
   updatedAt: string;
 };
