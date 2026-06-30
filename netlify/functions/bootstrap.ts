@@ -61,6 +61,9 @@ export default async (request: Request) => {
         m.minute,
         m.home_score AS "homeScore",
         m.away_score AS "awayScore",
+        m.home_penalty_score AS "homePenaltyScore",
+        m.away_penalty_score AS "awayPenaltyScore",
+        m.winner_side AS "winnerSide",
         m.updated_at AS "updatedAt"
       FROM matches m
       ORDER BY m.kickoff_at, m.id

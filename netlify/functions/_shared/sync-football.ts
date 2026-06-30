@@ -3,6 +3,7 @@ import {
   resolveProviderState,
   scoreStateChanged,
 } from "../../../src/lib/game";
+import type { MatchWinnerSide } from "../../../src/types";
 
 const EXPECTED_MATCH_COUNT = 104;
 const PRIMARY_FETCH_TIMEOUT_MS = 10_000;
@@ -21,6 +22,9 @@ type ProviderMatch = {
   score: {
     fullTime?: { home?: number | null; away?: number | null };
     halfTime?: { home?: number | null; away?: number | null };
+    penalties?: { home?: number | null; away?: number | null };
+    penaltyShootout?: { home?: number | null; away?: number | null };
+    winner?: unknown;
   };
 };
 
@@ -31,6 +35,9 @@ type LocalMatch = {
   status: string;
   homeScore: number | null;
   awayScore: number | null;
+  homePenaltyScore: number | null;
+  awayPenaltyScore: number | null;
+  winnerSide: MatchWinnerSide | null;
   minute: number | null;
   homeTeamId: number | null;
   awayTeamId: number | null;
@@ -93,6 +100,91 @@ export function scoreValue(value: unknown) {
   if (value === null || value === undefined || value === "") return null;
   const score = Number(value);
   return Number.isInteger(score) && score >= 0 && score <= 30 ? score : null;
+}
+
+function firstScoreValue(values: unknown[]) {
+  for (const value of values) {
+    const score = scoreValue(value);
+    if (score !== null) return score;
+  }
+  return null;
+}
+
+export function providerWinnerSide(value: unknown): MatchWinnerSide | null {
+  const normalized = String(value ?? "")
+    .trim()
+    .toLowerCase()
+    .replace(/[\s-]+/g, "_");
+  if (
+    normalized === "home" ||
+    normalized === "home_team" ||
+    normalized === "home_team_winner"
+  ) {
+    return "home";
+  }
+  if (
+    normalized === "away" ||
+    normalized === "away_team" ||
+    normalized === "away_team_winner"
+  ) {
+    return "away";
+  }
+  return null;
+}
+
+function scoreWinnerSide(
+  homeScore: number | null,
+  awayScore: number | null,
+): MatchWinnerSide | null {
+  if (homeScore === null || awayScore === null) return null;
+  if (homeScore > awayScore) return "home";
+  if (awayScore > homeScore) return "away";
+  return null;
+}
+
+export function matchTiebreakerState(
+  status: string,
+  homeScore: number | null,
+  awayScore: number | null,
+  homePenaltyScore: number | null,
+  awayPenaltyScore: number | null,
+  winnerSide: MatchWinnerSide | null,
+): {
+  homePenaltyScore: number | null;
+  awayPenaltyScore: number | null;
+  winnerSide: MatchWinnerSide | null;
+} {
+  const scoreWinner = scoreWinnerSide(homeScore, awayScore);
+  if (status !== "FINISHED" || homeScore === null || awayScore === null) {
+    return {
+      homePenaltyScore: null,
+      awayPenaltyScore: null,
+      winnerSide: null,
+    };
+  }
+  if (scoreWinner) {
+    return {
+      homePenaltyScore: null,
+      awayPenaltyScore: null,
+      winnerSide: scoreWinner,
+    };
+  }
+  if (
+    homePenaltyScore !== null &&
+    awayPenaltyScore !== null &&
+    homePenaltyScore !== awayPenaltyScore
+  ) {
+    return {
+      homePenaltyScore,
+      awayPenaltyScore,
+      winnerSide: homePenaltyScore > awayPenaltyScore ? "home" : "away",
+    };
+  }
+  return {
+    homePenaltyScore: null,
+    awayPenaltyScore: null,
+    winnerSide,
+  };
 }
 
 export function statusNeedsScores(status: string) {
@@ -306,6 +398,9 @@ export async function syncFootballData() {
         m.status,
         m.home_score AS "homeScore",
         m.away_score AS "awayScore",
+        m.home_penalty_score AS "homePenaltyScore",
+        m.away_penalty_score AS "awayPenaltyScore",
+        m.winner_side AS "winnerSide",
         m.minute,
         m.home_team_id AS "homeTeamId",
         m.away_team_id AS "awayTeamId",
@@ -348,10 +443,25 @@ export async function syncFootballData() {
         reportedHomeScore,
         reportedAwayScore,
       );
+      const tiebreaker = matchTiebreakerState(
+        reportedStatus,
+        reportedHomeScore,
+        reportedAwayScore,
+        firstScoreValue([
+          provider.score.penalties?.home,
+          provider.score.penaltyShootout?.home,
+        ]),
+        firstScoreValue([
+          provider.score.penalties?.away,
+          provider.score.penaltyShootout?.away,
+        ]),
+        providerWinnerSide(provider.score.winner),
+      );
       const nextState = resolveProviderState(local, {
         status: reportedStatus,
         homeScore: reportedHomeScore,
         awayScore: reportedAwayScore,
+        ...tiebreaker,
       });
       const minute = clampMinute(provider.minute);
       const metadataChanged =
@@ -405,6 +515,9 @@ export async function syncFootballData() {
           minute = ${minute},
           home_score = ${nextState.homeScore},
           away_score = ${nextState.awayScore},
+          home_penalty_score = ${nextState.homePenaltyScore},
+          away_penalty_score = ${nextState.awayPenaltyScore},
+          winner_side = ${nextState.winnerSide},
           source_updated_at = now(),
           updated_at = now()
         WHERE id = ${local.id}
@@ -456,6 +569,19 @@ export type PublicApiMatch = {
   away_team_id?: string;
   home_score?: string;
   away_score?: string;
+  home_penalty_score?: string;
+  away_penalty_score?: string;
+  home_penalty?: string;
+  away_penalty?: string;
+  home_penalties?: string;
+  away_penalties?: string;
+  penalty_home?: string;
+  penalty_away?: string;
+  penalties_home?: string;
+  penalties_away?: string;
+  winner?: string;
+  winner_side?: string;
+  winner_team_id?: string;
   finished?: string;
   time_elapsed?: string;
 };
@@ -476,6 +602,43 @@ export function publicApiMinute(value?: string) {
   const leadingDigits = /^\s*(\d{1,3})/.exec(String(value ?? ""));
   if (!leadingDigits) return null;
   return clampMinute(Number.parseInt(leadingDigits[1], 10));
+}
+
+export function publicApiTiebreakerState(
+  match: PublicApiMatch,
+  status: string,
+  homeScore: number | null,
+  awayScore: number | null,
+  homeTeamId: number | null,
+  awayTeamId: number | null,
+) {
+  const winnerTeamId = Number(match.winner_team_id) || null;
+  const winnerSideFromTeam =
+    winnerTeamId !== null && winnerTeamId === homeTeamId
+      ? "home"
+      : winnerTeamId !== null && winnerTeamId === awayTeamId
+        ? "away"
+        : null;
+  return matchTiebreakerState(
+    status,
+    homeScore,
+    awayScore,
+    firstScoreValue([
+      match.home_penalty_score,
+      match.home_penalty,
+      match.home_penalties,
+      match.penalty_home,
+      match.penalties_home,
+    ]),
+    firstScoreValue([
+      match.away_penalty_score,
+      match.away_penalty,
+      match.away_penalties,
+      match.penalty_away,
+      match.penalties_away,
+    ]),
+    providerWinnerSide(match.winner_side ?? match.winner) ?? winnerSideFromTeam,
+  );
 }
 
 export async function syncPublicWorldCup() {
@@ -501,6 +664,9 @@ export async function syncPublicWorldCup() {
         status,
         home_score AS "homeScore",
         away_score AS "awayScore",
+        home_penalty_score AS "homePenaltyScore",
+        away_penalty_score AS "awayPenaltyScore",
+        winner_side AS "winnerSide",
         minute,
         home_team_id AS "homeTeamId",
         away_team_id AS "awayTeamId",
@@ -538,14 +704,23 @@ export async function syncPublicWorldCup() {
         reportedHomeScore,
         reportedAwayScore,
       );
+      const homeTeamId = Number(game.home_team_id) || null;
+      const awayTeamId = Number(game.away_team_id) || null;
+      const tiebreaker = publicApiTiebreakerState(
+        game,
+        reportedStatus,
+        reportedHomeScore,
+        reportedAwayScore,
+        homeTeamId,
+        awayTeamId,
+      );
       const nextState = resolveProviderState(local, {
         status: reportedStatus,
         homeScore: reportedHomeScore,
         awayScore: reportedAwayScore,
+        ...tiebreaker,
       });
       const minute = publicApiMinute(game.time_elapsed);
-      const homeTeamId = Number(game.home_team_id) || null;
-      const awayTeamId = Number(game.away_team_id) || null;
       const metadataChanged =
         !sameProviderMatchId(local.providerMatchId, matchId) ||
         local.minute !== minute ||
@@ -594,6 +769,9 @@ export async function syncPublicWorldCup() {
           minute = ${minute},
           home_score = ${nextState.homeScore},
           away_score = ${nextState.awayScore},
+          home_penalty_score = ${nextState.homePenaltyScore},
+          away_penalty_score = ${nextState.awayPenaltyScore},
+          winner_side = ${nextState.winnerSide},
           source_updated_at = now(),
           updated_at = now()
         WHERE id = ${matchId}

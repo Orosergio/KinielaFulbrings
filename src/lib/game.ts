@@ -1,4 +1,4 @@
-import type { Match, Prediction, SyncStatus } from "../types";
+import type { Match, MatchWinnerSide, Prediction, SyncStatus } from "../types";
 
 export function outcome(home: number, away: number) {
   return Math.sign(home - away);
@@ -19,6 +19,56 @@ export function predictionPoints(
   if (sameResult) return 3;
   if (oneGoalExact) return 1;
   return 0;
+}
+
+type MatchResultState = {
+  status: string;
+  homeScore: number | null;
+  awayScore: number | null;
+  homePenaltyScore?: number | null;
+  awayPenaltyScore?: number | null;
+  winnerSide?: MatchWinnerSide | null;
+};
+
+export function hasPenaltyShootout(match: MatchResultState) {
+  return (
+    match.homePenaltyScore !== null &&
+    match.homePenaltyScore !== undefined &&
+    match.awayPenaltyScore !== null &&
+    match.awayPenaltyScore !== undefined
+  );
+}
+
+export function matchWinnerSide(match: MatchResultState) {
+  if (
+    match.status !== "FINISHED" ||
+    match.homeScore === null ||
+    match.awayScore === null
+  ) {
+    return null;
+  }
+
+  if (match.homeScore > match.awayScore) return "home";
+  if (match.awayScore > match.homeScore) return "away";
+
+  if (hasPenaltyShootout(match)) {
+    if ((match.homePenaltyScore ?? 0) > (match.awayPenaltyScore ?? 0)) {
+      return "home";
+    }
+    if ((match.awayPenaltyScore ?? 0) > (match.homePenaltyScore ?? 0)) {
+      return "away";
+    }
+  }
+
+  return match.winnerSide ?? null;
+}
+
+export function scoreLabel(match: MatchResultState, side: "home" | "away") {
+  const score = side === "home" ? match.homeScore : match.awayScore;
+  if (score === null) return "-";
+  const penaltyScore =
+    side === "home" ? match.homePenaltyScore : match.awayPenaltyScore;
+  return hasPenaltyShootout(match) ? `${score} (${penaltyScore})` : String(score);
 }
 
 export function isLocked(match: Match, now = Date.now()) {
@@ -69,19 +119,22 @@ export function calendarMatches(matches: Match[]) {
 }
 
 export function scoreStateChanged(
-  current: { status: string; homeScore: number | null; awayScore: number | null },
-  next: { status: string; homeScore: number | null; awayScore: number | null },
+  current: MatchResultState,
+  next: MatchResultState,
 ) {
   return (
     current.status !== next.status ||
     current.homeScore !== next.homeScore ||
-    current.awayScore !== next.awayScore
+    current.awayScore !== next.awayScore ||
+    (current.homePenaltyScore ?? null) !== (next.homePenaltyScore ?? null) ||
+    (current.awayPenaltyScore ?? null) !== (next.awayPenaltyScore ?? null) ||
+    (current.winnerSide ?? null) !== (next.winnerSide ?? null)
   );
 }
 
 export function safeProviderState(
-  current: { status: string; homeScore: number | null; awayScore: number | null },
-  next: { status: string; homeScore: number | null; awayScore: number | null },
+  current: MatchResultState,
+  next: MatchResultState,
 ) {
   const wouldRegressFinished =
     current.status === "FINISHED" && next.status !== "FINISHED";
@@ -104,9 +157,12 @@ export function resolveProviderState(
     status: string;
     homeScore: number | null;
     awayScore: number | null;
+    homePenaltyScore?: number | null;
+    awayPenaltyScore?: number | null;
+    winnerSide?: MatchWinnerSide | null;
     kickoffAt: string;
   },
-  next: { status: string; homeScore: number | null; awayScore: number | null },
+  next: MatchResultState,
   now = Date.now(),
 ) {
   const kickoff = new Date(current.kickoffAt).getTime();
@@ -123,12 +179,18 @@ export function resolveProviderState(
         status: current.status,
         homeScore: next.homeScore,
         awayScore: next.awayScore,
+        homePenaltyScore: next.homePenaltyScore ?? null,
+        awayPenaltyScore: next.awayPenaltyScore ?? null,
+        winnerSide: next.winnerSide ?? null,
       };
     }
     return {
       status: current.status,
       homeScore: current.homeScore,
       awayScore: current.awayScore,
+      homePenaltyScore: current.homePenaltyScore ?? null,
+      awayPenaltyScore: current.awayPenaltyScore ?? null,
+      winnerSide: current.winnerSide ?? null,
     };
   }
 
@@ -141,7 +203,14 @@ export function resolveProviderState(
   ) {
     // Recover from a premature FINISHED while the match could genuinely
     // still be running; scoring is rolled back by the database trigger.
-    return next;
+    return {
+      status: next.status,
+      homeScore: next.homeScore,
+      awayScore: next.awayScore,
+      homePenaltyScore: next.homePenaltyScore ?? null,
+      awayPenaltyScore: next.awayPenaltyScore ?? null,
+      winnerSide: next.winnerSide ?? null,
+    };
   }
 
   const resolved = safeProviderState(current, next);
@@ -149,6 +218,9 @@ export function resolveProviderState(
     status: resolved.status,
     homeScore: resolved.homeScore,
     awayScore: resolved.awayScore,
+    homePenaltyScore: resolved.homePenaltyScore ?? null,
+    awayPenaltyScore: resolved.awayPenaltyScore ?? null,
+    winnerSide: resolved.winnerSide ?? null,
   };
 }
 

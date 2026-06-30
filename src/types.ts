@@ -35,6 +35,8 @@ export type MatchStatus =
   | "POSTPONED"
   | "CANCELLED";
 
+export type MatchWinnerSide = "home" | "away";
+
 export type Match = {
   id: number;
   providerMatchId: number | null;
@@ -51,6 +53,9 @@ export type Match = {
   minute: number | null;
   homeScore: number | null;
   awayScore: number | null;
+  homePenaltyScore: number | null;
+  awayPenaltyScore: number | null;
+  winnerSide: MatchWinnerSide | null;
   updatedAt: string;
 };
 

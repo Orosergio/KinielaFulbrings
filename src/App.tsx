@@ -36,8 +36,11 @@ import { bracketMatches, bracketMatchLabel, bracketStages } from "./lib/bracket"
 import { demoBootstrap } from "./lib/demo";
 import {
   calendarMatches,
+  hasPenaltyShootout,
   isPickable,
+  matchWinnerSide,
   pendingMatches,
+  scoreLabel,
   syncHealth as getSyncHealth,
   type SyncHealth,
 } from "./lib/game";
@@ -653,49 +656,155 @@ function BracketView({
   language,
 }: Pick<AppContentProps, "data" | "language">) {
   const stages = bracketStages(language);
+  const knockoutMatches = stages.flatMap((stage) =>
+    bracketMatches(data.matches, stage),
+  );
+  const completedMatches = knockoutMatches.filter(
+    (match) => match.status === "FINISHED",
+  ).length;
+  const penaltyDecisions = knockoutMatches.filter(hasPenaltyShootout).length;
+  const nextMatch = knockoutMatches
+    .filter((match) => match.status === "SCHEDULED")
+    .sort(
+      (left, right) =>
+        new Date(left.kickoffAt).getTime() -
+          new Date(right.kickoffAt).getTime() || left.id - right.id,
+    )[0];
 
-  const teamName = (match: Match, side: "home" | "away") => {
+  const matchDate = (match: Match) =>
+    new Intl.DateTimeFormat(language === "es" ? "es-MX" : "en-US", {
+      day: "numeric",
+      month: "short",
+      hour: "2-digit",
+      minute: "2-digit",
+    }).format(new Date(match.kickoffAt));
+
+  const teamInfo = (match: Match, side: "home" | "away") => {
     const teamId = side === "home" ? match.homeTeamId : match.awayTeamId;
     const fallback = side === "home" ? match.homeLabel : match.awayLabel;
+    const team = teamId ? staticTeams.get(teamId) : undefined;
+    return {
+      team,
+      name:
+        team?.name[language] ??
+        fallback ??
+        (language === "es" ? "Por definir" : "To be decided"),
+      code: team?.fifaCode ?? "TBD",
+    };
+  };
+
+  const statusText = (match: Match) => {
+    if (match.status === "FINISHED") return language === "es" ? "Final" : "FT";
+    if (match.status === "LIVE") return language === "es" ? "En vivo" : "Live";
+    if (match.status === "PAUSED") return language === "es" ? "Pausa" : "Paused";
+    return language === "es" ? "Por jugar" : "Upcoming";
+  };
+
+  const renderTeam = (match: Match, side: "home" | "away") => {
+    const info = teamInfo(match, side);
+    const winner = matchWinnerSide(match) === side;
     return (
-      (teamId ? staticTeams.get(teamId)?.name[language] : undefined) ??
-      fallback ??
-      (language === "es" ? "Por definir" : "To be decided")
+      <div
+        className={[
+          "bracket-team",
+          winner ? "is-winner" : "",
+          info.team ? "" : "is-placeholder",
+        ]
+          .filter(Boolean)
+          .join(" ")}
+      >
+        {info.team ? (
+          <img src={info.team.flag} alt="" width="28" height="20" />
+        ) : (
+          <span className="bracket-flag-placeholder" aria-hidden="true" />
+        )}
+        <span>
+          <strong>{info.name}</strong>
+          <small>{winner ? (language === "es" ? "Avanza" : "Advances") : info.code}</small>
+        </span>
+        <b>{scoreLabel(match, side)}</b>
+      </div>
     );
   };
 
   return (
     <>
-      <section className="page-title">
-        <p className="eyebrow">ROAD TO NEW YORK NEW JERSEY</p>
-        <h1>{language === "es" ? "Camino a la final" : "Road to the final"}</h1>
-        <p>
-          {language === "es"
-            ? "Los cruces se completan automáticamente a medida que avanza el torneo."
-            : "Matchups fill in automatically as the tournament progresses."}
-        </p>
+      <section className="bracket-hero">
+        <div>
+          <p className="eyebrow">ROAD TO NEW YORK NEW JERSEY</p>
+          <h1>{language === "es" ? "Camino a la final" : "Road to the final"}</h1>
+          <p>
+            {language === "es"
+              ? "Cruces, ganadores y definiciones por penales en un solo mapa."
+              : "Matchups, winners, and penalty shootouts in one map."}
+          </p>
+        </div>
+        <div className="bracket-hero-stats" aria-label="Knockout summary">
+          <article>
+            <Trophy size={18} />
+            <span>{completedMatches}</span>
+            <small>{language === "es" ? "cerrados" : "finished"}</small>
+          </article>
+          <article>
+            <Award size={18} />
+            <span>{penaltyDecisions}</span>
+            <small>{language === "es" ? "por penales" : "on pens"}</small>
+          </article>
+          <article>
+            <CalendarDays size={18} />
+            <span>{nextMatch ? `#${nextMatch.id}` : "-"}</span>
+            <small>
+              {nextMatch
+                ? matchDate(nextMatch)
+                : language === "es"
+                  ? "sin pendientes"
+                  : "none left"}
+            </small>
+          </article>
+        </div>
       </section>
-      <section className="bracket" aria-label="Tournament bracket">
+
+      <section className="bracket-board" aria-label="Tournament bracket">
         {stages.map((stage) => (
-          <div className="bracket-column" key={stage.id}>
-            <h2>{stage.label}</h2>
+          <div className={`bracket-column stage-${stage.id}`} key={stage.id}>
+            <div className="bracket-column-title">
+              <h2>{stage.label}</h2>
+              <span>{bracketMatches(data.matches, stage).length}</span>
+            </div>
             <div className="bracket-matches">
-              {bracketMatches(data.matches, stage).map((match) => (
-                <article className="bracket-match" key={match.id}>
-                  <span>
-                    #{match.id} - {bracketMatchLabel(match, language)} -{" "}
-                    {formatDay(match.kickoffAt, language)}
-                  </span>
-                  <div>
-                    <strong>{teamName(match, "home")}</strong>
-                    <b>{match.homeScore ?? "-"}</b>
-                  </div>
-                  <div>
-                    <strong>{teamName(match, "away")}</strong>
-                    <b>{match.awayScore ?? "-"}</b>
-                  </div>
-                </article>
-              ))}
+              {bracketMatches(data.matches, stage).map((match) => {
+                  const hasShootout = hasPenaltyShootout(match);
+                  return (
+                    <article
+                      className={[
+                        "bracket-match",
+                        match.status === "FINISHED" ? "is-finished" : "",
+                        hasShootout ? "has-shootout" : "",
+                      ]
+                        .filter(Boolean)
+                        .join(" ")}
+                      key={match.id}
+                    >
+                      <header className="bracket-match-meta">
+                        <span>
+                          #{match.id} · {bracketMatchLabel(match, language)}
+                        </span>
+                        <small>{matchDate(match)}</small>
+                        <b>{statusText(match)}</b>
+                      </header>
+                      {renderTeam(match, "home")}
+                      {renderTeam(match, "away")}
+                      {hasShootout && (
+                        <div className="shootout-ribbon">
+                          <span>{language === "es" ? "Penales" : "Pens"}</span>
+                          <strong>
+                            {match.homePenaltyScore}-{match.awayPenaltyScore}
+                          </strong>
+                        </div>
+                      )}
+                    </article>
+                  );
+                })}
             </div>
           </div>
         ))}

@@ -81,7 +81,8 @@ try {
         INSERT INTO matches (
           id, stage, group_name, matchday, kickoff_at,
           home_team_id, away_team_id, home_label, away_label,
-          stadium_id, status, home_score, away_score
+          stadium_id, status, home_score, away_score,
+          home_penalty_score, away_penalty_score, winner_side
         ) VALUES (
           ${Number(match.id)},
           ${match.type},
@@ -95,7 +96,10 @@ try {
           ${match.stadiumId ? Number(match.stadiumId) : null},
           ${normalizeStatus(match.status)},
           ${finished ? Number(match.homeScore) : null},
-          ${finished ? Number(match.awayScore) : null}
+          ${finished ? Number(match.awayScore) : null},
+          ${finished ? (match.homePenaltyScore ?? null) : null},
+          ${finished ? (match.awayPenaltyScore ?? null) : null},
+          ${finished ? (match.winnerSide ?? null) : null}
         )
         ON CONFLICT (id) DO UPDATE SET
           stage = EXCLUDED.stage,

@@ -2,8 +2,11 @@ import { describe, expect, it } from "vitest";
 import {
   clampMinute,
   fetchPublicProvider,
+  matchTiebreakerState,
   publicApiMinute,
   publicApiStatus,
+  publicApiTiebreakerState,
+  providerWinnerSide,
   scoreValue,
   statusNeedsScores,
   type PublicApiMatch,
@@ -130,6 +133,75 @@ describe("scoreValue", () => {
     expect(scoreValue("-1")).toBeNull();
     expect(scoreValue("31")).toBeNull();
     expect(scoreValue("abc")).toBeNull();
+  });
+});
+
+describe("providerWinnerSide", () => {
+  it("normalizes provider winner labels", () => {
+    expect(providerWinnerSide("HOME_TEAM")).toBe("home");
+    expect(providerWinnerSide("away-team")).toBe("away");
+    expect(providerWinnerSide("DRAW")).toBeNull();
+  });
+});
+
+describe("matchTiebreakerState", () => {
+  it("derives a normal winner from the final score", () => {
+    expect(matchTiebreakerState("FINISHED", 2, 1, null, null, null)).toEqual({
+      homePenaltyScore: null,
+      awayPenaltyScore: null,
+      winnerSide: "home",
+    });
+  });
+
+  it("keeps penalty scores for tied finished matches", () => {
+    expect(matchTiebreakerState("FINISHED", 1, 1, 3, 4, null)).toEqual({
+      homePenaltyScore: 3,
+      awayPenaltyScore: 4,
+      winnerSide: "away",
+    });
+  });
+});
+
+describe("publicApiTiebreakerState", () => {
+  it("reads common public provider penalty fields", () => {
+    expect(
+      publicApiTiebreakerState(
+        {
+          id: "75",
+          home_penalties: "2",
+          away_penalties: "3",
+        },
+        "FINISHED",
+        1,
+        1,
+        10,
+        11,
+      ),
+    ).toEqual({
+      homePenaltyScore: 2,
+      awayPenaltyScore: 3,
+      winnerSide: "away",
+    });
+  });
+
+  it("can infer a tied-match winner from winner_team_id", () => {
+    expect(
+      publicApiTiebreakerState(
+        {
+          id: "75",
+          winner_team_id: "11",
+        },
+        "FINISHED",
+        1,
+        1,
+        10,
+        11,
+      ),
+    ).toEqual({
+      homePenaltyScore: null,
+      awayPenaltyScore: null,
+      winnerSide: "away",
+    });
   });
 });
 

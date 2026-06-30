@@ -21,6 +21,8 @@ CI; Netlify construye y publica la aplicación.
 - La fecha límite se valida en React, en la Function y en un trigger de PostgreSQL.
 - Las actualizaciones de marcador en vivo no modifican predicciones ni puntos
   hasta que el partido termina.
+- Los desempates por penales se guardan aparte del marcador: sirven para
+  mostrar quién avanza en el bracket, sin cambiar la puntuación del pick.
 - Los picks de otros miembros son visibles dentro del mismo grupo para transparencia.
 - Solo miembros del mismo grupo pueden consultar su tabla.
 - Los puntos se calculan en PostgreSQL al finalizar el partido.
@@ -71,8 +73,8 @@ Variables requeridas:
 - `SYNC_SECRET`: opcional; habilita una invocación manual protegida de la
   función programada.
 - `MIGRATE_SECRET`: opcional; habilita `POST /api/admin/migrate` (header
-  `x-kiniela-migrate-secret`). Sin body aplica la migración pendiente
-  `003_live_score_updates.sql` de forma idempotente y devuelve el estado de
+  `x-kiniela-migrate-secret`). Sin body aplica las migraciones runtime
+  pendientes de forma idempotente y devuelve el estado de
   `schema_migrations`, las últimas corridas de sync y los partidos recientes.
   Con body `{"action": "repair-match", "matchId": N}` fuerza el estado actual
   del proveedor para ese partido (ignorando la regla de FINISHED pegajoso),

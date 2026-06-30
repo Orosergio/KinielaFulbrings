@@ -37,24 +37,34 @@ export function demoBootstrap(): BootstrapData {
       { id: "laib", displayName: "Laib", role: "member", joinedAt: "" },
       { id: "richi", displayName: "Richi", role: "member", joinedAt: "" },
     ],
-    matches: dataset.matches.map((match) => ({
-      id: match.id,
-      providerMatchId: null,
-      stage: match.type,
-      groupName: match.group,
-      matchday: match.matchday,
-      kickoffAt: match.kickoffUtc,
-      homeTeamId: match.homeTeamId ? Number(match.homeTeamId) : null,
-      awayTeamId: match.awayTeamId ? Number(match.awayTeamId) : null,
-      homeLabel: match.homeLabel,
-      awayLabel: match.awayLabel,
-      stadiumId: match.stadiumId ? Number(match.stadiumId) : null,
-      status: mapStatus(match.status),
-      minute: null,
-      homeScore: null,
-      awayScore: null,
-      updatedAt: new Date().toISOString(),
-    })),
+    matches: dataset.matches.map((match) => {
+      const source = match as typeof match & {
+        homePenaltyScore?: number | null;
+        awayPenaltyScore?: number | null;
+        winnerSide?: "home" | "away" | null;
+      };
+      return {
+        id: match.id,
+        providerMatchId: null,
+        stage: match.type,
+        groupName: match.group,
+        matchday: match.matchday,
+        kickoffAt: match.kickoffUtc,
+        homeTeamId: match.homeTeamId ? Number(match.homeTeamId) : null,
+        awayTeamId: match.awayTeamId ? Number(match.awayTeamId) : null,
+        homeLabel: match.homeLabel,
+        awayLabel: match.awayLabel,
+        stadiumId: match.stadiumId ? Number(match.stadiumId) : null,
+        status: mapStatus(match.status),
+        minute: null,
+        homeScore: null,
+        awayScore: null,
+        homePenaltyScore: source.homePenaltyScore ?? null,
+        awayPenaltyScore: source.awayPenaltyScore ?? null,
+        winnerSide: source.winnerSide ?? null,
+        updatedAt: new Date().toISOString(),
+      };
+    }),
     predictions: [
       {
         userId: user.id,

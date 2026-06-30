@@ -1,7 +1,12 @@
 import { Check, Clock3, LockKeyhole, Minus, Plus, Save } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import dataset from "../../data/worldcup-2026.json";
-import { isLocked, ownPrediction } from "../lib/game";
+import {
+  hasPenaltyShootout,
+  isLocked,
+  matchWinnerSide,
+  ownPrediction,
+} from "../lib/game";
 import { translate } from "../lib/i18n";
 import type {
   Language,
@@ -36,20 +41,28 @@ function TeamSide({
   team,
   fallback,
   language,
+  winner,
 }: {
   team?: StaticTeam;
   fallback?: string | null;
   language: Language;
+  winner?: boolean;
 }) {
   return (
-    <div className="team-side">
+    <div className={`team-side ${winner ? "winner" : ""}`}>
       {team ? (
         <img src={team.flag} alt="" width="38" height="26" />
       ) : (
         <span className="flag-placeholder" aria-hidden="true" />
       )}
       <strong>{team?.name[language] ?? fallback ?? "TBD"}</strong>
-      <small>{team?.fifaCode ?? "—"}</small>
+      <small>
+        {winner
+          ? language === "es"
+            ? "Avanza"
+            : "Advances"
+          : team?.fifaCode ?? "—"}
+      </small>
     </div>
   );
 }
@@ -116,6 +129,8 @@ export function MatchCard({
   const home = match.homeTeamId ? teams.get(match.homeTeamId) : undefined;
   const away = match.awayTeamId ? teams.get(match.awayTeamId) : undefined;
   const stadium = match.stadiumId ? stadiums.get(match.stadiumId) : undefined;
+  const winnerSide = matchWinnerSide(match);
+  const hasShootout = hasPenaltyShootout(match);
   const t = (key: Parameters<typeof translate>[1]) => translate(language, key);
 
   useEffect(() => {
@@ -223,17 +238,35 @@ export function MatchCard({
       </div>
 
       <div className="match-teams">
-        <TeamSide team={home} fallback={match.homeLabel} language={language} />
+        <TeamSide
+          team={home}
+          fallback={match.homeLabel}
+          language={language}
+          winner={winnerSide === "home"}
+        />
         {locked && match.homeScore !== null && match.awayScore !== null ? (
           <div className="actual-score" aria-label="Score">
-            {match.homeScore}
-            <span>:</span>
-            {match.awayScore}
+            <div>
+              {match.homeScore}
+              <span>:</span>
+              {match.awayScore}
+            </div>
+            {hasShootout && (
+              <small>
+                {language === "es" ? "Penales" : "Pens"}{" "}
+                {match.homePenaltyScore}-{match.awayPenaltyScore}
+              </small>
+            )}
           </div>
         ) : (
           <span className="versus">VS</span>
         )}
-        <TeamSide team={away} fallback={match.awayLabel} language={language} />
+        <TeamSide
+          team={away}
+          fallback={match.awayLabel}
+          language={language}
+          winner={winnerSide === "away"}
+        />
       </div>
 
       {!locked && home && away ? (

@@ -3,9 +3,11 @@ import type { Match } from "../types";
 import {
   calendarMatches,
   isLocked,
+  matchWinnerSide,
   predictionPoints,
   resolveProviderState,
   safeProviderState,
+  scoreLabel,
   scoreStateChanged,
   syncHealth,
 } from "./game";
@@ -28,6 +30,9 @@ function match(overrides: Partial<Match> = {}): Match {
     minute: null,
     homeScore: null,
     awayScore: null,
+    homePenaltyScore: null,
+    awayPenaltyScore: null,
+    winnerSide: null,
     updatedAt: "2026-06-09T00:00:00.000Z",
     ...overrides,
   };
@@ -52,6 +57,28 @@ describe("predictionPoints", () => {
 
   it("awards 0 when nothing matches", () => {
     expect(predictionPoints(0, 3, 2, 1)).toBe(0);
+  });
+});
+
+describe("matchWinnerSide", () => {
+  it("uses the regular score winner when there is one", () => {
+    expect(
+      matchWinnerSide(match({ status: "FINISHED", homeScore: 2, awayScore: 1 })),
+    ).toBe("home");
+  });
+
+  it("uses penalties to resolve a tied knockout result", () => {
+    const tied = match({
+      status: "FINISHED",
+      homeScore: 1,
+      awayScore: 1,
+      homePenaltyScore: 2,
+      awayPenaltyScore: 3,
+    });
+
+    expect(matchWinnerSide(tied)).toBe("away");
+    expect(scoreLabel(tied, "home")).toBe("1 (2)");
+    expect(scoreLabel(tied, "away")).toBe("1 (3)");
   });
 });
 
@@ -150,7 +177,14 @@ describe("resolveProviderState", () => {
         { status: "FINISHED", homeScore: 0, awayScore: 0 },
         kickoff + 30 * 60 * 1000,
       ),
-    ).toEqual({ status: "LIVE", homeScore: 0, awayScore: 0 });
+    ).toEqual({
+      status: "LIVE",
+      homeScore: 0,
+      awayScore: 0,
+      homePenaltyScore: null,
+      awayPenaltyScore: null,
+      winnerSide: null,
+    });
   });
 
   it("keeps tracking provider scores while rejecting a premature finish", () => {
@@ -160,7 +194,14 @@ describe("resolveProviderState", () => {
         { status: "FINISHED", homeScore: 1, awayScore: 0 },
         kickoff + 30 * 60 * 1000,
       ),
-    ).toEqual({ status: "LIVE", homeScore: 1, awayScore: 0 });
+    ).toEqual({
+      status: "LIVE",
+      homeScore: 1,
+      awayScore: 0,
+      homePenaltyScore: null,
+      awayPenaltyScore: null,
+      winnerSide: null,
+    });
   });
 
   it("leaves a scheduled match untouched on a premature finish", () => {
@@ -170,7 +211,14 @@ describe("resolveProviderState", () => {
         { status: "FINISHED", homeScore: 0, awayScore: 0 },
         kickoff + 30 * 60 * 1000,
       ),
-    ).toEqual({ status: "SCHEDULED", homeScore: null, awayScore: null });
+    ).toEqual({
+      status: "SCHEDULED",
+      homeScore: null,
+      awayScore: null,
+      homePenaltyScore: null,
+      awayPenaltyScore: null,
+      winnerSide: null,
+    });
   });
 
   it("accepts FINISHED once the match could really be over", () => {
@@ -180,7 +228,14 @@ describe("resolveProviderState", () => {
         { status: "FINISHED", homeScore: 1, awayScore: 0 },
         kickoff + 110 * 60 * 1000,
       ),
-    ).toEqual({ status: "FINISHED", homeScore: 1, awayScore: 0 });
+    ).toEqual({
+      status: "FINISHED",
+      homeScore: 1,
+      awayScore: 0,
+      homePenaltyScore: null,
+      awayPenaltyScore: null,
+      winnerSide: null,
+    });
   });
 
   it("rolls a glitched FINISHED back to LIVE while the match can still run", () => {
@@ -190,7 +245,14 @@ describe("resolveProviderState", () => {
         { status: "LIVE", homeScore: 1, awayScore: 0 },
         kickoff + 2 * 60 * 60 * 1000,
       ),
-    ).toEqual({ status: "LIVE", homeScore: 1, awayScore: 0 });
+    ).toEqual({
+      status: "LIVE",
+      homeScore: 1,
+      awayScore: 0,
+      homePenaltyScore: null,
+      awayPenaltyScore: null,
+      winnerSide: null,
+    });
   });
 
   it("keeps a final sticky once the match window has passed", () => {
@@ -200,7 +262,14 @@ describe("resolveProviderState", () => {
         { status: "LIVE", homeScore: 2, awayScore: 0 },
         kickoff + 6 * 60 * 60 * 1000,
       ),
-    ).toEqual({ status: "FINISHED", homeScore: 1, awayScore: 0 });
+    ).toEqual({
+      status: "FINISHED",
+      homeScore: 1,
+      awayScore: 0,
+      homePenaltyScore: null,
+      awayPenaltyScore: null,
+      winnerSide: null,
+    });
   });
 
   it("still blocks regressions to SCHEDULED on live matches", () => {
@@ -210,7 +279,14 @@ describe("resolveProviderState", () => {
         { status: "SCHEDULED", homeScore: null, awayScore: null },
         kickoff + 2 * 60 * 60 * 1000,
       ),
-    ).toEqual({ status: "LIVE", homeScore: 1, awayScore: 0 });
+    ).toEqual({
+      status: "LIVE",
+      homeScore: 1,
+      awayScore: 0,
+      homePenaltyScore: null,
+      awayPenaltyScore: null,
+      winnerSide: null,
+    });
   });
 });
 

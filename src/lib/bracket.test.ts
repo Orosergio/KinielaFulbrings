@@ -25,6 +25,9 @@ function datasetMatches(): Match[] {
     minute: null,
     homeScore: null,
     awayScore: null,
+    homePenaltyScore: null,
+    awayPenaltyScore: null,
+    winnerSide: null,
     updatedAt: "",
   }));
 }
