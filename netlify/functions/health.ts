@@ -4,6 +4,7 @@ import { json } from "./_shared/http";
 
 const EXPECTED_MATCH_COUNT = 104;
 const STALE_AFTER_SECONDS = 15 * 60;
+const QUIET_STALE_AFTER_SECONDS = 6 * 60 * 60;
 
 export default async () => {
   try {
@@ -101,9 +102,19 @@ export default async () => {
           FROM matches
           WHERE status = 'SCHEDULED'
             AND kickoff_at < now() - interval '4 hours'
-        ) AS "pastScheduled"
+        ) AS "pastScheduled",
+        EXISTS (
+          SELECT 1
+          FROM matches
+          WHERE status IN ('LIVE', 'PAUSED')
+             OR kickoff_at BETWEEN now() - interval '4.5 hours'
+                              AND now() + interval '1 hour'
+        ) AS "requiresFreshSync"
     `;
 
+    const staleLimitSeconds = health?.requiresFreshSync
+      ? STALE_AFTER_SECONDS
+      : QUIET_STALE_AFTER_SECONDS;
     const runHealthy =
       health?.syncStatus === "SUCCESS" ||
       (health?.syncStatus === "RUNNING" &&
@@ -112,10 +123,10 @@ export default async () => {
       // recent success keeps the data fresh; staleness below still catches
       // sustained outages.
       (health?.syncStatus === "FAILED" &&
-        Number(health.syncAgeSeconds) <= STALE_AFTER_SECONDS);
+        Number(health.syncAgeSeconds) <= staleLimitSeconds);
     const syncHealthy =
       runHealthy &&
-      Number(health.syncAgeSeconds) <= STALE_AFTER_SECONDS &&
+      Number(health.syncAgeSeconds) <= staleLimitSeconds &&
       Number(health.matchesSeen) >= EXPECTED_MATCH_COUNT &&
       Number(health.matchesUpdated) >= EXPECTED_MATCH_COUNT;
     const integrityHealthy =
@@ -129,6 +140,7 @@ export default async () => {
     return json(
       {
         healthy,
+        syncStaleLimitSeconds: staleLimitSeconds,
         ...health,
       },
       healthy ? 200 : 503,

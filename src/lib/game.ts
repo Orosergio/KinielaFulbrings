@@ -274,11 +274,37 @@ export type SyncHealth = {
   reason: "ok" | "missing" | "running" | "failed" | "stale" | "incomplete";
 };
 
+const STRICT_SYNC_STALE_AFTER_MS = 15 * 60 * 1000;
+const QUIET_SYNC_STALE_AFTER_MS = 6 * 60 * 60 * 1000;
+const SYNC_ACTIVE_BEFORE_KICKOFF_MS = 60 * 60 * 1000;
+
+export function syncStaleAfterMs(
+  matches: Match[],
+  serverNow: string,
+  strictAfterMs = STRICT_SYNC_STALE_AFTER_MS,
+  quietAfterMs = QUIET_SYNC_STALE_AFTER_MS,
+) {
+  const now = new Date(serverNow).getTime();
+  if (!Number.isFinite(now)) return strictAfterMs;
+
+  const needsFreshScores = matches.some((match) => {
+    if (match.status === "LIVE" || match.status === "PAUSED") return true;
+    const kickoff = new Date(match.kickoffAt).getTime();
+    if (!Number.isFinite(kickoff)) return false;
+    return (
+      now >= kickoff - SYNC_ACTIVE_BEFORE_KICKOFF_MS &&
+      now <= kickoff + UNFINISH_WINDOW_MS
+    );
+  });
+
+  return needsFreshScores ? strictAfterMs : quietAfterMs;
+}
+
 export function syncHealth(
   sync: SyncStatus | null,
   serverNow: string,
   expectedMatches: number,
-  staleAfterMs = 15 * 60 * 1000,
+  staleAfterMs = STRICT_SYNC_STALE_AFTER_MS,
 ): SyncHealth {
   if (!sync) return { state: "error", reason: "missing" };
 

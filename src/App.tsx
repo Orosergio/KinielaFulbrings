@@ -41,6 +41,7 @@ import {
   matchWinnerSide,
   pendingMatches,
   scoreLabel,
+  syncStaleAfterMs,
   syncHealth as getSyncHealth,
   type SyncHealth,
 } from "./lib/game";
@@ -200,7 +201,12 @@ function RulesDashboard({
     },
   ];
   const sync = data.syncStatus;
-  const health = getSyncHealth(sync, data.serverNow, data.matches.length);
+  const health = getSyncHealth(
+    sync,
+    data.serverNow,
+    data.matches.length,
+    syncStaleAfterMs(data.matches, data.serverNow),
+  );
 
   return (
     <section className="command-section">
@@ -337,6 +343,7 @@ function Dashboard({
     data.syncStatus,
     data.serverNow,
     data.matches.length,
+    syncStaleAfterMs(data.matches, data.serverNow),
   );
 
   return (
@@ -832,6 +839,7 @@ function AppContent(props: AppContentProps) {
     props.data.syncStatus,
     props.data.serverNow,
     props.data.matches.length,
+    syncStaleAfterMs(props.data.matches, props.data.serverNow),
   );
   let content;
 

@@ -12,6 +12,7 @@ import {
   scoreLabel,
   scoreStateChanged,
   syncHealth,
+  syncStaleAfterMs,
 } from "./game";
 import type { SyncStatus } from "../types";
 
@@ -357,5 +358,35 @@ describe("syncHealth", () => {
     expect(
       syncHealth({ ...sync, matchesUpdated: 103 }, serverNow, 104).reason,
     ).toBe("incomplete");
+  });
+});
+
+describe("syncStaleAfterMs", () => {
+  it("uses a strict freshness window around live or imminent matches", () => {
+    expect(
+      syncStaleAfterMs(
+        [
+          match({
+            status: "SCHEDULED",
+            kickoffAt: "2026-07-03T18:00:00.000Z",
+          }),
+        ],
+        "2026-07-03T17:30:00.000Z",
+      ),
+    ).toBe(15 * 60 * 1000);
+  });
+
+  it("uses a quieter freshness window when no match needs live scores", () => {
+    expect(
+      syncStaleAfterMs(
+        [
+          match({
+            status: "SCHEDULED",
+            kickoffAt: "2026-07-03T18:00:00.000Z",
+          }),
+        ],
+        "2026-07-03T14:00:00.000Z",
+      ),
+    ).toBe(6 * 60 * 60 * 1000);
   });
 });
