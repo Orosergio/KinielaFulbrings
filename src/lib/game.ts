@@ -1,4 +1,10 @@
-import type { Match, MatchWinnerSide, Prediction, SyncStatus } from "../types";
+import type {
+  Match,
+  MatchStatus,
+  MatchWinnerSide,
+  Prediction,
+  SyncStatus,
+} from "../types";
 
 export function outcome(home: number, away: number) {
   return Math.sign(home - away);
@@ -116,8 +122,31 @@ export function scoreLabel(match: MatchResultState, side: "home" | "away") {
   return hasPenaltyShootout(match) ? `${score} (${penaltyScore})` : String(score);
 }
 
+export function effectiveMatchStatus(
+  match: Pick<Match, "status" | "kickoffAt">,
+  now = Date.now(),
+): MatchStatus {
+  const kickoff = new Date(match.kickoffAt).getTime();
+  if (
+    Number.isFinite(kickoff) &&
+    now < kickoff &&
+    (match.status === "LIVE" || match.status === "PAUSED")
+  ) {
+    return "SCHEDULED";
+  }
+  return match.status;
+}
+
 export function isLocked(match: Match, now = Date.now()) {
-  return match.status !== "SCHEDULED" || new Date(match.kickoffAt).getTime() <= now;
+  const kickoff = new Date(match.kickoffAt).getTime();
+  if (!Number.isFinite(kickoff) || kickoff <= now) return true;
+
+  const status = effectiveMatchStatus(match, now);
+  return (
+    status === "FINISHED" ||
+    status === "POSTPONED" ||
+    status === "CANCELLED"
+  );
 }
 
 export function isPickable(match: Match, now = Date.now()) {
@@ -211,6 +240,28 @@ export function resolveProviderState(
   now = Date.now(),
 ) {
   const kickoff = new Date(current.kickoffAt).getTime();
+  const beforeKickoff = Number.isFinite(kickoff) && now < kickoff;
+  const currentCanReturnToScheduled =
+    current.status === "SCHEDULED" ||
+    current.status === "LIVE" ||
+    current.status === "PAUSED";
+  const nextIsPrematureMatchState =
+    next.status === "LIVE" ||
+    next.status === "PAUSED" ||
+    next.status === "FINISHED" ||
+    ((current.status === "LIVE" || current.status === "PAUSED") &&
+      next.status === "SCHEDULED");
+
+  if (beforeKickoff && currentCanReturnToScheduled && nextIsPrematureMatchState) {
+    return {
+      status: "SCHEDULED",
+      homeScore: null,
+      awayScore: null,
+      homePenaltyScore: null,
+      awayPenaltyScore: null,
+      winnerSide: null,
+    };
+  }
 
   if (
     next.status === "FINISHED" &&
@@ -288,7 +339,8 @@ export function syncStaleAfterMs(
   if (!Number.isFinite(now)) return strictAfterMs;
 
   const needsFreshScores = matches.some((match) => {
-    if (match.status === "LIVE" || match.status === "PAUSED") return true;
+    const status = effectiveMatchStatus(match, now);
+    if (status === "LIVE" || status === "PAUSED") return true;
     const kickoff = new Date(match.kickoffAt).getTime();
     if (!Number.isFinite(kickoff)) return false;
     return (

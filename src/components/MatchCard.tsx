@@ -2,6 +2,7 @@ import { Check, Clock3, LockKeyhole, Minus, Plus, Save } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import dataset from "../../data/worldcup-2026.json";
 import {
+  effectiveMatchStatus,
   hasPenaltyShootout,
   isKnockoutStage,
   isLocked,
@@ -191,6 +192,7 @@ export function MatchCard({
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
   const [now, setNow] = useState(() => Date.now());
+  const effectiveStatus = effectiveMatchStatus(match, now);
   const locked = isLocked(match, now);
   const knockout = isKnockoutStage(match.stage);
   const home = match.homeTeamId ? teams.get(match.homeTeamId) : undefined;
@@ -237,7 +239,7 @@ export function MatchCard({
 
   useEffect(() => {
     setNow(Date.now());
-    if (match.status !== "SCHEDULED") return;
+    if (effectiveMatchStatus(match, Date.now()) !== "SCHEDULED") return;
 
     const kickoffAt = new Date(match.kickoffAt).getTime();
     const delay = kickoffAt - Date.now();
@@ -266,15 +268,15 @@ export function MatchCard({
     (item) => item.matchId === match.id && item.userId !== currentUserId,
   );
   const statusLabel =
-    match.status === "LIVE"
+    effectiveStatus === "LIVE"
       ? `${t("live")}${match.minute ? ` · ${match.minute}'` : ""}`
-      : match.status === "FINISHED"
+      : effectiveStatus === "FINISHED"
         ? t("finished")
-        : match.status === "PAUSED"
+        : effectiveStatus === "PAUSED"
           ? t("paused")
-          : match.status === "POSTPONED"
+          : effectiveStatus === "POSTPONED"
             ? t("postponed")
-            : match.status === "CANCELLED"
+            : effectiveStatus === "CANCELLED"
               ? t("cancelled")
               : locked
                 ? t("locked")
@@ -338,8 +340,8 @@ export function MatchCard({
             ? `${t("groupStage")} ${match.groupName ?? ""}`
             : t("knockout")}
         </span>
-        <span className={`status status-${match.status.toLowerCase()}`}>
-          {match.status === "LIVE" && <span className="live-dot" />}
+        <span className={`status status-${effectiveStatus.toLowerCase()}`}>
+          {effectiveStatus === "LIVE" && <span className="live-dot" />}
           {statusLabel}
         </span>
       </header>

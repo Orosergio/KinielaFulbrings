@@ -292,12 +292,27 @@ async function repairMatch(sql: Sql, matchId: number) {
     awayTeamId,
   );
 
+  const kickoff = new Date(existing.kickoffAt as string).getTime();
+  if (
+    (status === "LIVE" || status === "PAUSED") &&
+    Number.isFinite(kickoff) &&
+    Date.now() < kickoff
+  ) {
+    return json(
+      {
+        error:
+          "Provider reports an active match before kickoff; refusing to lock predictions early.",
+        code: "PREMATURE_ACTIVE",
+      },
+      422,
+    );
+  }
+
   // repair-match deliberately bypasses the sticky-FINISHED rule so a glitched
   // final can be rolled back, but it must never go the other way and lock in a
   // final that is physically impossible (before a match could have ended). That
   // is always a provider glitch, never something an operator wants to persist.
   if (status === "FINISHED") {
-    const kickoff = new Date(existing.kickoffAt as string).getTime();
     if (
       Number.isFinite(kickoff) &&
       Date.now() < kickoff + MIN_FINISH_AFTER_KICKOFF_MS

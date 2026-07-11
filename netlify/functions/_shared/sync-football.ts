@@ -364,7 +364,13 @@ async function verifySyncIntegrity(
         FROM matches
         WHERE status = 'SCHEDULED'
           AND kickoff_at < now() - interval '4 hours'
-      ) AS "pastScheduled"
+      ) AS "pastScheduled",
+      (
+        SELECT COUNT(*)::int
+        FROM matches
+        WHERE status IN ('LIVE', 'PAUSED')
+          AND kickoff_at > now()
+      ) AS "futureActive"
   `;
 
   const failures = Object.entries(integrity ?? {}).filter(

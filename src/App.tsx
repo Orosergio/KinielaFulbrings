@@ -36,6 +36,7 @@ import { bracketMatches, bracketMatchLabel, bracketStages } from "./lib/bracket"
 import { demoBootstrap } from "./lib/demo";
 import {
   calendarMatches,
+  effectiveMatchStatus,
   hasPenaltyShootout,
   isPickable,
   matchWinnerSide,
@@ -327,9 +328,16 @@ function Dashboard({
   const available = data.matches.filter((match) => isPickable(match));
   const completed = Math.max(0, available.length - pending.length);
   const progress = available.length ? (completed / available.length) * 100 : 100;
-  const live = data.matches.filter((match) => match.status === "LIVE");
+  const dashboardNow = Date.now();
+  const live = data.matches.filter(
+    (match) => effectiveMatchStatus(match, dashboardNow) === "LIVE",
+  );
   const upcoming = data.matches
-    .filter((match) => new Date(match.kickoffAt).getTime() > Date.now())
+    .filter(
+      (match) =>
+        effectiveMatchStatus(match, dashboardNow) === "SCHEDULED" &&
+        new Date(match.kickoffAt).getTime() > dashboardNow,
+    )
     .slice(0, 3);
   const recentResults = data.matches
     .filter((match) => match.status === "FINISHED")
@@ -677,6 +685,7 @@ function BracketView({
   language,
 }: Pick<AppContentProps, "data" | "language">) {
   const stages = bracketStages(language);
+  const bracketNow = Date.now();
   const knockoutMatches = stages.flatMap((stage) =>
     bracketMatches(data.matches, stage),
   );
@@ -685,7 +694,9 @@ function BracketView({
   ).length;
   const penaltyDecisions = knockoutMatches.filter(hasPenaltyShootout).length;
   const nextMatch = knockoutMatches
-    .filter((match) => match.status === "SCHEDULED")
+    .filter(
+      (match) => effectiveMatchStatus(match, bracketNow) === "SCHEDULED",
+    )
     .sort(
       (left, right) =>
         new Date(left.kickoffAt).getTime() -
@@ -715,15 +726,17 @@ function BracketView({
   };
 
   const statusText = (match: Match) => {
-    if (match.status === "FINISHED") return language === "es" ? "Final" : "FT";
-    if (match.status === "LIVE") return language === "es" ? "En vivo" : "Live";
-    if (match.status === "PAUSED") return language === "es" ? "Pausa" : "Paused";
+    const status = effectiveMatchStatus(match, bracketNow);
+    if (status === "FINISHED") return language === "es" ? "Final" : "FT";
+    if (status === "LIVE") return language === "es" ? "En vivo" : "Live";
+    if (status === "PAUSED") return language === "es" ? "Pausa" : "Paused";
     return language === "es" ? "Por jugar" : "Upcoming";
   };
 
   const renderTeam = (match: Match, side: "home" | "away") => {
     const info = teamInfo(match, side);
     const winner = matchWinnerSide(match) === side;
+    const showScore = effectiveMatchStatus(match, bracketNow) !== "SCHEDULED";
     return (
       <div
         className={[
@@ -743,7 +756,7 @@ function BracketView({
           <strong>{info.name}</strong>
           <small>{winner ? (language === "es" ? "Avanza" : "Advances") : info.code}</small>
         </span>
-        <b>{scoreLabel(match, side)}</b>
+        <b>{showScore ? scoreLabel(match, side) : "-"}</b>
       </div>
     );
   };
@@ -799,7 +812,9 @@ function BracketView({
                     <article
                       className={[
                         "bracket-match",
-                        match.status === "FINISHED" ? "is-finished" : "",
+                        effectiveMatchStatus(match, bracketNow) === "FINISHED"
+                          ? "is-finished"
+                          : "",
                         hasShootout ? "has-shootout" : "",
                       ]
                         .filter(Boolean)

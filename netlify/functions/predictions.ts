@@ -50,7 +50,10 @@ export default async (request: Request) => {
         stage,
         home_team_id AS "homeTeamId",
         away_team_id AS "awayTeamId",
-        (now() >= kickoff_at OR status <> 'SCHEDULED') AS locked
+        (
+          now() >= kickoff_at
+          OR status IN ('FINISHED', 'POSTPONED', 'CANCELLED')
+        ) AS locked
       FROM matches
       WHERE id = ${payload.matchId}
     `;

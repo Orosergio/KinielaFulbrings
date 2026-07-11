@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import type { Match } from "../types";
 import {
   calendarMatches,
+  effectiveMatchStatus,
   isLocked,
   matchWinnerSide,
   predictionAdvancementPoints,
@@ -121,11 +122,23 @@ describe("isLocked", () => {
     expect(isLocked(match(), kickoff)).toBe(true);
   });
 
-  it("locks picks whenever the provider marks the match as live", () => {
+  it("keeps picks open when the provider marks a future match as live", () => {
+    const futureLive = match({
+      status: "LIVE",
+      kickoffAt: "2026-06-12T19:00:00.000Z",
+    });
+
+    expect(effectiveMatchStatus(futureLive, kickoff)).toBe("SCHEDULED");
+    expect(
+      isLocked(futureLive, kickoff),
+    ).toBe(false);
+  });
+
+  it("still locks terminal matches before their scheduled kickoff", () => {
     expect(
       isLocked(
         match({
-          status: "LIVE",
+          status: "CANCELLED",
           kickoffAt: "2026-06-12T19:00:00.000Z",
         }),
         kickoff,
@@ -197,6 +210,57 @@ describe("safeProviderState", () => {
 describe("resolveProviderState", () => {
   const kickoffAt = "2026-06-12T23:00:00.000Z";
   const kickoff = Date.parse(kickoffAt);
+
+  it("rejects a live report before kickoff", () => {
+    expect(
+      resolveProviderState(
+        { status: "SCHEDULED", homeScore: null, awayScore: null, kickoffAt },
+        { status: "LIVE", homeScore: 0, awayScore: 0 },
+        kickoff - 12 * 60 * 60 * 1000,
+      ),
+    ).toEqual({
+      status: "SCHEDULED",
+      homeScore: null,
+      awayScore: null,
+      homePenaltyScore: null,
+      awayPenaltyScore: null,
+      winnerSide: null,
+    });
+  });
+
+  it("repairs a live state that was stored before kickoff", () => {
+    expect(
+      resolveProviderState(
+        { status: "LIVE", homeScore: 0, awayScore: 0, kickoffAt },
+        { status: "LIVE", homeScore: 0, awayScore: 0 },
+        kickoff - 60 * 60 * 1000,
+      ),
+    ).toEqual({
+      status: "SCHEDULED",
+      homeScore: null,
+      awayScore: null,
+      homePenaltyScore: null,
+      awayPenaltyScore: null,
+      winnerSide: null,
+    });
+  });
+
+  it("accepts a live report at kickoff", () => {
+    expect(
+      resolveProviderState(
+        { status: "SCHEDULED", homeScore: null, awayScore: null, kickoffAt },
+        { status: "LIVE", homeScore: 0, awayScore: 0 },
+        kickoff,
+      ),
+    ).toEqual({
+      status: "LIVE",
+      homeScore: 0,
+      awayScore: 0,
+      homePenaltyScore: null,
+      awayPenaltyScore: null,
+      winnerSide: null,
+    });
+  });
 
   it("ignores a FINISHED report before the match could physically end", () => {
     expect(
@@ -383,6 +447,20 @@ describe("syncStaleAfterMs", () => {
           match({
             status: "SCHEDULED",
             kickoffAt: "2026-07-03T18:00:00.000Z",
+          }),
+        ],
+        "2026-07-03T14:00:00.000Z",
+      ),
+    ).toBe(6 * 60 * 60 * 1000);
+  });
+
+  it("ignores a premature live status outside the kickoff window", () => {
+    expect(
+      syncStaleAfterMs(
+        [
+          match({
+            status: "LIVE",
+            kickoffAt: "2026-07-04T02:00:00.000Z",
           }),
         ],
         "2026-07-03T14:00:00.000Z",

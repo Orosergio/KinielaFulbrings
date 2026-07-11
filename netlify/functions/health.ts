@@ -103,6 +103,12 @@ export default async () => {
           WHERE status = 'SCHEDULED'
             AND kickoff_at < now() - interval '4 hours'
         ) AS "pastScheduled",
+        (
+          SELECT COUNT(*)::int
+          FROM matches
+          WHERE status IN ('LIVE', 'PAUSED')
+            AND kickoff_at > now()
+        ) AS "futureActive",
         EXISTS (
           SELECT 1
           FROM matches
@@ -134,7 +140,8 @@ export default async () => {
       Number(health?.pointMismatches) === 0 &&
       Number(health?.unfinishedWithPoints) === 0 &&
       Number(health?.finishedWithoutScores) === 0 &&
-      Number(health?.pastScheduled) === 0;
+      Number(health?.pastScheduled) === 0 &&
+      Number(health?.futureActive) === 0;
     const healthy = syncHealthy && integrityHealthy;
 
     return json(
