@@ -363,7 +363,7 @@ async function verifySyncIntegrity(
         SELECT COUNT(*)::int
         FROM matches
         WHERE status = 'SCHEDULED'
-          AND kickoff_at < now() - interval '4 hours'
+          AND kickoff_at < now() - interval '30 minutes'
       ) AS "pastScheduled",
       (
         SELECT COUNT(*)::int
