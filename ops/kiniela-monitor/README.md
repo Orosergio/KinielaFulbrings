@@ -47,6 +47,15 @@ The public repository can be cloned without credentials. GitHub write
 credentials are optional: without them, a repair remains as a tested local
 branch and commit for Sergio to review.
 
+To grant repository-scoped GitHub write access, generate the dedicated key,
+add `~/.ssh/kiniela_github_ed25519.pub` as a write-enabled deploy key in
+`Orosergio/KinielaFulbrings`, and then activate the SSH remote:
+
+```sh
+sh configure-github-write.sh
+sh configure-github-write.sh --activate
+```
+
 Useful checks:
 
 ```sh
