@@ -170,6 +170,12 @@ function buildHealthChecks(health) {
       expected: 0,
       actual: data.pastScheduled,
     },
+    {
+      name: "future active matches",
+      ok: numberValue(data.futureActive) === 0,
+      expected: 0,
+      actual: data.futureActive,
+    },
   ];
 }
 
