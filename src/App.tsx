@@ -38,6 +38,7 @@ import {
   calendarMatches,
   effectiveMatchStatus,
   hasPenaltyShootout,
+  isPostTournamentComplete,
   isPickable,
   matchWinnerSide,
   pendingMatches,
@@ -202,11 +203,16 @@ function RulesDashboard({
     },
   ];
   const sync = data.syncStatus;
+  const postTournamentComplete = isPostTournamentComplete(
+    data.matches,
+    data.matches.length,
+  );
   const health = getSyncHealth(
     sync,
     data.serverNow,
     data.matches.length,
     syncStaleAfterMs(data.matches, data.serverNow),
+    postTournamentComplete,
   );
 
   return (
@@ -347,11 +353,16 @@ function Dashboard({
     )
     .slice(0, 3);
   const next = pending[0];
+  const postTournamentComplete = isPostTournamentComplete(
+    data.matches,
+    data.matches.length,
+  );
   const health = getSyncHealth(
     data.syncStatus,
     data.serverNow,
     data.matches.length,
     syncStaleAfterMs(data.matches, data.serverNow),
+    postTournamentComplete,
   );
 
   return (
@@ -850,11 +861,16 @@ function BracketView({
 }
 
 function AppContent(props: AppContentProps) {
+  const postTournamentComplete = isPostTournamentComplete(
+    props.data.matches,
+    props.data.matches.length,
+  );
   const health = getSyncHealth(
     props.data.syncStatus,
     props.data.serverNow,
     props.data.matches.length,
     syncStaleAfterMs(props.data.matches, props.data.serverNow),
+    postTournamentComplete,
   );
   let content;
 

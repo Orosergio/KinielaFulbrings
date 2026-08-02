@@ -115,6 +115,15 @@ function buildHealthChecks(health) {
   }
 
   const data = health.data ?? {};
+  const postTournamentComplete =
+    data.allMatchesFinished === true &&
+    numberValue(data.matchesSeen) >= EXPECTED_MATCH_COUNT &&
+    numberValue(data.matchesUpdated) >= EXPECTED_MATCH_COUNT &&
+    numberValue(data.pointMismatches) === 0 &&
+    numberValue(data.unfinishedWithPoints) === 0 &&
+    numberValue(data.finishedWithoutScores) === 0 &&
+    numberValue(data.pastScheduled) === 0 &&
+    numberValue(data.futureActive) === 0;
   return [
     {
       name: "health flag",
@@ -130,8 +139,12 @@ function buildHealthChecks(health) {
     },
     {
       name: "latest successful sync freshness",
-      ok: numberValue(data.syncAgeSeconds) <= MAX_SYNC_AGE_SECONDS,
-      expected: `<=${MAX_SYNC_AGE_SECONDS}`,
+      ok:
+        postTournamentComplete ||
+        numberValue(data.syncAgeSeconds) <= MAX_SYNC_AGE_SECONDS,
+      expected: postTournamentComplete
+        ? "post-tournament complete"
+        : `<=${MAX_SYNC_AGE_SECONDS}`,
       actual: data.syncAgeSeconds,
     },
     {

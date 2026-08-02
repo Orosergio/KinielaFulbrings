@@ -3,6 +3,7 @@ import type { Match } from "../types";
 import {
   calendarMatches,
   effectiveMatchStatus,
+  isPostTournamentComplete,
   isLocked,
   matchWinnerSide,
   predictionAdvancementPoints,
@@ -423,6 +424,23 @@ describe("syncHealth", () => {
       syncHealth({ ...sync, matchesUpdated: 103 }, serverNow, 104).reason,
     ).toBe("incomplete");
   });
+
+  it("allows stale failed sync after a complete tournament", () => {
+    expect(
+      syncHealth(
+        {
+          ...sync,
+          status: "FAILED",
+          startedAt: "2026-08-02T15:01:12.000Z",
+          finishedAt: "2026-08-02T15:01:13.000Z",
+        },
+        "2026-08-02T15:05:00.000Z",
+        104,
+        6 * 60 * 60 * 1000,
+        true,
+      ),
+    ).toEqual({ state: "healthy", reason: "ok" });
+  });
 });
 
 describe("syncStaleAfterMs", () => {
@@ -466,5 +484,33 @@ describe("syncStaleAfterMs", () => {
         "2026-07-03T14:00:00.000Z",
       ),
     ).toBe(6 * 60 * 60 * 1000);
+  });
+});
+
+describe("isPostTournamentComplete", () => {
+  it("requires the expected count and every match to be finished", () => {
+    expect(
+      isPostTournamentComplete(
+        [
+          match({ id: 1, status: "FINISHED" }),
+          match({ id: 2, status: "FINISHED" }),
+        ],
+        2,
+      ),
+    ).toBe(true);
+
+    expect(
+      isPostTournamentComplete(
+        [
+          match({ id: 1, status: "FINISHED" }),
+          match({ id: 2, status: "SCHEDULED" }),
+        ],
+        2,
+      ),
+    ).toBe(false);
+
+    expect(isPostTournamentComplete([match({ status: "FINISHED" })], 2)).toBe(
+      false,
+    );
   });
 });
