@@ -109,6 +109,11 @@ export default async () => {
           WHERE status IN ('LIVE', 'PAUSED')
             AND kickoff_at > now()
         ) AS "futureActive",
+        (
+          SELECT COUNT(*)::int = ${EXPECTED_MATCH_COUNT}
+          FROM matches
+          WHERE status = 'FINISHED'
+        ) AS "allMatchesFinished",
         EXISTS (
           SELECT 1
           FROM matches
@@ -121,6 +126,11 @@ export default async () => {
     const staleLimitSeconds = health?.requiresFreshSync
       ? STALE_AFTER_SECONDS
       : QUIET_STALE_AFTER_SECONDS;
+    const successComplete =
+      Number(health?.matchesSeen) >= EXPECTED_MATCH_COUNT &&
+      Number(health?.matchesUpdated) >= EXPECTED_MATCH_COUNT;
+    const postTournamentComplete =
+      health?.allMatchesFinished === true && successComplete;
     const runHealthy =
       health?.syncStatus === "SUCCESS" ||
       (health?.syncStatus === "RUNNING" &&
@@ -131,10 +141,9 @@ export default async () => {
       (health?.syncStatus === "FAILED" &&
         Number(health.syncAgeSeconds) <= staleLimitSeconds);
     const syncHealthy =
-      runHealthy &&
-      Number(health.syncAgeSeconds) <= staleLimitSeconds &&
-      Number(health.matchesSeen) >= EXPECTED_MATCH_COUNT &&
-      Number(health.matchesUpdated) >= EXPECTED_MATCH_COUNT;
+      successComplete &&
+      (postTournamentComplete ||
+        (runHealthy && Number(health.syncAgeSeconds) <= staleLimitSeconds));
     const integrityHealthy =
       Number(health?.matchCount) === EXPECTED_MATCH_COUNT &&
       Number(health?.pointMismatches) === 0 &&
