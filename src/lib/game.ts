@@ -352,17 +352,27 @@ export function syncStaleAfterMs(
   return needsFreshScores ? strictAfterMs : quietAfterMs;
 }
 
+export function isPostTournamentComplete(matches: Match[], expectedMatches: number) {
+  return (
+    matches.length === expectedMatches &&
+    matches.every((match) => match.status === "FINISHED")
+  );
+}
+
 export function syncHealth(
   sync: SyncStatus | null,
   serverNow: string,
   expectedMatches: number,
   staleAfterMs = STRICT_SYNC_STALE_AFTER_MS,
+  postTournamentComplete = false,
 ): SyncHealth {
   if (!sync) return { state: "error", reason: "missing" };
 
   const now = new Date(serverNow).getTime();
   const reference = new Date(sync.finishedAt ?? sync.startedAt).getTime();
   const age = now - reference;
+  const syncComplete =
+    sync.matchesSeen >= expectedMatches && sync.matchesUpdated >= expectedMatches;
 
   if (sync.status === "RUNNING") {
     return age <= 60_000
@@ -370,9 +380,12 @@ export function syncHealth(
       : { state: "error", reason: "stale" };
   }
   if (sync.status === "FAILED") {
+    if (postTournamentComplete && syncComplete) {
+      return { state: "healthy", reason: "ok" };
+    }
     return { state: "error", reason: "failed" };
   }
-  if (!Number.isFinite(age) || age > staleAfterMs) {
+  if (!postTournamentComplete && (!Number.isFinite(age) || age > staleAfterMs)) {
     return { state: "error", reason: "stale" };
   }
 
@@ -388,8 +401,7 @@ export function syncHealth(
 
   if (
     !detailComplete ||
-    sync.matchesSeen < expectedMatches ||
-    sync.matchesUpdated < expectedMatches
+    !syncComplete
   ) {
     return { state: "error", reason: "incomplete" };
   }
