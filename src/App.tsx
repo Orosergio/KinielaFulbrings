@@ -6,6 +6,7 @@ import {
   type User as IdentityUser,
 } from "@netlify/identity";
 import {
+  Archive,
   CalendarDays,
   ChevronDown,
   CircleUserRound,
@@ -325,8 +326,16 @@ function Dashboard({
     data.predictions,
     data.currentUser.id,
   );
-  const available = data.matches.filter((match) => isPickable(match));
-  const completed = Math.max(0, available.length - pending.length);
+  const available = data.matches.filter(
+    (match) => match.homeTeamId !== null && match.awayTeamId !== null,
+  );
+  const completed = available.filter((match) =>
+    data.predictions.some(
+      (prediction) =>
+        prediction.userId === data.currentUser.id &&
+        prediction.matchId === match.id,
+    ),
+  ).length;
   const progress = available.length ? (completed / available.length) * 100 : 100;
   const dashboardNow = Date.now();
   const live = data.matches.filter(
@@ -421,30 +430,32 @@ function Dashboard({
 
       <div className="dashboard-grid">
         <div className="dashboard-main">
-          <section className="page-section">
-            <div className="section-heading">
-              <div>
-                <CalendarDays size={19} />
-                <h2>{t("upcoming")}</h2>
+          {upcoming.length > 0 && (
+            <section className="page-section">
+              <div className="section-heading">
+                <div>
+                  <CalendarDays size={19} />
+                  <h2>{t("upcoming")}</h2>
+                </div>
+                <button className="text-button" onClick={() => setView("picks")}>
+                  {language === "es" ? "Ver todos" : "View all"}
+                </button>
               </div>
-              <button className="text-button" onClick={() => setView("picks")}>
-                {language === "es" ? "Ver todos" : "View all"}
-              </button>
-            </div>
-            <div className="match-list">
-              {upcoming.map((match) => (
-                <MatchCard
-                  key={match.id}
-                  match={match}
-                  language={language}
-                  currentUserId={data.currentUser.id}
-                  predictions={data.predictions}
-                  members={data.members}
-                  onSave={save}
-                />
-              ))}
-            </div>
-          </section>
+              <div className="match-list">
+                {upcoming.map((match) => (
+                  <MatchCard
+                    key={match.id}
+                    match={match}
+                    language={language}
+                    currentUserId={data.currentUser.id}
+                    predictions={data.predictions}
+                    members={data.members}
+                    onSave={save}
+                  />
+                ))}
+              </div>
+            </section>
+          )}
 
           {recentResults.length > 0 && (
             <section className="page-section">
@@ -1074,7 +1085,11 @@ export default function App() {
   }
 
   async function signOut() {
-    if (!demoMode) await logout();
+    if (demoMode) {
+      setProfileMenu(false);
+      return;
+    }
+    await logout();
     setIdentityUser(null);
     setData(null);
     setProfileMenu(false);
@@ -1191,6 +1206,16 @@ export default function App() {
       </aside>
 
       <main className="app-content">
+        {demoMode && (
+          <div className="archive-notice" role="status">
+            <Archive size={17} />
+            <span>
+              {language === "es"
+                ? "Demo de portafolio · Mundial 2026 finalizado"
+                : "Portfolio demo · 2026 World Cup completed"}
+            </span>
+          </div>
+        )}
         {error ? (
           <section className="error-state">
             <CircleUserRound size={34} />

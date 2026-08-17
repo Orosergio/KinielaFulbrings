@@ -29,6 +29,4 @@ export default async (request: Request) => {
   }
 };
 
-export const config: Config = {
-  schedule: "*/5 * * * *",
-};
+export const config: Config = {};

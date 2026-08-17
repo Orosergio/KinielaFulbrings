@@ -1,106 +1,73 @@
 # Kiniela Mundial 2026
 
-Aplicación multiusuario para organizar quinielas privadas del Mundial 2026.
+> **Archived project.** The tournament is over and the production application
+> was retired on August 17, 2026. The public deployment remains available as a
+> read-only, anonymized portfolio demo.
 
-## Arquitectura
+[Open the portfolio demo](https://kiniela-mundial-2026.netlify.app)
 
-- React, TypeScript y Vite para la interfaz.
-- Netlify Identity para registro, acceso y recuperación de cuentas.
-- Netlify Functions para autorización y reglas del juego.
-- Neon PostgreSQL para perfiles, grupos, membresías, partidos y predicciones.
-- `worldcup26.ir` como proveedor público de marcadores.
-- `football-data.org` como proveedor alternativo configurable.
+Kiniela is a bilingual, multi-user football prediction app built for private
+groups during the 2026 World Cup. It includes match picks, transparent group
+scoring, live-result synchronization, knockout advancement predictions, and a
+complete bracket with penalty shootout results.
 
-GitHub Pages ya no es el destino correcto: una aplicación con cuentas y datos
-compartidos necesita funciones de servidor. GitHub conserva el código y ejecuta
-CI; Netlify construye y publica la aplicación.
+## Highlights
 
-## Reglas de seguridad
+- Responsive React interface in Spanish and English.
+- Private pools, member standings, and visible group picks.
+- Score predictions plus a separate knockout advancement pick.
+- Penalty shootouts shown in the bracket without changing the regulation-time
+  score used by the quiniela.
+- Database-enforced kickoff deadlines and server-side scoring.
+- Provider glitch protection for premature live and finished states.
+- Health checks, backups, and an OpenClaw production guardian used during the
+  live tournament.
 
-- Una predicción solo puede escribirse antes de `matches.kickoff_at`.
-- La fecha límite se valida en React, en la Function y en un trigger de PostgreSQL.
-- Las actualizaciones de marcador en vivo no modifican predicciones ni puntos
-  hasta que el partido termina.
-- Los desempates por penales se guardan aparte del marcador: sirven para
-  mostrar quién avanza en el bracket, sin cambiar la puntuación del pick.
-- Los picks de otros miembros son visibles dentro del mismo grupo para transparencia.
-- Solo miembros del mismo grupo pueden consultar su tabla.
-- Los puntos se calculan en PostgreSQL al finalizar el partido.
-- La sección "Mi grupo" muestra las reglas de puntos, cobertura del proveedor de
-  marcadores y el dashboard completo del grupo.
+## Scoring
 
-Puntuación: 7 por marcador exacto, 4 por signo y un gol exacto, 3 por signo,
-1 por un gol exacto.
+| Result | Points |
+| --- | ---: |
+| Exact score | 7 |
+| Correct outcome and one exact team score | 4 |
+| Correct outcome | 3 |
+| One exact team score | 1 |
+| Correct knockout team to advance | +2 |
 
-## Desarrollo
+Shootout goals are not added to the match score. In knockout matches, the app
+scores the regulation/extra-time result and the team-to-advance pick separately.
+
+## Stack
+
+- React 19, TypeScript, Vite
+- Netlify and Netlify Functions
+- Netlify Identity
+- PostgreSQL, initially on Neon and later self-hosted on a VPS
+- Vitest and GitHub Actions
+
+## Portfolio mode
+
+The deployed build uses `VITE_DEMO_MODE=true`. It reads the final 104 public
+match results from `data/worldcup-2026-results.json` and generates fictional
+members and picks locally. It does not authenticate, query PostgreSQL, or expose
+real participant data.
+
+```powershell
+$env:VITE_DEMO_MODE="true"
+npm install
+npm run dev
+```
+
+Production synchronization and monitoring schedules have been removed. The
+backend and migrations remain in the repository as implementation reference for
+a future tournament.
+
+## Verification
 
 ```bash
-npm install
 npm run check
 npm test
 npm run build
 ```
 
-Netlify Identity requiere un deploy para probar el acceso real. Para revisar la
-interfaz sin backend:
-
-```bash
-$env:VITE_DEMO_MODE="true"
-npm run dev
-```
-
-## Base de datos
-
-1. Crea un proyecto Neon separado para Kiniela.
-2. Copia `.env.example` como `.env` y define `DATABASE_URL`.
-3. Ejecuta:
-
-```bash
-npm run db:migrate
-npm run db:seed
-```
-
-Las migraciones incrementales están en `db/migrations`.
-
-## Netlify
-
-Variables requeridas:
-
-- `DATABASE_URL`: conexión pooled de Neon.
-- `FOOTBALL_DATA_API_TOKEN`: opcional; si existe, usa `football-data.org` en
-  lugar del proveedor público. Muy recomendado: el proveedor público
-  (`worldcup26.ir`) presenta timeouts y errores 500 intermitentes desde AWS.
-- `SYNC_SECRET`: opcional; habilita una invocación manual protegida de la
-  función programada.
-- `MIGRATE_SECRET`: opcional; habilita `POST /api/admin/migrate` (header
-  `x-kiniela-migrate-secret`). Sin body aplica las migraciones runtime
-  pendientes de forma idempotente y devuelve el estado de
-  `schema_migrations`, las últimas corridas de sync y los partidos recientes.
-  Con body `{"action": "repair-match", "matchId": N}` fuerza el estado actual
-  del proveedor para ese partido (ignorando la regla de FINISHED pegajoso),
-  útil si un glitch del proveedor dejó un partido finalizado por error; el
-  trigger recalcula o anula los puntos solo. Por seguridad rechaza un
-  `FINISHED` imposiblemente temprano (antes de que el partido pudiera terminar)
-  con código `PREMATURE_FINISH`. Mientras la variable no exista, el endpoint
-  responde 404.
-
-> **Importante**: las migraciones NO corren en el build de Netlify. Tras
-> desplegar código que dependa de una migración nueva hay que aplicarla con
-> `npm run db:migrate` (con `DATABASE_URL` apuntando a producción) o vía
-> `/api/admin/migrate`. La falla de marcadores en vivo del 12-13 de junio de
-> 2026 (`PREDICTION_LOCKED` en cada gol) fue exactamente esto: el código del
-> trigger corregido estaba en `003_live_score_updates.sql` sin aplicar.
-
-Configuración:
-
-- Build: `npm run build`
-- Publish: `dist`
-- Functions: `netlify/functions`
-- Sincronización: cada 2 minutos en producción.
-- Salud: `GET /api/health` valida conexión, cobertura de 104 partidos,
-  actualidad del proveedor e integridad de puntos.
-- Monitoreo: GitHub Actions consulta producción cada 5 minutos.
-
-Después del primer deploy, habilita Identity y decide si el registro será
-abierto o solo por invitación. Para un grupo privado se recomienda invitación o
-confirmación de correo obligatoria.
+See [ARCHIVE.md](./docs/ARCHIVE.md) for the retirement record and reactivation
+checklist.
